@@ -105,6 +105,7 @@ button[type="submit"]:hover
     border-radius: 5px;
     margin-bottom: 20px;
     text-align: center;
+    font-weight: bolder;
 }
 
 footer
