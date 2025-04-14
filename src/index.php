@@ -1,18 +1,21 @@
 <?php
-    $hostname = "localhost";
-    $user = "root";
-    $password = "[priadon1.5]";
-    $database = "divinglog";
-
-    $mysqlB = mysqli_connect($hostname, $user, $password, $database);
-    if(mysqli_connect_error() == 0)
+session_start();
+include('../config.php');
+$logged_in = false;
+if(isset($_SESSION['tcno']))
+{
+    $tcno = $_SESSION['tcno'];
+    $sql = "SELECT login FROM users WHERE tcno='$tcno'";
+    $result = mysqli_query($mysqlB, $sql);
+    if(mysqli_num_rows($result) > 0)
     {
-        //echo "Veritabanı bağlantısı başarılı!";
+        $user = mysqli_fetch_assoc($result);
+        if($user['login'] == 1)
+        {
+            $logged_in = true;
+        }
     }
-    else
-    {
-        //echo "Veritabanı bağlantısı başarısız! HATA" .mysqli_connect_error();
-    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -30,10 +33,11 @@
 
     <div class="content">
         <p>Web uygulamanızda dalış geçmişinizi kaydedebilir ve yönetebilirsiniz.</p>
-        <a href="users/login.php" class="btn">Giriş Yap</a>
-        <a href="users/signup.php" class="btn">Kayıt Ol</a>
+        <?php if (!$logged_in): ?>
+            <a href="users/login.php" class="btn">Giriş Yap</a>
+            <a href="users/signup.php" class="btn">Kayıt Ol</a>
+        <?php endif; ?>
     </div>
-
     <footer>
         <p>&copy; 2025 DivingLog Uygulaması</p>
     </footer>
