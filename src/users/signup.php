@@ -2,27 +2,25 @@
 include('../../config.php');
 $success_message = '';
 $error_message = '';
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Formdan gelen veriler
+if($_SERVER["REQUEST_METHOD"] == "POST")
+{
     $ad = mysqli_real_escape_string($mysqlB, $_POST['ad']);
     $soyad = mysqli_real_escape_string($mysqlB, $_POST['soyad']);
-    $tcno = mysqli_real_escape_string($mysqlB, $_POST['tcno']);  // TC Kimlik Numarası
+    $tcno = mysqli_real_escape_string($mysqlB, $_POST['tcno']);
     $dogum_tarihi = mysqli_real_escape_string($mysqlB, $_POST['dogum_tarihi']);
     $milliyet = mysqli_real_escape_string($mysqlB, $_POST['milliyet']);
     $adres = mysqli_real_escape_string($mysqlB, $_POST['adres']);
     $kaza_haber_kişi_ad_soyad = mysqli_real_escape_string($mysqlB, $_POST['kaza_haber_kişi_ad_soyad']);
     $telefon = mysqli_real_escape_string($mysqlB, $_POST['telefon']);
     $sifre = mysqli_real_escape_string($mysqlB, $_POST['sifre']);
-    $hashed_sifre = password_hash($sifre, PASSWORD_DEFAULT);  // Şifreyi hash'leyerek güvenli hale getir
-
-    // Veritabanına ekleme işlemi
-    $sql = "INSERT INTO users (ad, soyad, tcno, dogum_tarihi, milliyet, adres, kaza_haber_kişi_ad_soyad, telefon, sifre) 
-            VALUES ('$ad', '$soyad', '$tcno', '$dogum_tarihi', '$milliyet', '$adres', '$kaza_haber_kişi_ad_soyad', '$telefon', '$hashed_sifre')";
-
-    if (mysqli_query($mysqlB, $sql)) {
+    $hashed_sifre = password_hash($sifre, PASSWORD_DEFAULT);
+    $sql = "INSERT INTO users (ad, soyad, tcno, dogum_tarihi, milliyet, adres, kaza_haber_kişi_ad_soyad, telefon, sifre) VALUES ('$ad', '$soyad', '$tcno', '$dogum_tarihi', '$milliyet', '$adres', '$kaza_haber_kişi_ad_soyad', '$telefon', '$hashed_sifre')";
+    if(mysqli_query($mysqlB, $sql))
+    {
         $success_message = "Kayıt başarılı! <a href='login.php' class='login-link'>Giriş Yap</a>";
-    } else {
+    }
+    else
+    {
         $error_message = "Kayıt sırasında hata oluştu: " . mysqli_error($mysqlB);
     }
 }
