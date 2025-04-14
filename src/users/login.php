@@ -5,38 +5,29 @@ session_start();  // Oturum başlat
 $success_message = '';
 $error_message = '';
 
-if($_SERVER["REQUEST_METHOD"] == "POST")
-{
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $tcno = mysqli_real_escape_string($mysqlB, $_POST['tcno']);
     $sifre = mysqli_real_escape_string($mysqlB, $_POST['sifre']);
     $sql = "SELECT * FROM users WHERE tcno='$tcno'";
     $result = mysqli_query($mysqlB, $sql);
-    if(mysqli_num_rows($result) > 0)
-    {
+    if (mysqli_num_rows($result) > 0) {
         $user = mysqli_fetch_assoc($result);
-        if(password_verify($sifre, $user['sifre']))
-        {
+        if (password_verify($sifre, $user['sifre'])) {
             // Kullanıcıyı giriş yaptı olarak işaretle
             $update_sql = "UPDATE users SET login = 1 WHERE tcno = '$tcno'";
-            if(mysqli_query($mysqlB, $update_sql)) {
+            if (mysqli_query($mysqlB, $update_sql)) {
                 // Oturumda tcno'yu sakla
                 $_SESSION['tcno'] = $tcno;
                 $success_message = "Giriş başarılı! Yönlendiriliyorsunuz...";
                 header("Location: ../index.php");
                 exit(); // Yönlendirmeden sonra işlemi sonlandır
-            }
-            else
-            {
+            } else {
                 $error_message = "Veritabanı güncellenirken bir hata oluştu.";
             }
-        }
-        else
-        {
+        } else {
             $error_message = "Geçersiz şifre.";
         }
-    }
-    else
-    {
+    } else {
         $error_message = "Kullanıcı bulunamadı.";
     }
 }
@@ -54,10 +45,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 <body>
     <h1>DivingLog | Giriş Yap</h1>
     <div class="content">
-        <?php if($success_message): ?>
+        <?php if ($success_message): ?>
             <div class="success"><?php echo $success_message; ?></div>
         <?php endif; ?>
-        <?php if($error_message): ?>
+        <?php if ($error_message): ?>
             <div class="error"><?php echo $error_message; ?></div>
         <?php endif; ?>
         <form action="login.php" method="POST">
@@ -70,6 +61,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
             <button type="submit" class="btn">Giriş Yap</button>
         </form>
         <p>Hesabınız yok mu? <a href="signup.php" class="signup-link">Kayıt Ol</a></p>
+        <p>Şifrenizi mi unuttunuz? <a href="authentication.php" class="forget-password">Şifremi Unuttum</a> </p>
     </div>
     <footer>
         <p>&copy; 2025 DivingLog Uygulaması</p>
