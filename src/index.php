@@ -33,9 +33,12 @@ if(isset($_SESSION['tcno']))
 
     <div class="content">
         <p>Web uygulamanızda dalış geçmişinizi kaydedebilir ve yönetebilirsiniz.</p>
-        <?php if (!$logged_in): ?>
+        <?php if(!$logged_in): ?>
             <a href="users/login.php" class="btn">Giriş Yap</a>
-            <a href="users/signup.php" class="btn">Kayıt Ol</a>
+            <a href="users/signup.php" class="btn">Kaydol</a>
+        <?php endif; ?>
+        <?php if($logged_in): ?>
+            <a href="users/exit.php" class="btn">Çıkış Yap</a>
         <?php endif; ?>
     </div>
     <footer>
