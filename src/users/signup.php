@@ -2,8 +2,7 @@
 include('../../config.php');
 $success_message = '';
 $error_message = '';
-if($_SERVER["REQUEST_METHOD"] == "POST")
-{
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $ad = mysqli_real_escape_string($mysqlB, $_POST['ad']);
     $soyad = mysqli_real_escape_string($mysqlB, $_POST['soyad']);
     $tcno = mysqli_real_escape_string($mysqlB, $_POST['tcno']);
@@ -12,15 +11,17 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
     $adres = mysqli_real_escape_string($mysqlB, $_POST['adres']);
     $kaza_haber_kişi_ad_soyad = mysqli_real_escape_string($mysqlB, $_POST['kaza_haber_kişi_ad_soyad']);
     $telefon = mysqli_real_escape_string($mysqlB, $_POST['telefon']);
+    $email = mysqli_real_escape_string($mysqlB, $_POST['email']);  // Yeni eklenen email
     $sifre = mysqli_real_escape_string($mysqlB, $_POST['sifre']);
     $hashed_sifre = password_hash($sifre, PASSWORD_DEFAULT);
-    $sql = "INSERT INTO users (ad, soyad, tcno, dogum_tarihi, milliyet, adres, kaza_haber_kişi_ad_soyad, telefon, sifre) VALUES ('$ad', '$soyad', '$tcno', '$dogum_tarihi', '$milliyet', '$adres', '$kaza_haber_kişi_ad_soyad', '$telefon', '$hashed_sifre')";
-    if(mysqli_query($mysqlB, $sql))
-    {
+    
+    // Veritabanına kullanıcıyı ekleyen SQL sorgusu
+    $sql = "INSERT INTO users (ad, soyad, tcno, dogum_tarihi, milliyet, adres, kaza_haber_kişi_ad_soyad, telefon, email, sifre) 
+            VALUES ('$ad', '$soyad', '$tcno', '$dogum_tarihi', '$milliyet', '$adres', '$kaza_haber_kişi_ad_soyad', '$telefon', '$email', '$hashed_sifre')";
+    
+    if (mysqli_query($mysqlB, $sql)) {
         $success_message = "Kayıt başarılı! <a href='login.php' class='login-link'>Giriş Yap</a>";
-    }
-    else
-    {
+    } else {
         $error_message = "Kayıt sırasında hata oluştu: " . mysqli_error($mysqlB);
     }
 }
@@ -39,10 +40,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
     <h1>DivingLog | Kayıt Ol</h1>
     <h2>Yeni Hesap Oluştur</h2>
     <div class="content">
-        <?php if($success_message): ?>
+        <?php if ($success_message): ?>
             <div class="success"><?php echo $success_message; ?></div>
         <?php endif; ?>
-        <?php if($error_message): ?>
+        <?php if ($error_message): ?>
             <div class="error"><?php echo $error_message; ?></div>
         <?php endif; ?>
         <form action="signup.php" method="POST">
@@ -73,6 +74,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 
             <label for="telefon">Telefon Numarası:</label><br>
             <input type="text" id="telefon" name="telefon" required pattern="^\+?\d{10,15}$" title="Telefon numarasını +90xxxxxxxxxx formatında girin"><br><br>
+
+            <label for="email">E-posta:</label><br>
+            <input type="email" id="email" name="email" required><br><br>
 
             <label for="sifre">Şifre:</label><br>
             <input type="password" id="sifre" name="sifre" required><br><br>
