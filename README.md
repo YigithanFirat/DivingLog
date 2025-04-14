@@ -4,9 +4,9 @@ Kullanıcıların dalışlarını kaydetmelerine ve takip etmelerine yardımcı 
 ## User Register
 Kullanıcı kaydına ait işlemler tamamlanmıştır ve fotoğraf paylaşılmıştır.
 
-![alt text](image-1.png)
+![alt text](user_register.png)
 
 ## Web Icon
 Web sitesine ait ikon eklenmiştir ve fotoğraf paylaşılmıştır.
 
-![alt text](image.png)
+![alt text](web_icon.png)
