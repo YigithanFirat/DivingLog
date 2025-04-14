@@ -1,5 +1,7 @@
 <?php
 include('../../config.php');
+session_start();  // Oturum başlat
+
 $success_message = '';
 $error_message = '';
 
@@ -14,9 +16,19 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
         $user = mysqli_fetch_assoc($result);
         if(password_verify($sifre, $user['sifre']))
         {
-            $success_message = "Giriş başarılı! Yönlendiriliyorsunuz...";
-            header("Location: ../index.php");
-            exit();
+            // Kullanıcıyı giriş yaptı olarak işaretle
+            $update_sql = "UPDATE users SET login = 1 WHERE tcno = '$tcno'";
+            if(mysqli_query($mysqlB, $update_sql)) {
+                // Oturumda tcno'yu sakla
+                $_SESSION['tcno'] = $tcno;
+                $success_message = "Giriş başarılı! Yönlendiriliyorsunuz...";
+                header("Location: ../index.php");
+                exit(); // Yönlendirmeden sonra işlemi sonlandır
+            }
+            else
+            {
+                $error_message = "Veritabanı güncellenirken bir hata oluştu.";
+            }
         }
         else
         {
