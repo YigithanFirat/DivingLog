@@ -2,10 +2,11 @@
     session_start();
     include('../config.php');
     $logged_in = false;
+    $ag = false;
     if(isset($_SESSION['tcno']))
     {
         $tcno = $_SESSION['tcno'];
-        $sql = "SELECT login FROM users WHERE tcno='$tcno'";
+        $sql = "SELECT login, admin FROM users WHERE tcno='$tcno'";
         $result = mysqli_query($mysqlB, $sql);
         if(mysqli_num_rows($result) > 0)
         {
@@ -13,6 +14,10 @@
             if($user['login'] == 1)
             {
                 $logged_in = true;
+            }
+            if($user['admin'] == 1)
+            {
+                $ag = true;
             }
         }
     }
@@ -38,6 +43,9 @@
         <?php endif; ?>
         <?php if($logged_in): ?>
             <a href="users/exit.php" class="btn">Çıkış Yap</a>
+            <?php if($ag): ?>
+                <a href="admin/dashboard.php" class="btn">Dashboard</a>
+            <?php endif; ?>
         <?php endif; ?>
     </div>
     <footer>
