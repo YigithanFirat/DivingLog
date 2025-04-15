@@ -4,62 +4,61 @@ require_once '../PHPMailer-master/src/PHPMailer.php';
 require_once '../PHPMailer-master/src/SMTP.php';
 include('../../config.php');
 session_start();
-
 $success_message = '';
 $error_message = '';
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if($_SERVER["REQUEST_METHOD"] == "POST")
+{
     $email = mysqli_real_escape_string($mysqlB, $_POST['email']);
-
-    if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    if(filter_var($email, FILTER_VALIDATE_EMAIL))
+    {
         $sql = "SELECT * FROM users WHERE email='$email'";
         $result = mysqli_query($mysqlB, $sql);
-
-        if (mysqli_num_rows($result) > 0) {
+        if(mysqli_num_rows($result) > 0)
+        {
             $user = mysqli_fetch_assoc($result);
-            $reset_token = bin2hex(random_bytes(32)); // Token oluşturuluyor
+            $reset_token = bin2hex(random_bytes(32));
             date_default_timezone_set('Europe/Istanbul');
-            $token_expiry = date('Y-m-d H:i:s', strtotime('+1 hour')); // 1 saatlik geçerlilik süresi
+            $token_expiry = date('Y-m-d H:i:s', strtotime('+1 hour'));
             $update_sql = "UPDATE users SET reset_token='$reset_token', token_expiry='$token_expiry' WHERE email='$email'";
-            if (mysqli_query($mysqlB, $update_sql)) {
+            if(mysqli_query($mysqlB, $update_sql))
+            {
                 $reset_link = "http://localhost/DivingLog/src/users/reset_password.php?token=$reset_token";
                 $mail = new PHPMailer\PHPMailer\PHPMailer();
                 $mail->isSMTP();
                 $mail->Host = 'smtp.gmail.com';
                 $mail->SMTPAuth = true;
                 $mail->Username = 'yigithanfirat@gmail.com';
-                $mail->Password = 'yaef dgtn euzd dtkj'; // Uygulama özel şifresi kullanılmalı
+                $mail->Password = 'yaef dgtn euzd dtkj';
                 $mail->SMTPSecure = PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
                 $mail->Port = 587;
-
-                // Gönderen bilgisi
-                $mail->setFrom('divinglog@example.com', 'DivingLog'); // Burada, doğru adresi belirtmelisiniz
+                $mail->setFrom('divinglog@example.com', 'DivingLog');
                 $mail->addAddress($email);
-
-                // Başlık için doğru karakter seti ve kodlama
-                $mail->CharSet = 'UTF-8'; // Karakter seti
-                $mail->Subject = "=?UTF-8?B?" . base64_encode('Şifre Sıfırlama Talebi') . "?="; // Başlık kodlaması
-
-                // E-posta içeriği
+                $mail->CharSet = 'UTF-8';
+                $mail->Subject = "=?UTF-8?B?" . base64_encode('Şifre Sıfırlama Talebi') . "?=";
                 $mail->Body = "Şifrenizi sıfırlamak için aşağıdaki bağlantıya tıklayın:\n$reset_link";
-                $mail->isHTML(false); // E-posta içeriği düz metin olarak gönderiliyor
-
-                // Debugging mode to see the error messages
-                $mail->SMTPDebug = 0; // Hata ayıklama mesajlarını kapat
-
-                // E-posta gönderme işlemi
-                if ($mail->send()) {
+                $mail->isHTML(false);
+                $mail->SMTPDebug = 0;
+                if($mail->send())
+                {
                     $success_message = "Şifre sıfırlama bağlantınız e-posta adresinize gönderildi.";
-                } else {
+                }
+                else
+                {
                     $error_message = "E-posta gönderilemedi. Lütfen tekrar deneyin. Hata: " . $mail->ErrorInfo;
                 }
-            } else {
+            }
+            else
+            {
                 $error_message = "Veritabanı güncellenirken bir hata oluştu.";
             }
-        } else {
+        }
+        else
+        {
             $error_message = "Bu e-posta adresiyle kayıtlı bir kullanıcı bulunamadı.";
         }
-    } else {
+    }
+    else
+    {
         $error_message = "Geçersiz e-posta adresi.";
     }
 }
@@ -72,6 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DivingLog | Şifremi Unuttum</title>
     <link rel="stylesheet" href="../CSS/authentication.css">
+    <link rel="web icon" href="../images/divinglog.png">
 </head>
 <body>
     <h1>DivingLog | Şifremi Unuttum</h1>
