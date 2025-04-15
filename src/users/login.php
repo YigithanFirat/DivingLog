@@ -1,33 +1,39 @@
 <?php
 include('../../config.php');
-session_start();  // Oturum başlat
-
+session_start();
 $success_message = '';
 $error_message = '';
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if($_SERVER["REQUEST_METHOD"] == "POST")
+{
     $tcno = mysqli_real_escape_string($mysqlB, $_POST['tcno']);
     $sifre = mysqli_real_escape_string($mysqlB, $_POST['sifre']);
     $sql = "SELECT * FROM users WHERE tcno='$tcno'";
     $result = mysqli_query($mysqlB, $sql);
-    if (mysqli_num_rows($result) > 0) {
+    if(mysqli_num_rows($result) > 0)
+    {
         $user = mysqli_fetch_assoc($result);
-        if (password_verify($sifre, $user['sifre'])) {
-            // Kullanıcıyı giriş yaptı olarak işaretle
+        if(password_verify($sifre, $user['sifre']))
+        {
             $update_sql = "UPDATE users SET login = 1 WHERE tcno = '$tcno'";
-            if (mysqli_query($mysqlB, $update_sql)) {
-                // Oturumda tcno'yu sakla
+            if(mysqli_query($mysqlB, $update_sql))
+            {
                 $_SESSION['tcno'] = $tcno;
                 $success_message = "Giriş başarılı! Yönlendiriliyorsunuz...";
                 header("Location: ../index.php");
-                exit(); // Yönlendirmeden sonra işlemi sonlandır
-            } else {
+                exit();
+            }
+            else
+            {
                 $error_message = "Veritabanı güncellenirken bir hata oluştu.";
             }
-        } else {
+        }
+        else
+        {
             $error_message = "Geçersiz şifre.";
         }
-    } else {
+    }
+    else
+    {
         $error_message = "Kullanıcı bulunamadı.";
     }
 }
@@ -54,10 +60,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <form action="login.php" method="POST">
             <label for="tcno">TC Kimlik Numarası:</label><br>
             <input type="text" id="tcno" name="tcno" required><br><br>
-
             <label for="sifre">Şifre:</label><br>
             <input type="password" id="sifre" name="sifre" required><br><br>
-
             <button type="submit" class="btn">Giriş Yap</button>
         </form>
         <p>Hesabınız yok mu? <a href="signup.php" class="signup-link">Kayıt Ol</a></p>
