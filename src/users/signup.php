@@ -69,6 +69,8 @@
             <input type="text" id="kaza_haber_kişi_ad_soyad" name="kaza_haber_kişi_ad_soyad" required><br><br>
             <label for="telefon">Telefon Numarası:</label><br>
             <input type="text" id="telefon" name="telefon" required pattern="^\+?\d{10,15}$" title="Telefon numarasını +90xxxxxxxxxx formatında girin"><br><br>
+            <label for="fotograf">Fotoğraf:</label>
+            <input type="text" id="fotograf" name="fotograf" required><br><br>
             <label for="email">E-posta:</label><br>
             <input type="email" id="email" name="email" required><br><br>
             <label for="sifre">Şifre:</label><br>
