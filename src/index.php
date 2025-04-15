@@ -1,21 +1,21 @@
 <?php
-session_start();
-include('../config.php');
-$logged_in = false;
-if(isset($_SESSION['tcno']))
-{
-    $tcno = $_SESSION['tcno'];
-    $sql = "SELECT login FROM users WHERE tcno='$tcno'";
-    $result = mysqli_query($mysqlB, $sql);
-    if(mysqli_num_rows($result) > 0)
+    session_start();
+    include('../config.php');
+    $logged_in = false;
+    if(isset($_SESSION['tcno']))
     {
-        $user = mysqli_fetch_assoc($result);
-        if($user['login'] == 1)
+        $tcno = $_SESSION['tcno'];
+        $sql = "SELECT login FROM users WHERE tcno='$tcno'";
+        $result = mysqli_query($mysqlB, $sql);
+        if(mysqli_num_rows($result) > 0)
         {
-            $logged_in = true;
+            $user = mysqli_fetch_assoc($result);
+            if($user['login'] == 1)
+            {
+                $logged_in = true;
+            }
         }
     }
-}
 ?>
 
 <!DOCTYPE html>
@@ -30,7 +30,6 @@ if(isset($_SESSION['tcno']))
 <body>
     <h1>DivingLog</h1>
     <h2>Web Uygulamasına Hoşgeldiniz</h2>
-
     <div class="content">
         <p>Web uygulamanızda dalış geçmişinizi kaydedebilir ve yönetebilirsiniz.</p>
         <?php if(!$logged_in): ?>
