@@ -15,9 +15,7 @@
         $email = mysqli_real_escape_string($mysqlB, $_POST['email']);
         $sifre = mysqli_real_escape_string($mysqlB, $_POST['sifre']);
         $hashed_sifre = password_hash($sifre, PASSWORD_DEFAULT);
-        $sql = "INSERT INTO users (ad, soyad, tcno, dogum_tarihi, milliyet, adres, kaza_haber_kişi_ad_soyad, telefon, email, sifre) 
-                VALUES ('$ad', '$soyad', '$tcno', '$dogum_tarihi', '$milliyet', '$adres', '$kaza_haber_kişi_ad_soyad', '$telefon', '$email', '$hashed_sifre')";
-        
+        $sql = "INSERT INTO users (ad, soyad, tcno, dogum_tarihi, milliyet, adres, kaza_haber_kişi_ad_soyad, telefon, email, sifre) VALUES ('$ad', '$soyad', '$tcno', '$dogum_tarihi', '$milliyet', '$adres', '$kaza_haber_kişi_ad_soyad', '$telefon', '$email', '$hashed_sifre')";
         if(mysqli_query($mysqlB, $sql))
         {
             $success_message = "Kayıt başarılı! <a href='login.php' class='login-link'>Giriş Yap</a>";
