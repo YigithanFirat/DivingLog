@@ -1,15 +1,9 @@
 <?php
-// Veritabanı bağlantısını yapıyoruz
-include('../../config.php');
-
-// Admin işlemleri için mesajlar
-$success_message = '';
-$error_message = '';
-
-// Kullanıcı listesi
-$sql = "SELECT * FROM users";
-$result = mysqli_query($mysqlB, $sql);
-
+    include('../../config.php');
+    $success_message = '';
+    $error_message = '';
+    $sql = "SELECT * FROM users";
+    $result = mysqli_query($mysqlB, $sql);
 ?>
 <!DOCTYPE html>
 <html lang="tr">
@@ -31,17 +25,13 @@ $result = mysqli_query($mysqlB, $sql);
             </ul>
         </nav>
     </header>
-
     <div class="container">
-        <!-- Success/Error mesajları -->
         <?php if ($success_message): ?>
             <div class="success"><?php echo $success_message; ?></div>
         <?php endif; ?>
         <?php if ($error_message): ?>
             <div class="error"><?php echo $error_message; ?></div>
         <?php endif; ?>
-
-        <!-- Kullanıcılar Listesi -->
         <h2>Kullanıcılar</h2>
         <table class="user-table">
             <thead>
@@ -56,7 +46,7 @@ $result = mysqli_query($mysqlB, $sql);
                 </tr>
             </thead>
             <tbody>
-                <?php while ($user = mysqli_fetch_assoc($result)): ?>
+                <?php while($user = mysqli_fetch_assoc($result)): ?>
                     <tr>
                         <td><?php echo $user['id']; ?></td>
                         <td><?php echo $user['ad']; ?></td>
@@ -74,7 +64,6 @@ $result = mysqli_query($mysqlB, $sql);
             </tbody>
         </table>
     </div>
-
     <footer>
         <p>&copy; 2025 DivingLog Uygulaması</p>
     </footer>
