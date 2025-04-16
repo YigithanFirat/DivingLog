@@ -1,42 +1,42 @@
 <?php
-include('../../config.php');
-session_start();
-$success_message = '';
-$error_message = '';
-if($_SERVER["REQUEST_METHOD"] == "POST")
-{
-    $tcno = mysqli_real_escape_string($mysqlB, $_POST['tcno']);
-    $sifre = mysqli_real_escape_string($mysqlB, $_POST['sifre']);
-    $sql = "SELECT * FROM users WHERE tcno='$tcno'";
-    $result = mysqli_query($mysqlB, $sql);
-    if(mysqli_num_rows($result) > 0)
+    include('../../config.php');
+    session_start();
+    $success_message = '';
+    $error_message = '';
+    if($_SERVER["REQUEST_METHOD"] == "POST")
     {
-        $user = mysqli_fetch_assoc($result);
-        if(password_verify($sifre, $user['sifre']))
+        $tcno = mysqli_real_escape_string($mysqlB, $_POST['tcno']);
+        $sifre = mysqli_real_escape_string($mysqlB, $_POST['sifre']);
+        $sql = "SELECT * FROM users WHERE tcno='$tcno'";
+        $result = mysqli_query($mysqlB, $sql);
+        if(mysqli_num_rows($result) > 0)
         {
-            $update_sql = "UPDATE users SET login = 1 WHERE tcno = '$tcno'";
-            if(mysqli_query($mysqlB, $update_sql))
+            $user = mysqli_fetch_assoc($result);
+            if(password_verify($sifre, $user['sifre']))
             {
-                $_SESSION['tcno'] = $tcno;
-                $success_message = "Giriş başarılı! Yönlendiriliyorsunuz...";
-                header("Location: ../index.php");
-                exit();
+                $update_sql = "UPDATE users SET login = 1 WHERE tcno = '$tcno'";
+                if(mysqli_query($mysqlB, $update_sql))
+                {
+                    $_SESSION['tcno'] = $tcno;
+                    $success_message = "Giriş başarılı! Yönlendiriliyorsunuz...";
+                    header("Location: ../index.php");
+                    exit();
+                }
+                else
+                {
+                    $error_message = "Veritabanı güncellenirken bir hata oluştu.";
+                }
             }
             else
             {
-                $error_message = "Veritabanı güncellenirken bir hata oluştu.";
+                $error_message = "Geçersiz şifre.";
             }
         }
         else
         {
-            $error_message = "Geçersiz şifre.";
+            $error_message = "Kullanıcı bulunamadı.";
         }
     }
-    else
-    {
-        $error_message = "Kullanıcı bulunamadı.";
-    }
-}
 ?>
 
 <!DOCTYPE html>
