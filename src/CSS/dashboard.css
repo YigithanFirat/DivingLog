@@ -1,53 +1,56 @@
-/* admin.css */
-
-body {
+body
+{
     font-family: 'Arial', sans-serif;
-    background-color: #F2F7FF;  /* Hafif gri-bleu arka plan */
+    background-color: #F2F7FF;
     margin: 0;
     padding: 0;
 }
 
-header {
-    background-color: #1e3c58;  /* DivingLog ana rengi - Mavi */
+header
+{
+    background-color: #1e3c58;
     color: white;
     padding: 20px;
     text-align: center;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* admin.css */
-
-header nav ul {
+header nav ul
+{
     list-style-type: none;
     padding: 0;
     margin: 0;
     text-align: center;
 }
 
-header nav ul li {
+header nav ul li
+{
     display: inline-block;
     margin: 10px;
 }
 
-header nav ul li a {
-    color: #fafafa; /* Yazı rengini belirledik */
-    background-color: #005A8D; /* Butonun arka plan rengi */
+header nav ul li a
+{
+    color: #fafafa;
+    background-color: #005A8D;
     text-decoration: none;
     font-weight: bold;
     font-size: 16px;
-    padding: 12px 25px;  /* Buton boyutları */
-    border-radius: 8px;   /* Kenarları yuvarlak yapmak için */
+    padding: 12px 25px;
+    border-radius: 8px;
     display: inline-block;
-    transition: background-color 0.3s ease, color 0.3s ease; /* Hover geçiş efekti */
+    transition: background-color 0.3s ease, color 0.3s ease;
     text-align: center;
 }
 
-header nav ul li a:hover {
-    background-color: #FF9900; /* Hover durumunda arka plan rengi */
-    color: #ffffff; /* Hover durumunda yazı rengi beyaz olacak */
+header nav ul li a:hover
+{
+    background-color: #FF9900;
+    color: #ffffff;
 }
 
-.container {
+.container
+{
     width: 90%;
     max-width: 1200px;
     margin: 20px auto;
@@ -57,41 +60,48 @@ header nav ul li a:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-h2 {
+h2
+{
     color: #333;
     font-size: 28px;
     text-align: center;
     margin-bottom: 20px;
 }
 
-.user-table {
+.user-table
+{
     width: 100%;
     border-collapse: collapse;
     margin-top: 30px;
 }
 
-.user-table th, .user-table td {
+.user-table th, .user-table td
+{
     padding: 15px;
     border: 1px solid #ddd;
     text-align: left;
 }
 
-.user-table th {
-    background-color: #1e3c58;  /* Başlık kısmı için mavi arka plan */
+.user-table th
+{
+    background-color: #1e3c58;
     color: white;
     font-size: 16px;
 }
 
-.user-table td {
+.user-table td
+{
     font-size: 15px;
     color: #333;
 }
 
-.user-table tr:hover {
-    background-color: #f5f5f5;  /* Satır üzerine gelince renk değişir */
+.user-table tr:hover
+{
+    background-color: #f5f5f5;
 }
 
-.user-table td a {
+.user-table td a
+{
     color: #1e3c58;
     text-decoration: none;
     padding: 8px 15px;
@@ -102,21 +112,24 @@ h2 {
 
 .user-table td a:hover
 {
-    background-color: #FF9900;  /* Buton üzerine gelince sarı renge dönüşür */
+    background-color: #FF9900;
     color: white;
 }
 
-.user-table td a.delete {
-    background-color: #FF5733;  /* Silme butonu için kırmızı tonları */
+.user-table td a.delete
+{
+    background-color: #FF5733;
     color: white;
     border-color: #FF5733;
 }
 
-.user-table td a.delete:hover {
+.user-table td a.delete:hover
+{
     background-color: #FF2E00;
 }
 
-.success, .error {
+.success, .error
+{
     padding: 15px;
     margin-bottom: 20px;
     border-radius: 8px;
@@ -124,13 +137,15 @@ h2 {
     text-align: center;
 }
 
-.success {
-    background-color: #4CAF50;  /* Başarılı işlem için yeşil renk */
+.success
+{
+    background-color: #4CAF50;
     color: white;
 }
 
-.error {
-    background-color: #F44336;  /* Hata mesajı için kırmızı renk */
+.error
+{
+    background-color: #F44336;
     color: white;
 }
 
@@ -149,23 +164,27 @@ footer p
     font-weight: bolder;
 }
 
-/* Responsive Tasarım */
-@media screen and (max-width: 768px) {
-    .container {
+@media screen and (max-width: 768px)
+{
+    .container
+    {
         width: 95%;
         padding: 20px;
     }
 
-    header nav ul li {
+    header nav ul li
+    {
         display: block;
         margin: 10px 0;
     }
 
-    header nav ul li a {
+    header nav ul li a
+    {
         font-size: 18px;
     }
 
-    .user-table th, .user-table td {
+    .user-table th, .user-table td
+    {
         font-size: 14px;
         padding: 12px;
     }
