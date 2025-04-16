@@ -57,7 +57,6 @@
 </head>
 <body>
     <h1>DivingLog | Şifre Sıfırlama</h1>
-
     <div class="content">
         <?php if ($success_message): ?>
             <div class="success"><?php echo $success_message; ?></div>
@@ -73,7 +72,6 @@
             <button type="submit" class="btn">Şifremi Sıfırla</button>
         </form>
     </div>
-
     <footer>
         <p>&copy; 2025 DivingLog Uygulaması</p>
     </footer>
