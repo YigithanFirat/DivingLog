@@ -1,12 +1,8 @@
 <?php
-// Veritabanı bağlantısı
-include('../../config.php');
-session_start();
-
-// Kullanıcıları veritabanından çekme
-$sql = "SELECT * FROM users";
-$result = mysqli_query($mysqlB, $sql);
-
+    include('../../config.php');
+    session_start();
+    $sql = "SELECT * FROM users";
+    $result = mysqli_query($mysqlB, $sql);
 ?>
 
 <!DOCTYPE html>
@@ -28,10 +24,8 @@ $result = mysqli_query($mysqlB, $sql);
             </ul>
         </nav>
     </header>
-
     <div class="container">
         <h2>Kullanıcılar Listesi</h2>
-
         <?php if (mysqli_num_rows($result) > 0): ?>
             <table>
                 <thead>
@@ -63,7 +57,6 @@ $result = mysqli_query($mysqlB, $sql);
             <p>Henüz kullanıcı bulunmamaktadır.</p>
         <?php endif; ?>
     </div>
-
     <footer>
         <p>&copy; 2025 DivingLog Uygulaması</p>
     </footer>
