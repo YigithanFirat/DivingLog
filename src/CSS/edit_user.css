@@ -1,51 +1,56 @@
-/* admin.css */
-
-body {
+body
+{
     font-family: 'Arial', sans-serif;
     background-color: #F2F7FF;
     margin: 0;
     padding: 0;
 }
 
-header {
-    background-color: #1e3c58;  /* DivingLog ana rengi - Mavi */
+header
+{
+    background-color: #1e3c58;
     color: white;
     padding: 20px;
     text-align: center;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-header nav ul {
+header nav ul
+{
     list-style-type: none;
     padding: 0;
     margin: 0;
     text-align: center;
 }
 
-header nav ul li {
+header nav ul li
+{
     display: inline-block;
     margin: 10px;
 }
 
-header nav ul li a {
-    color: #fafafa; /* Yazı rengini belirledik */
-    background-color: #005A8D; /* Butonun arka plan rengi */
+header nav ul li a
+{
+    color: #fafafa;
+    background-color: #005A8D;
     text-decoration: none;
     font-weight: bold;
     font-size: 16px;
-    padding: 12px 25px;  /* Buton boyutları */
-    border-radius: 8px;   /* Kenarları yuvarlak yapmak için */
+    padding: 12px 25px;
+    border-radius: 8px;
     display: inline-block;
-    transition: background-color 0.3s ease, color 0.3s ease; /* Hover geçiş efekti */
+    transition: background-color 0.3s ease, color 0.3s ease;
     text-align: center;
 }
 
-header nav ul li a:hover {
-    background-color: #FF9900; /* Hover durumunda arka plan rengi */
-    color: #ffffff; /* Hover durumunda yazı rengi beyaz olacak */
+header nav ul li a:hover
+{
+    background-color: #FF9900;
+    color: #ffffff;
 }
 
-.container {
+.container
+{
     width: 80%;
     max-width: 1200px;
     margin: 20px auto;
@@ -55,20 +60,23 @@ header nav ul li a:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-h2 {
+h2
+{
     color: #333;
     font-size: 28px;
     text-align: center;
     margin-bottom: 20px;
 }
 
-form {
+form
+{
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-form label {
+form label
+{
     font-size: 16px;
     margin: 10px 0 5px;
     text-align: left;
@@ -76,7 +84,8 @@ form label {
     max-width: 500px;
 }
 
-form input, form select {
+form input, form select
+{
     width: 100%;
     max-width: 500px;
     padding: 12px;
@@ -86,7 +95,8 @@ form input, form select {
     border-radius: 5px;
 }
 
-form button {
+form button
+{
     width: 100%;
     max-width: 500px;
     padding: 12px;
@@ -99,11 +109,13 @@ form button {
     transition: background-color 0.3s ease;
 }
 
-form button:hover {
+form button:hover
+{
     background-color: #FF9900;
 }
 
-.success, .error {
+.success, .error
+{
     padding: 15px;
     margin-bottom: 20px;
     border-radius: 8px;
@@ -111,12 +123,14 @@ form button:hover {
     text-align: center;
 }
 
-.success {
+.success
+{
     background-color: #4CAF50;
     color: white;
 }
 
-.error {
+.error
+{
     background-color: #F44336;
     color: white;
 }
