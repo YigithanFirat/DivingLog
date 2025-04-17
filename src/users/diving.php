@@ -1,16 +1,15 @@
 <?php
-    // Örnek veri
-    $date = date('d/m/Y'); // Bugünün tarihi
-    $diving_no = 1; // Örnek dalış numarası
-    $max_depth = 6; // Planlanan derinlik (feet)
-    $max_depth_meter = 2; // Planlanan derinlik (metre)
-    $gas = 'Hava'; // Solunum gazı
-    $gas_percentage = 21; // Hava için oksijen yüzdesi
-    $equipment = 'Scuba, Nargile, MK-18, MK-17, Tam Yüz Maskesi, Basınç OD, Diğer'; // Kullanılan ekipman
-    $purpose = 'Eğitim Dalışı'; // Dalışın amacı
-    $water_type = 'Tatlı Su'; // Dalış ortamı
-    $clothing = 'Kuru'; // Dalış elbisesi
-    $tools = 'Scuba, Nargile'; // Kullanılan alet ve cihazlar
+    $date = date('d/m/Y');
+    $diving_no = 1;
+    $max_depth = 6;
+    $max_depth_meter = 2;
+    $gas = 'Hava, Nitrox, Helioks, Trimks, Oksijen';
+    $gas_percentage = 21;
+    $equipment = 'Scuba, Nargile, MK-18, MK-17, Tam Yüz Maskesi, Basınç OD, Diğer';
+    $purpose = 'Eğitim Dalışı';
+    $water_type = 'Tatlı Su';
+    $clothing = 'Kuru, Islak, Diğer';
+    $tools = 'Scuba, Nargile';
 ?>
 
 <!DOCTYPE html>
@@ -28,7 +27,6 @@
             <h1>Dalış Planı</h1>
             <p>İSTE | Tarih: <?php echo $date; ?></p>
         </header>
-
         <div class="plan-details">
             <form action="#" method="POST">
                 <table>
@@ -65,11 +63,15 @@
                     </tr>
                     <tr>
                         <td>Solunum Gazı:</td>
-                        <td><input type="text" value="<?php echo $gas; ?>" disabled></td>
-                    </tr>
-                    <tr>
-                        <td>Solunum Gazı Yüzdesi:</td>
-                        <td><input type="text" value="<?php echo $gas_percentage; ?>%" disabled></td>
+                        <td>
+                            <select name="respiration" required>
+                            <option value="Hava" <?php if($gas == 'Hava') echo 'selected'; ?>>Hava</option>
+                            <option value="Nitrox" <?php if($gas == 'Nitrox') echo 'selected'; ?>>Nitrox</option>
+                            <option value="Helioks" <?php if($gas == 'Helioks') echo 'selected'; ?>>Helioks</option>
+                            <option value="Trimks" <?php if($gas == 'Trimks') echo 'selected'; ?>>Trimks</option>
+                            <option value="Oksijen" <?php if($gas == 'Oksijen') echo 'selected'; ?>>Oksijen</option>
+                            </select>
+                        </td>
                     </tr>
                     <tr>
                         <td>Dalış Elbisesi:</td>
@@ -85,7 +87,7 @@
                     </tr>
                     <tr>
                         <td>Kullanılan Alet ve Cihazlar:</td>
-                        <td></td>
+                        <td><input type="text" name="tools" placeholder="Kullanılan Alet ve Cihazları Yazınız" required></td>
                     </tr>
                     <tr>
                         <td>Dalış Takımı:</td>
