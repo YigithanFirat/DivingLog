@@ -71,11 +71,6 @@ table input[type="text"], select
     margin-bottom: 10px;
 }
 
-input[type="radio"]
-{
-    margin-right: 10px;
-}
-
 footer
 {
     background-color: #1c2b3a;
