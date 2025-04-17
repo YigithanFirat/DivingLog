@@ -45,6 +45,7 @@
             <a href="users/exit.php" class="btn">Çıkış Yap</a>
             <?php if($ag): ?>
                 <a href="admin/dashboard.php" class="btn">Dashboard</a>
+                <a href="users/diving.php" class="btn">Diving Plan</a>
             <?php endif; ?>
         <?php endif; ?>
     </div>
