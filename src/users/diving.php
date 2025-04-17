@@ -76,9 +76,11 @@
                     <tr>
                         <td>Dalış Elbisesi:</td>
                         <td>
-                            <input type="radio" name="clothing" value="Kuru" <?php if($clothing == 'Kuru') echo 'checked'; ?>> Kuru
-                            <input type="radio" name="clothing" value="Islak" <?php if($clothing == 'Islak') echo 'checked'; ?>> Islak
-                            <input type="radio" name="clothing" value="Islak" <?php if($clothing == 'Diğer') echo 'checked'; ?>> Diğer
+                            <select name="clothing" required>
+                                <option value="Kuru" <?php if($clothing == 'Kuru') echo 'selected'; ?>>Kuru</option>
+                                <option value="Islak" <?php if($clothing == 'Islak') echo 'selected'; ?>>Islak</option>
+                                <option value="Diğer" <?php if($clothing == 'Diğer') echo 'selected'; ?>>Diğer</option>
+                            </select>
                         </td>
                     </tr>
                     <tr>
@@ -102,6 +104,10 @@
                                 <option value="Diğer" <?php if($equipment == 'Diğer') echo 'selected'; ?>>Diğer</option>
                             </select>
                         </td>
+                    </tr>
+                    <tr>
+                        <td>Dalış Amiri:</td>
+                        <td><input type="text" name="supervisor" placeholder="Dalış Amirini Giriniz"></td>
                     </tr>
                 </table>
             </form>
