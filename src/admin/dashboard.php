@@ -67,6 +67,5 @@
     <footer>
         <p>&copy; 2025 DivingLog Uygulaması</p>
     </footer>
-
 </body>
 </html>
