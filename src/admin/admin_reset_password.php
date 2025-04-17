@@ -54,7 +54,7 @@
         <h1>DivingLog | Admin Şifre Sıfırlama</h1>
         <nav>
             <ul>
-                <li><a href="dashboard.php">Ana Sayfa</a></li>
+                <li><a href="../index.php">Ana Sayfa</a></li>
                 <li><a href="manage_users.php">Kullanıcıları Yönet</a></li>
                 <li><a href="../users/exit.php">Çıkış Yap</a></li>
             </ul>
@@ -67,8 +67,8 @@
         <?php if (isset($error_message)): ?>
             <div class="error"><?php echo $error_message; ?></div>
         <?php endif; ?>
-        <h2><?php echo $user['ad']; ?> için Şifreyi Sıfırlama</h2>
         <form action="admin_reset_password.php?id=<?php echo $user_id; ?>" method="POST">
+            <h2><?php echo $user['ad']; ?> için Şifreyi Sıfırlama</h2>
             <label for="new_password">Yeni Şifre:</label>
             <input type="password" id="new_password" name="new_password" required>
 
