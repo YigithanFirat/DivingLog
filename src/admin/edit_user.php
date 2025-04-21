@@ -20,8 +20,8 @@
     {
         $name = mysqli_real_escape_string($mysqlB, $_POST['name']);
         $email = mysqli_real_escape_string($mysqlB, $_POST['email']);
-        $status = $_POST['status'];
-        $update_sql = "UPDATE users SET name='$name', email='$email', status='$status' WHERE id='$user_id'";
+        $status = $_POST['login'];
+        $update_sql = "UPDATE users SET ad='$name', email='$email', login='$status' WHERE id='$user_id'";
         if(mysqli_query($mysqlB, $update_sql))
         {
             $success_message = "Kullanıcı başarıyla güncellendi.";
@@ -87,6 +87,10 @@
             </select>
             <label for="email">E-posta:</label>
             <input type="email" id="email" name="email" value="<?php echo $user['email']; ?>" required>
+            <select name="administrator" id="administrator" required>
+                <option value="0" <?php if($user['admin'] == 0) echo 'selected'; ?>>Üye</option>
+                <option value="1" <?php if($user['admin'] == 1) echo 'selected'; ?>>Administrator</option>
+            </select>
             <button type="submit" class="btn">Güncelle</button>
         </form>
     </div>
