@@ -32,37 +32,6 @@
         <?php if ($error_message): ?>
             <div class="error"><?php echo $error_message; ?></div>
         <?php endif; ?>
-        <h2>Kullanıcılar</h2>
-        <table class="user-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Ad</th>
-                    <th>Soyad</th>
-                    <th>E-Posta</th>
-                    <th>Durum</th>
-                    <th>Yetki Düzeyi</th>
-                    <th>İşlemler</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while($user = mysqli_fetch_assoc($result)): ?>
-                    <tr>
-                        <td><?php echo $user['id']; ?></td>
-                        <td><?php echo $user['ad']; ?></td>
-                        <td><?php echo $user['soyad']; ?></td>
-                        <td><?php echo $user['email']; ?></td>
-                        <td><?php echo $user['login'] == 1 ? 'Aktif' : 'Pasif'; ?></td>
-                        <td><?php echo $user['admin'] == 1 ? 'Administrator' : 'Üye'; ?></td>
-                        <td>
-                            <a href="admin_reset_password.php?id=<?php echo $user['id']; ?>" class="btn">Şifre Sıfırla</a>
-                            <a href="edit_user.php?id=<?php echo $user['id']; ?>" class="btn">Düzenle</a>
-                            <a href="delete_user.php?id=<?php echo $user['id']; ?>" class="btn delete" onclick="return confirm('Bu kullanıcıyı silmek istediğinize emin misiniz?');">Sil</a>
-                        </td>
-                    </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
     </div>
     <footer>
         <p>&copy; 2025 DivingLog Uygulaması</p>
