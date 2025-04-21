@@ -3,10 +3,11 @@
     include('../config.php');
     $logged_in = false;
     $ag = false;
+    $user = [];
     if(isset($_SESSION['tcno']))
     {
         $tcno = $_SESSION['tcno'];
-        $sql = "SELECT login, admin FROM users WHERE tcno='$tcno'";
+        $sql = "SELECT login, admin, ad FROM users WHERE tcno='$tcno'";
         $result = mysqli_query($mysqlB, $sql);
         if(mysqli_num_rows($result) > 0)
         {
@@ -36,6 +37,7 @@
     <h1>DivingLog</h1>
     <h2>Web Uygulamasına Hoşgeldiniz</h2>
     <div class="content">
+        <h3>Hoş geldin, <?php echo htmlspecialchars($user['ad'] ?? 'misafir'); ?>! 👋</h3>
         <p>Web uygulamanızda dalış geçmişinizi kaydedebilir ve yönetebilirsiniz.</p>
         <?php if(!$logged_in): ?>
             <a href="users/login.php" class="btn">Giriş Yap</a>
