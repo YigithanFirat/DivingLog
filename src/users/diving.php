@@ -1,15 +1,48 @@
 <?php
-    $date = date('d/m/Y');
-    $diving_no = 1;
-    $max_depth = 6;
-    $max_depth_meter = 2;
+    include('../../config.php');
+    $equipment = 'Scuba, Nargile, MK-17, MK-18, Tam Yüz Maskesi, Basınç OD, Diğer';
+    $water_type = 'Tatlı Su, Tuzlu Su, Sahil, Bot-Tekne, Diğer, Dalga, Rüzgar, Akıntı';
     $gas = 'Hava, Nitrox, Helioks, Trimks, Oksijen';
-    $gas_percentage = 21;
-    $equipment = 'Scuba, Nargile, MK-18, MK-17, Tam Yüz Maskesi, Basınç OD, Diğer';
-    $purpose = 'Eğitim Dalışı';
-    $water_type = 'Tatlı Su';
     $clothing = 'Kuru, Islak, Diğer';
-    $tools = 'Scuba, Nargile';
+    $success_message = '';
+    $error_message = '';
+    if($_SERVER['REQUEST_METHOD'] == 'POST')
+    {
+        $date = date('d/m/Y');
+        $minutes = $_POST['diving_time'] ?? '';
+        $diving_location = $_POST['diving_location'] ?? '';
+        $water_type = $_POST['water_type'] ?? '';
+        $depth_feet = $_POST['depth_feet'] ?? '';
+        $depth_meter = $_POST['depth_meter'] ?? '';
+        $respiration = $_POST['respiration'] ?? '';
+        $clothing = $_POST['clothing'] ?? '';
+        $diving_purpose = $_POST['diving_purpose'] ?? '';
+        $tools = $_POST['tools'] ?? '';
+        $tools_devices = $_POST['tools_devices'] ?? '';
+        $supervisor = $_POST['supervisor'] ?? '';
+        session_start();
+        $tcno = $_SESSION['tcno'] ?? null;
+        if($tcno)
+        {
+            $stmt = mysqli_prepare($mysqlB, "INSERT INTO diving_plans
+            (tcno, minutes, diving_location, water_type, depth_feet, depth_meter, respiration, clothing, diving_purpose, tools, tools_devices, supervisor) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            mysqli_stmt_bind_param($stmt, "ssssssssssss", $tcno, $minutes, $diving_location, $water_type, $depth_feet, $depth_meter, $respiration, $clothing, $diving_purpose, $tools, $tools_devices, $supervisor);
+            if(mysqli_stmt_execute($stmt))
+            {
+                $success_message = "Dalış planı başarıyla kaydedildi!";
+            }
+            else
+            {
+                $error_message = "Kayıt sırasında hata oluştu. Lütfen tekrar deneyin.";
+            }
+            mysqli_stmt_close($stmt);
+        }
+        else
+        {
+            $error_message = "Lütfen giriş yapın.";
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -30,6 +63,12 @@
         <div class="plan-details">
             <form action="#" method="POST">
                 <table>
+                <?php if ($success_message): ?>
+                    <div class="success"><?php echo $success_message; ?></div>
+                <?php endif; ?>
+                <?php if ($error_message): ?>
+                    <div class="error"><?php echo $error_message; ?></div>
+                <?php endif; ?>
                     <tr>
                         <td>Toplam Dalış Zamanı (dakika):</td>
                         <td><input type="text" name="minutes" placeholder="Dalış Süresini Giriniz ( Dakika )"></td>
@@ -55,21 +94,21 @@
                     </tr>
                     <tr>
                         <td>Planlanan Derinlik (Feet):</td>
-                        <td><input type="text" placeholder="Derinliği Feet Cinsinden Giriniz"></td>
+                        <td><input type="text" name="depth_feet" placeholder="Derinliği Feet Cinsinden Giriniz"></td>
                     </tr>
                     <tr>
                         <td>Planlanan Derinlik (Metre):</td>
-                        <td><input type="text" placeholder="Derinliği Metre Cinsinden Giriniz"></td>
+                        <td><input type="text" name="depth_meter" placeholder="Derinliği Metre Cinsinden Giriniz"></td>
                     </tr>
                     <tr>
                         <td>Solunum Gazı:</td>
                         <td>
                             <select name="respiration" required>
-                            <option value="Hava" <?php if($gas == 'Hava') echo 'selected'; ?>>Hava</option>
-                            <option value="Nitrox" <?php if($gas == 'Nitrox') echo 'selected'; ?>>Nitrox</option>
-                            <option value="Helioks" <?php if($gas == 'Helioks') echo 'selected'; ?>>Helioks</option>
-                            <option value="Trimks" <?php if($gas == 'Trimks') echo 'selected'; ?>>Trimks</option>
-                            <option value="Oksijen" <?php if($gas == 'Oksijen') echo 'selected'; ?>>Oksijen</option>
+                                <option value="Hava" <?php if($gas == 'Hava') echo 'selected'; ?>>Hava</option>
+                                <option value="Nitrox" <?php if($gas == 'Nitrox') echo 'selected'; ?>>Nitrox</option>
+                                <option value="Helioks" <?php if($gas == 'Helioks') echo 'selected'; ?>>Helioks</option>
+                                <option value="Trimks" <?php if($gas == 'Trimks') echo 'selected'; ?>>Trimks</option>
+                                <option value="Oksijen" <?php if($gas == 'Oksijen') echo 'selected'; ?>>Oksijen</option>
                             </select>
                         </td>
                     </tr>
@@ -110,6 +149,7 @@
                         <td><input type="text" name="supervisor" placeholder="Dalış Amirini Giriniz"></td>
                     </tr>
                 </table>
+                <button class="diving_plan_create">Dalış Planı Oluştur</button>
             </form>
         </div>
     </div>
