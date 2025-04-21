@@ -32,6 +32,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Adı</th>
+                        <th>Soyadı</th>
                         <th>E-posta</th>
                         <th>Durum</th>
                         <th>İşlemler</th>
@@ -42,6 +43,7 @@
                         <tr>
                             <td><?php echo $user['id']; ?></td>
                             <td><?php echo $user['ad']; ?></td>
+                            <td><?php echo $user['soyad']; ?></td>
                             <td><?php echo $user['email']; ?></td>
                             <td><?php echo $user['login'] == 1 ? 'Aktif' : 'Pasif'; ?></td>
                             <td>
