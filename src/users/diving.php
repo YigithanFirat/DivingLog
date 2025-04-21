@@ -6,9 +6,9 @@
     $clothing = 'Kuru, Islak, Diğer';
     $success_message = '';
     $error_message = '';
+    $date = date('d/m/Y');
     if($_SERVER['REQUEST_METHOD'] == 'POST')
     {
-        $date = date('d/m/Y');
         $minutes = $_POST['diving_time'] ?? '';
         $diving_location = $_POST['diving_location'] ?? '';
         $water_type = $_POST['water_type'] ?? '';
