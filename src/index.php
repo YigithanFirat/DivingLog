@@ -37,7 +37,7 @@
     <h1>DivingLog</h1>
     <h2>Web Uygulamasına Hoşgeldiniz</h2>
     <div class="content">
-        <h3>Hoş geldin, <?php echo htmlspecialchars($user['ad'] ?? 'misafir'); ?>! 👋</h3>
+        <h3>Hoş geldin <?php echo htmlspecialchars($user['ad'] ?? ''); ?>! 👋</h3>
         <p>Web uygulamanızda dalış geçmişinizi kaydedebilir ve yönetebilirsiniz.</p>
         <?php if(!$logged_in): ?>
             <a href="users/login.php" class="btn">Giriş Yap</a>
