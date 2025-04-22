@@ -1,7 +1,7 @@
 body
 {
     font-family: 'Arial', sans-serif;
-    background-color: #F2F7FF;
+    background-color: #1e3c58;
     margin: 0;
     padding: 0;
 }
@@ -58,6 +58,34 @@ header nav ul li a:hover
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    justify-content: center;
+    margin-top: 210px;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container ul
+{
+    display: flex;
+    justify-content: space-around;
+    list-style: none;
+    gap: 20px;
+    padding: 0;
+}
+
+.container ul li
+{
+    background-color: #FF9900;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.container ul li a
+{
+    text-decoration: none;
+    color: #fafafa;
+    font-size: 12px;
+    font-weight: bolder;
 }
 
 h2
@@ -93,6 +121,17 @@ h2
 {
     font-size: 15px;
     color: #333;
+}
+
+header nav ul li a.active, header nav ul li a:focus
+{
+    background-color: #FF9900;
+    color: white;
+}
+
+.user-table tr
+{
+    transition: background-color 0.3s ease;
 }
 
 .user-table tr:hover
@@ -152,7 +191,7 @@ h2
 footer
 {
     text-align: center;
-    margin-top: 222px;
+    margin-top: 197px;
     color: #d3d3d3;
     padding: 10px;
     width: 98.7%;
@@ -166,6 +205,19 @@ footer p
 
 @media screen and (max-width: 768px)
 {
+    .container ul
+    {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .container ul li
+    {
+        width: 100%;
+        text-align: center;
+    }
+
     .container
     {
         width: 95%;
@@ -188,4 +240,24 @@ footer p
         font-size: 14px;
         padding: 12px;
     }
+
+    header h1
+    {
+        font-size: 1.5em;
+    }
+}
+
+a, button
+{
+    transition: all 0.3s ease-in-out;
+}
+
+header, footer
+{
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.15);
+}
+
+header h1
+{
+    font-size: 2.2em;
 }
