@@ -17,13 +17,6 @@
 <body>
     <header>
         <h1>DivingLog | Admin Paneli</h1>
-        <nav>
-            <ul>
-                <li><a href="../index.php">Ana Sayfa</a></li>
-                <li><a href="manage_users.php">Kullanıcıları Yönet</a></li>
-                <li><a href="../users/exit.php">Çıkış Yap</a></li>
-            </ul>
-        </nav>
     </header>
     <div class="container">
         <?php if ($success_message): ?>
@@ -32,6 +25,11 @@
         <?php if ($error_message): ?>
             <div class="error"><?php echo $error_message; ?></div>
         <?php endif; ?>
+        <ul>
+            <li><a href="../index.php">Ana Sayfa</a></li>
+            <li><a href="manage_users.php">Kullanıcıları Yönet</a></li>
+            <li><a href="../users/exit.php">Çıkış Yap</a></li>
+        </ul>
     </div>
     <footer>
         <p>&copy; 2025 DivingLog Uygulaması</p>
