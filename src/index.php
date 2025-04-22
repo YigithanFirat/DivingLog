@@ -4,6 +4,13 @@
     $logged_in = false;
     $ag = false;
     $user = [];
+    function buyukHarfTR($metin)
+    {
+        $harfler = ['i', 'ı', 'ğ', 'ü', 'ş', 'ö', 'ç'];
+        $buyukler = ['İ', 'I', 'Ğ', 'Ü', 'Ş', 'Ö', 'Ç'];
+        $metin = str_replace($harfler, $buyukler, $metin);
+        return mb_strtoupper($metin, 'UTF-8');
+    }
     if(isset($_SESSION['tcno']))
     {
         $tcno = $_SESSION['tcno'];
@@ -37,7 +44,7 @@
     <h1>DivingLog</h1>
     <h2>Web Uygulamasına Hoşgeldiniz</h2>
     <div class="content">
-        <h3>Hoş geldin <?php echo htmlspecialchars($user['ad'] ?? ''); ?>! 👋</h3>
+    <h3>Hoş geldin, <?php echo htmlspecialchars(buyukHarfTR($user['ad'] ?? 'MİSAFİR ÜYE')); ?>! 👋</h3>
         <p>Web uygulamanızda dalış geçmişinizi kaydedebilir ve yönetebilirsiniz.</p>
         <?php if(!$logged_in): ?>
             <a href="users/login.php" class="btn">Giriş Yap</a>
