@@ -17,8 +17,10 @@
 <body>
     <header>
         <h1>DivingLog | Admin Paneli</h1>
+        <h2>Admin İşlemlerine Aşağıdan Ulaşabilirsiniz!</h2>
     </header>
     <div class="container">
+        <h3>İşlemleri bu kısımdan yapabilirsiniz.</h3>
         <?php if ($success_message): ?>
             <div class="success"><?php echo $success_message; ?></div>
         <?php endif; ?>
