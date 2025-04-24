@@ -1,6 +1,13 @@
 # DivingLog
 Kullanıcıların dalışlarını kaydetmelerine ve takip etmelerine yardımcı olur. Uygulama, dalış deneyimlerinizi not almanıza, dalış verilerinizi depolamanıza ve analiz etmenize olanak tanır.
 
+## Greetings
+Kullanıcıların anasayfaya bağlanma durumlarına göre selamlama eklendi. Giriş yapmışsa adıyla, yapmamışsa MİSAFİR ÜYE olarak selamlama yapılmaktadır.
+
+![alt text](greetingsnologin.png)
+
+![alt text](greetingslogin.png)
+
 ## User Register
 Kullanıcı kaydına ait işlemler tamamlanmıştır ve fotoğraf paylaşılmıştır.
 
