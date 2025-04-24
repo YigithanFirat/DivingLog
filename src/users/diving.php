@@ -9,7 +9,7 @@
     $date = date('d/m/Y');
     if($_SERVER['REQUEST_METHOD'] == 'POST')
     {
-        $minutes = $_POST['diving_time'] ?? '';
+        $minutes = $_POST['minutes'] ?? '';
         $diving_location = $_POST['diving_location'] ?? '';
         $water_type = $_POST['water_type'] ?? '';
         $depth_feet = $_POST['depth_feet'] ?? '';
