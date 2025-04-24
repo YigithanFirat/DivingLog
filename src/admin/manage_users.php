@@ -13,6 +13,7 @@
     <title>DivingLog | Kullanıcıları Yönet</title>
     <link rel="stylesheet" href="../CSS/manage_users.css">
     <link rel="web icon" href="../images/divinglog.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
     <header>
@@ -25,6 +26,9 @@
         </nav>
     </header>
     <div class="container">
+    <?php if (isset($_GET['login'])): ?>
+        <div class="<?php echo $_GET['login'] === 'success' ? 'success_message' : 'error_message'; ?>"></div>
+    <?php endif; ?>
         <h2>Kullanıcılar Listesi</h2>
         <?php if (mysqli_num_rows($result) > 0): ?>
             <table>
@@ -50,7 +54,9 @@
                                 <a href="edit_user.php?id=<?php echo $user['id']; ?>" class="btn">Düzenle</a>
                                 <a href="admin_reset_password.php?id=<?php echo $user['id']; ?>" class="btn">Şifre Sıfırla</a>
                                 <a href="export_pdf.php?id=<?php echo $user['id']; ?>" class="btn">Dışa Aktar ( PDF )</a>
-                                <a href="delete_user.php?id=<?php echo $user['id']; ?>" class="btn delete" onclick="return confirm('Bu kullanıcıyı silmek istediğinize emin misiniz?');">Sil</a>
+                                <a href="#" class="btn delete-btn" onclick="openConfirmModal(<?php echo $user['id']; ?>); return false;">
+                                    <i class="fas fa-exclamation-triangle"></i> Sil
+                                </a>
                             </td>
                         </tr>
                     <?php endwhile; ?>
@@ -60,8 +66,20 @@
             <p>Henüz kullanıcı bulunmamaktadır.</p>
         <?php endif; ?>
     </div>
+    <!-- Modal HTML -->
+    <div id="confirmModal" class="modal-overlay">
+    <div class="modal-box">
+        <h3><i class="fas fa-triangle-exclamation"></i> Dikkat!</h3>
+        <p>Bu kullanıcıyı silmek istediğinize emin misiniz?</p>
+        <div class="modal-actions">
+        <button onclick="proceedDelete()" class="modal-confirm">Evet, Sil</button>
+        <button onclick="closeConfirmModal()" class="modal-cancel">İptal</button>
+        </div>
+    </div>
+    </div>
     <footer>
         <p>&copy; 2025 DivingLog Uygulaması</p>
     </footer>
+    <script src="../JS/manage_users.js"></script>
 </body>
 </html>
