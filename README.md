@@ -21,7 +21,7 @@ Web sitesine ait ikon eklenmiştir ve fotoğraf paylaşılmıştır.
 ## Admin Dashboard
 Admin dashboard eklendi. Dashboard üstünden kullanıcıları yönetebilme, dalışları yönetebilme, hesabınız çıkış yapma veya anasayfaya yönlendirme gibi işlemler eklendi.
 
-![alt text](admindasboard.png)
+![alt text](admindashboard.png)
 
 ## Reset Password
 Adminler tarafından şifrelerini unutan kullanıcıların şifrelerinin sıfırlanabilmesi sağlandı.
@@ -36,7 +36,9 @@ Kullanıcı bilgilerinin bazılarının görüntülenip düzenleyebilme, silme v
 ## Index Diving Plan
 Anasayfa su altı dalışı planlaması yapılabilmesi için butonla yönlendirilebilir bir kısım yapıldı.
 
-![alt text](greetingsnologin.png) ![alt text](greetingslogin.png)
+![alt text](greetingsnologin.png)
+
+![alt text](greetingslogin.png)
 
 ## Diving Plan Form
 Dalış planına ait tüm bilgilerin girilebilir ve seçilebilir olduğu bir form tasarlandı.
