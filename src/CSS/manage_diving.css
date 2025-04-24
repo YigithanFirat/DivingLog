@@ -1,0 +1,149 @@
+body
+{
+    font-family: Arial, sans-serif;
+    background-color: #1e3c57;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+h2
+{
+    text-align: center;
+    font-size: 24px;
+    color: #fff;
+    margin-top: 20px;
+}
+
+table
+{
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+th
+{
+    background-color: #2a77cc;
+    color: white;
+    padding: 10px;
+    text-align: left;
+}
+
+td
+{
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+tr:hover
+{
+    background-color: #f4f4f4;
+}
+
+a
+{
+    color: #2a77cc;
+    text-decoration: none;
+}
+
+a:hover
+{
+    text-decoration: underline;
+}
+
+a:active
+{
+    color: #e63946;
+}
+
+.success_message, .error_message
+{
+    padding: 15px;
+    margin: 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+    width: 90%;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.success_message
+{
+    background-color: #4CAF50;
+    color: white;
+}
+
+.error_message
+{
+    background-color: #f44336;
+    color: white;
+}
+
+.confirm_message
+{
+    color: #333;
+    font-size: 16px;
+    text-align: center;
+}
+
+footer
+{
+    text-align: center;
+    margin-top: 489px;
+    color: #d3d3d3;
+    padding: 10px;
+    width: 98.7%;
+    background-color: #1c2b3a;
+}
+
+footer p
+{
+    font-weight: bolder;
+}
+
+.action-buttons
+{
+    display: flex;
+    gap: 8px;
+}
+
+.action-buttons a
+{
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 13px;
+    font-weight: bold;
+    border: 1px solid transparent;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-buttons .edit-btn, .action-buttons .export-btn
+{
+    background-color: #FF9900;
+    border-color: #FF9900;
+}
+
+.action-buttons .edit-btn:hover, .action-buttons .export-btn:hover
+{
+    background-color: #e88c00;
+}
+
+.action-buttons .delete-btn
+{
+    background-color: #FF5733;
+    border-color: #FF5733;
+}
+
+.action-buttons .delete-btn:hover
+{
+    background-color: #FF2E00;
+}
