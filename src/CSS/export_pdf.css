@@ -1,0 +1,41 @@
+body
+{
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+.success_message
+{
+    padding: 15px;
+    margin: 20px;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.error_message
+{
+    padding: 15px;
+    margin: 20px;
+    background-color: #f44336;
+    color: white;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.success_message, .error_message
+{
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: 80%;
+}
