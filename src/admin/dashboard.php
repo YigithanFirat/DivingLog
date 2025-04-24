@@ -30,6 +30,7 @@
         <ul>
             <li><a href="../index.php">Ana Sayfa</a></li>
             <li><a href="manage_users.php">Kullanıcıları Yönet</a></li>
+            <li><a href="manage_diving.php">Dalışları Yönet</a></li>
             <li><a href="../users/exit.php">Çıkış Yap</a></li>
         </ul>
     </div>
