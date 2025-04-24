@@ -45,10 +45,11 @@
                             <td><?php echo $user['ad']; ?></td>
                             <td><?php echo $user['soyad']; ?></td>
                             <td><?php echo $user['email']; ?></td>
-                            <td><?php echo $user['login'] == 1 ? 'Aktif' : 'Pasif'; ?></td>
+                            <td><?php echo $user['login'] == 1 ? 'Çevrim İçi' : 'Çevrim Dışı'; ?></td>
                             <td>
                                 <a href="edit_user.php?id=<?php echo $user['id']; ?>" class="btn">Düzenle</a>
                                 <a href="admin_reset_password.php?id=<?php echo $user['id']; ?>" class="btn">Şifre Sıfırla</a>
+                                <a href="export_pdf.php?id=<?php echo $user['id']; ?>" class="btn">Dışa Aktar ( PDF )</a>
                                 <a href="delete_user.php?id=<?php echo $user['id']; ?>" class="btn delete" onclick="return confirm('Bu kullanıcıyı silmek istediğinize emin misiniz?');">Sil</a>
                             </td>
                         </tr>
