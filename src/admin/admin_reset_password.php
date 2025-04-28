@@ -27,7 +27,7 @@
         else
         {
             $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
-            $update_sql = "UPDATE users SET password='$hashed_password' WHERE id='$user_id'";
+            $update_sql = "UPDATE users SET sifre='$hashed_password' WHERE id='$user_id'";
             if(mysqli_query($mysqlB, $update_sql))
             {
                 $success_message = "Şifre başarıyla güncellendi.";
