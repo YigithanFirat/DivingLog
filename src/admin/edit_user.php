@@ -18,10 +18,17 @@
     }
     if($_SERVER["REQUEST_METHOD"] == "POST")
     {
-        $name = mysqli_real_escape_string($mysqlB, $_POST['name']);
-        $email = mysqli_real_escape_string($mysqlB, $_POST['email']);
-        $status = $_POST['login'];
-        $update_sql = "UPDATE users SET ad='$name', email='$email', login='$status' WHERE id='$user_id'";
+        $ad = isset($_POST['ad']) ? mysqli_real_escape_string($mysqlB, $_POST['ad']) : '';
+        $soyad = isset($_POST['soyad']) ? mysqli_real_escape_string($mysqlB, $_POST['soyad']) : '';
+        $birthdate = isset($_POST['dogum_tarihi']) ? mysqli_real_escape_string($mysqlB, $_POST['dogum_tarihi']) : '';
+        $nation = isset($_POST['milliyet']) ? mysqli_real_escape_string($mysqlB, $_POST['milliyet']) : '';
+        $adres = isset($_POST['adres']) ? mysqli_real_escape_string($mysqlB, $_POST['adres']) : '';
+        $kaza = isset($_POST['kaza_haber_kişi_ad_soyad']) ? mysqli_real_escape_string($mysqlB, $_POST['kaza_haber_kişi_ad_soyad']) : '';
+        $telefon = isset($_POST['telefon']) ? $_POST['telefon'] : '';
+        $tcno = isset($_POST['tcno']) ? $_POST['tcno'] : '';
+        $email = isset($_POST['email']) ? mysqli_real_escape_string($mysqlB, $_POST['email']) : '';
+        $status = isset($_POST['login']) ? $_POST['login'] : '';        
+        $update_sql = "UPDATE users SET ad='$ad', soyad='$soyad', dogum_tarihi='$birthdate', milliyet='$nation', adres='$adres', kaza_haber_kişi_ad_soyad='$kaza', telefon='$telefon', tcno='$tcno', email='$email', login='$status' WHERE id='$user_id'";
         if(mysqli_query($mysqlB, $update_sql))
         {
             $success_message = "Kullanıcı başarıyla güncellendi.";
@@ -63,34 +70,47 @@
         <h2>Kullanıcı Bilgilerini Düzenle</h2>
         <form action="edit_user.php?id=<?php echo $user_id; ?>" method="POST">
             <label for="name">Ad:</label>
-            <input type="text" id="name" name="name" value="<?php echo $user['ad']; ?>" required>
+            <input type="text" id="name" name="ad" value="<?php echo $user['ad']; ?>" required>
+
             <label for="surname">Soyad:</label>
-            <input type="text" id="surname" name="surname" value="<?php echo $user['soyad']; ?>" required>
+            <input type="text" id="surname" name="soyad" value="<?php echo $user['soyad']; ?>" required>
+
             <label for="dogumatarihi">Doğum Tarihi:</label>
-            <input type="text" id="dogumtarihi" name="dogumtarihi" value="<?php echo $user['dogum_tarihi']; ?>" required>
+            <input type="text" id="dogumtarihi" name="dogum_tarihi" value="<?php echo $user['dogum_tarihi']; ?>" required>
+
             <label for="milliyet">Milliyet:</label>
             <input type="text" id="milliyet" name="milliyet" value="<?php echo $user['milliyet']; ?>" required>
+
             <label for="adres">Adres:</label>
             <input type="text" id="adres" name="adres" value="<?php echo $user['adres']; ?>" required>
+
             <label for="kaza_haber_kişi_ad_soyad">Kaza Halinde Haber Verilecek Kişinin Ad Soyadı:</label>
             <input type="text" id="kaza_haber_kişi_ad_soyad" name="kaza_haber_kişi_ad_soyad" value="<?php echo $user['kaza_haber_kişi_ad_soyad']; ?>" required>
-            <label for="telefon">Telefon Numarası:</label><br>
+
+            <label for="telefon">Telefon Numarası:</label>
             <input type="text" id="telefon" name="telefon" value="<?php echo $user['telefon']; ?>" required>
+
             <label for="tcno">T.C Kimlik Numarası:</label>
             <input type="text" id="tcno" name="tcno" value="<?php echo $user['tcno']; ?>" required>
+
             <label for="fotograf">Fotoğraf:</label>
             <input type="text" id="fotograf" name="fotograf" value="<?php echo $user['fotograf']; ?>" required>
+
             <label for="login">Durum:</label>
             <select id="login" name="login" required>
                 <option value="1" <?php if ($user['login'] == 1) echo 'selected'; ?>>Aktif</option>
                 <option value="0" <?php if ($user['login'] == 0) echo 'selected'; ?>>Pasif</option>
             </select>
+
             <label for="email">E-posta:</label>
             <input type="email" id="email" name="email" value="<?php echo $user['email']; ?>" required>
+
+            <label for="administrator">Rol:</label>
             <select name="administrator" id="administrator" required>
                 <option value="0" <?php if($user['admin'] == 0) echo 'selected'; ?>>Üye</option>
                 <option value="1" <?php if($user['admin'] == 1) echo 'selected'; ?>>Administrator</option>
             </select>
+
             <button type="submit" class="btn">Güncelle</button>
         </form>
     </div>
