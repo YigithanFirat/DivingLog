@@ -4,6 +4,21 @@
     $error_message = '';
     $sql = "SELECT * FROM users";
     $result = mysqli_query($mysqlB, $sql);
+
+    $total_user_sql = "SELECT COUNT(*) as total_users FROM users";
+    $sonuc = mysqli_query($mysqlB, $total_user_sql);
+    $row = mysqli_fetch_assoc($sonuc);
+    $total_users = $row['total_users'];
+
+    $total_diving_sql = "SELECT COUNT(*) as total_diving FROM diving_plans";
+    $total_diving_result = mysqli_query($mysqlB, $total_diving_sql);
+    $satir = mysqli_fetch_assoc($total_diving_result);
+    $total_diving = $satir['total_diving'];
+
+    $total_certificate_sql = "SELECT COUNT(*) as total_certificate FROM certificate";
+    $total_certificate_result = mysqli_query($mysqlB, $total_certificate_sql);
+    $csatir = mysqli_fetch_assoc($total_certificate_result);
+    $total_certificate = $csatir['total_certificate'];
 ?>
 <!DOCTYPE html>
 <html lang="tr">
@@ -33,6 +48,9 @@
             <li><a href="manage_diving.php">Dalışları Yönet</a></li>
             <li><a href="../users/exit.php">Çıkış Yap</a></li>
         </ul>
+        <p>Toplam Kullanıcı Sayısı: <?php echo $total_users; ?></p>
+        <p>Toplam Dalış Sayısı: <?php echo $total_diving; ?></p>
+        <p>Toplam Verilen Sertifika Sayısı: <?php echo $total_certificate ?></p>
     </div>
     <footer>
         <p>&copy; 2025 DivingLog Uygulaması</p>
