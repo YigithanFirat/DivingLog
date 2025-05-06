@@ -75,6 +75,11 @@ header nav ul li a:hover
     margin-top: 100px;
 }
 
+.container ul li:hover
+{
+    background-color: #008c9e;
+}
+
 .container ul li a
 {
     text-decoration: none;
@@ -194,7 +199,7 @@ header nav ul li a.active, header nav ul li a:focus
 footer
 {
     text-align: center;
-    margin-top: 303px;
+    margin-top: 203px;
     color: #d3d3d3;
     padding: 10px;
     width: 98.7%;
@@ -263,4 +268,17 @@ header, footer
 header h1
 {
     font-size: 2.2em;
+}
+
+.container p 
+{
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #005A8D;
+    display: inline-block;
+    padding: 12px 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    margin-top: 20px;
 }
