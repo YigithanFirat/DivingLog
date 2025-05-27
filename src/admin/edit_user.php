@@ -1,43 +1,57 @@
 <?php
-    include('../../config.php');
-    session_start();
-    if(isset($_GET['id']))
-    {
-        $user_id = $_GET['id'];
-        $sql = "SELECT * FROM users WHERE id = '$user_id'";
-        $result = mysqli_query($mysqlB, $sql);
-        if(mysqli_num_rows($result) > 0)
-        {
-            $user = mysqli_fetch_assoc($result);
-        }
-        else
-        {
-            echo "Kullanıcı bulunamadı.";
-            exit;
-        }
+include('../../config.php');
+session_start();
+
+if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+    $user_id = intval($_GET['id']);
+    $stmt = $mysqlB->prepare("SELECT * FROM users WHERE id = ?");
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $user = $result->fetch_assoc();
+    } else {
+        echo "Kullanıcı bulunamadı.";
+        exit;
     }
-    if($_SERVER["REQUEST_METHOD"] == "POST")
-    {
-        $ad = isset($_POST['ad']) ? mysqli_real_escape_string($mysqlB, $_POST['ad']) : '';
-        $soyad = isset($_POST['soyad']) ? mysqli_real_escape_string($mysqlB, $_POST['soyad']) : '';
-        $birthdate = isset($_POST['dogum_tarihi']) ? mysqli_real_escape_string($mysqlB, $_POST['dogum_tarihi']) : '';
-        $nation = isset($_POST['milliyet']) ? mysqli_real_escape_string($mysqlB, $_POST['milliyet']) : '';
-        $adres = isset($_POST['adres']) ? mysqli_real_escape_string($mysqlB, $_POST['adres']) : '';
-        $kaza = isset($_POST['kaza_haber_kişi_ad_soyad']) ? mysqli_real_escape_string($mysqlB, $_POST['kaza_haber_kişi_ad_soyad']) : '';
-        $telefon = isset($_POST['telefon']) ? $_POST['telefon'] : '';
-        $tcno = isset($_POST['tcno']) ? $_POST['tcno'] : '';
-        $email = isset($_POST['email']) ? mysqli_real_escape_string($mysqlB, $_POST['email']) : '';
-        $status = isset($_POST['login']) ? $_POST['login'] : '';        
-        $update_sql = "UPDATE users SET ad='$ad', soyad='$soyad', dogum_tarihi='$birthdate', milliyet='$nation', adres='$adres', kaza_haber_kişi_ad_soyad='$kaza', telefon='$telefon', tcno='$tcno', email='$email', login='$status' WHERE id='$user_id'";
-        if(mysqli_query($mysqlB, $update_sql))
-        {
-            $success_message = "Kullanıcı başarıyla güncellendi.";
-        }
-        else
-        {
-            $error_message = "Kullanıcı güncellenirken bir hata oluştu.";
-        }
+    $stmt->close();
+} else {
+    echo "Geçersiz kullanıcı ID'si.";
+    exit;
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $ad = $_POST['ad'] ?? '';
+    $soyad = $_POST['soyad'] ?? '';
+    $birthdate = $_POST['dogum_tarihi'] ?? '';
+    $nation = $_POST['milliyet'] ?? '';
+    $adres = $_POST['adres'] ?? '';
+    $kaza = $_POST['kaza_haber_kişi_ad_soyad'] ?? '';
+    $telefon = $_POST['telefon'] ?? '';
+    $tcno = $_POST['tcno'] ?? '';
+    $fotograf = $_POST['fotograf'] ?? '';
+    $email = $_POST['email'] ?? '';
+    $status = $_POST['login'] ?? '';
+    $admin = $_POST['administrator'] ?? '';
+
+    $stmt = $mysqlB->prepare("UPDATE users SET 
+        ad = ?, soyad = ?, dogum_tarihi = ?, milliyet = ?, adres = ?, 
+        kaza_haber_kişi_ad_soyad = ?, telefon = ?, tcno = ?, fotograf = ?, 
+        email = ?, login = ?, admin = ? WHERE id = ?");
+    $stmt->bind_param("ssssssssssiii",
+        $ad, $soyad, $birthdate, $nation, $adres,
+        $kaza, $telefon, $tcno, $fotograf,
+        $email, $status, $admin, $user_id
+    );
+
+    if ($stmt->execute()) {
+        $success_message = "Kullanıcı başarıyla güncellendi.";
+    } else {
+        $error_message = "Kullanıcı güncellenirken bir hata oluştu: " . $stmt->error;
     }
+    $stmt->close();
+}
 ?>
 
 <!DOCTYPE html>
