@@ -4,32 +4,37 @@
     $error_message = '';
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $user_id = $_POST['user_id'];
-        $certificate_name = $_POST['certificate_name'];
-        $issuing_organization = $_POST['issuing_organization'];
+        // Temel doğrulama ve XSS koruması için verileri temizle
+        $user_id = filter_input(INPUT_POST, 'user_id', FILTER_VALIDATE_INT);
+        $certificate_name = trim($_POST['certificate_name']);
+        $issuing_organization = trim($_POST['issuing_organization']);
         $issue_date = $_POST['issue_date'];
         $expiration_date = $_POST['expiration_date'];
-        $certificate_level = $_POST['certificate_level'];
-        $certificate_number = $_POST['certificate_number'];
-        $notes = $_POST['notes'];
+        $certificate_level = trim($_POST['certificate_level']);
+        $certificate_number = trim($_POST['certificate_number']);
+        $notes = trim($_POST['notes']);
 
-        // Güvenlik için veri doğrulama ve boş alan kontrolü
+        // Gerekli alanlar kontrol ediliyor
         if (!empty($user_id) && !empty($certificate_name)) {
             $stmt = $mysqlB->prepare("INSERT INTO certificate 
                 (user_id, certificate_name, issuing_organization, issue_date, expiration_date, certificate_level, certificate_number, notes)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 
-            $stmt->bind_param("isssssss", $user_id, $certificate_name, $issuing_organization, $issue_date, $expiration_date, $certificate_level, $certificate_number, $notes);
+            if ($stmt) {
+                $stmt->bind_param("isssssss", $user_id, $certificate_name, $issuing_organization, $issue_date, $expiration_date, $certificate_level, $certificate_number, $notes);
 
-            if ($stmt->execute()) {
-                $success_message = "Sertifika başarıyla eklendi.";
+                if ($stmt->execute()) {
+                    $success_message = "Sertifika başarıyla eklendi.";
+                } else {
+                    $error_message = "Veritabanına eklenirken bir hata oluştu: " . $stmt->error;
+                }
+
+                $stmt->close();
             } else {
-                $error_message = "Hata oluştu: " . $stmt->error;
+                $error_message = "Sorgu hazırlanamadı: " . $mysqlB->error;
             }
-
-            $stmt->close();
         } else {
-            $error_message = "Kullanıcı ve Sertifika Adı alanları zorunludur.";
+            $error_message = "Kullanıcı ID ve Sertifika Adı alanları zorunludur.";
         }
     }
 ?>
