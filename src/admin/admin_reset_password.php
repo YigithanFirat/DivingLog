@@ -1,25 +1,35 @@
 <?php
     include('../../config.php');
     session_start();
+
+    // Kullanıcı verisini güvenli şekilde al
     if(isset($_GET['id']))
     {
         $user_id = $_GET['id'];
-        $sql = "SELECT * FROM users WHERE id = '$user_id'";
-        $result = mysqli_query($mysqlB, $sql);
-        if(mysqli_num_rows($result) > 0)
+
+        // Prepared statement kullanarak SQL Injection'a karşı koruma
+        $stmt = $mysqlB->prepare("SELECT * FROM users WHERE id = ?");
+        $stmt->bind_param("i", $user_id); // "i" -> integer
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if($result->num_rows > 0)
         {
-            $user = mysqli_fetch_assoc($result);
+            $user = $result->fetch_assoc();
         }
         else
         {
             echo "Kullanıcı bulunamadı.";
             exit;
         }
+        $stmt->close();
     }
+
     if($_SERVER["REQUEST_METHOD"] == "POST")
     {
         $new_password = $_POST['new_password'];
         $confirm_password = $_POST['confirm_password'];
+
         if($new_password !== $confirm_password)
         {
             $error_message = "Şifreler eşleşmiyor.";
@@ -27,8 +37,12 @@
         else
         {
             $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
-            $update_sql = "UPDATE users SET sifre='$hashed_password' WHERE id='$user_id'";
-            if(mysqli_query($mysqlB, $update_sql))
+
+            // Prepared statement ile güncelleme işlemi
+            $update_stmt = $mysqlB->prepare("UPDATE users SET sifre = ? WHERE id = ?");
+            $update_stmt->bind_param("si", $hashed_password, $user_id);
+
+            if($update_stmt->execute())
             {
                 $success_message = "Şifre başarıyla güncellendi.";
             }
@@ -36,6 +50,8 @@
             {
                 $error_message = "Şifre güncellenirken bir hata oluştu.";
             }
+
+            $update_stmt->close();
         }
     }
 ?>
