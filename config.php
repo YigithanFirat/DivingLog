@@ -10,7 +10,7 @@ function env($key, $default = null) {
 
 $hostname = env('DB_HOST', 'localhost');
 $user = env('DB_USER', 'root');
-$password = env('DB_PASS', '');
+$password = env('DB_PASS', '[priadon1.5]');
 $database = env('DB_NAME', 'divinglog');
 
 $mysqlB = mysqli_connect($hostname, $user, $password, $database);
