@@ -31,6 +31,18 @@ header h1
     padding: 0 10px;
 }
 
+table input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #34495e;
+    color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
 .plan-details
 {
     background-color: #2f4f66;
