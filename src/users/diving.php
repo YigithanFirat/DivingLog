@@ -122,11 +122,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </tr>
                     <tr>
                         <td>Planlanan Derinlik (Feet):</td>
-                        <td><input type="number" min="0" name="depth_feet" placeholder="Derinliği Feet Cinsinden Giriniz" value="<?php echo isset($depth_feet) ? htmlspecialchars($depth_feet) : ''; ?>"></td>
+                        <td><input type="number" min="0" name="depth_feet" ... ></td>
                     </tr>
                     <tr>
                         <td>Planlanan Derinlik (Metre):</td>
-                        <td><input type="number" min="0" name="depth_meter" placeholder="Derinliği Metre Cinsinden Giriniz" value="<?php echo isset($depth_meter) ? htmlspecialchars($depth_meter) : ''; ?>"></td>
+                        <td><input type="number" min="0" name="depth_meter" ... ></td>
                     </tr>
                     <tr>
                         <td>Solunum Gazı:</td>
