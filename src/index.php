@@ -63,6 +63,8 @@ if (isset($_SESSION['tcno'])) {
                 <a href="admin/dashboard.php" class="btn">Dashboard</a>
                 <a href="users/diving.php" class="btn">Diving Plan</a>
                 <a href="admin/certificate.php" class="btn">Sertifika</a>
+                <a href="admin/health_inspection.php" class="btn">Sağlık Raporu</a>
+                <a href="users/health_inspection_list.php" class="btn">Sağlık Raporlarını Listele</a>
             <?php endif; ?>
         <?php endif; ?>
     </div>
