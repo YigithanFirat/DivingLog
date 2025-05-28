@@ -101,7 +101,7 @@ button[type="submit"]:hover
 footer
 {
     text-align: center;
-    margin-top: 90px;
+    margin-top: 321px;
     color: #d3d3d3;
     padding: 10px;
     width: 98.7%;
@@ -133,17 +133,21 @@ footer p
     text-align: center;
 }
 
-.login-link
-{
+.success, .error {
+    font-size: 1.1em;
+    max-width: 600px;
+}
+
+.login-link {
     color: #00bcd4;
-    text-decoration: none;
+    text-decoration: underline;
     font-weight: bold;
     margin-left: 5px;
 }
 
-.login-link:hover
-{
-    color: #008c9e;
+.login-link:hover {
+    color: #008c9e; /* İsterseniz hover'da renk değişebilir */
+    text-decoration: underline; /* veya underline gösterebilirsiniz */
 }
 
 textarea
