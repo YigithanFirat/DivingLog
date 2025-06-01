@@ -46,11 +46,11 @@ $result = mysqli_query($mysqlB, $query);
                         <td><?= htmlspecialchars($row['onaylanan']) ?></td>
                         <td><?= date('d.m.Y H:i', strtotime($row['created_at'])) ?></td>
                         <td>
-                            <a href="../admin/health_inspection_edit.php?id=<?= $row['id'] ?>" class="btn-edit">Düzenle</a>
+                            <a href="health_inspection_edit.php?id=<?= $row['id'] ?>" class="btn-edit">Düzenle</a>
                             <button class="btn-delete" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-id="<?= $row['id'] ?>">
                                 ⚠️ Sil
                             </button>
-                            <a href="../admin/health_inspection_export_pdf.php?id=<?= $row['id'] ?>" target="_blank" class="btn-pdf">PDF Dışa Aktar</a>
+                            <a href="health_inspection_export_pdf.php?id=<?= $row['id'] ?>" target="_blank" class="btn-pdf">PDF Dışa Aktar</a>
                         </td>
                     </tr>
                 <?php endwhile; ?>
