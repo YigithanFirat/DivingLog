@@ -75,7 +75,7 @@ $result = $mysqlB->query($sql);
 </div>
 
 <!-- Silme Modalı -->
-<div id="confirmModal" class="modal" style="display:none;">
+<div id="confirmModal" class="modal" style="display:none; justify-content: center;">
     <div class="modal-content">
         <p>Bu planı silmek istediğinizden emin misiniz?</p>
         <div class="modal-actions">
