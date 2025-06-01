@@ -35,6 +35,7 @@ $result = mysqli_query($mysqlB, $query);
                     <th>Seviye</th>
                     <th>Sertifika No</th>
                     <th>Notlar</th>
+                    <th>İşlemler</th>
                 </tr>
             </thead>
             <tbody>
@@ -48,6 +49,11 @@ $result = mysqli_query($mysqlB, $query);
                         <td><?= htmlspecialchars($row['certificate_level']) ?></td>
                         <td><?= htmlspecialchars($row['certificate_number']) ?></td>
                         <td><?= nl2br(htmlspecialchars($row['notes'])) ?></td>
+                        <td class="action-buttons">
+                            <a href="edit_certificate.php?id=<?= $row['id'] ?>" class="btn btn-warning btn-sm">Düzenle</a>
+                            <a href="#" class="btn btn-danger btn-sm" onclick="confirmDelete(<?= $row['id'] ?>)">Sil</a>
+                            <a href="export_certificate_pdf.php?id=<?= $row['id'] ?>" class="btn btn-primary btn-sm">PDF</a>
+                        </td>
                     </tr>
                 <?php endwhile; ?>
             </tbody>
@@ -62,5 +68,12 @@ $result = mysqli_query($mysqlB, $query);
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function confirmDelete(id) {
+    if (confirm("Bu sertifikayı silmek istediğinizden emin misiniz?")) {
+        window.location.href = 'delete_certificate.php?id=' + id;
+    }
+}
+</script>
 </body>
 </html>
