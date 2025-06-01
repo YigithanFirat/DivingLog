@@ -121,6 +121,7 @@ footer p
     border-radius: 5px;
     margin-bottom: 20px;
     text-align: center;
+    text-decoration: none;
 }
 
 .error
