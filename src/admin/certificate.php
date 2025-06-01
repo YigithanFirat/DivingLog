@@ -1,21 +1,59 @@
 <?php
-    include('../../config.php'); // Veritabanı bağlantısı burada tanımlı olmalı
-    $success_message = '';
-    $error_message = '';
+include('../../config.php'); // Veritabanı bağlantısı burada tanımlı olmalı
+$success_message = '';
+$error_message = '';
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // Temel doğrulama ve XSS koruması için verileri temizle
-        $user_id = filter_input(INPUT_POST, 'user_id', FILTER_VALIDATE_INT);
-        $certificate_name = trim($_POST['certificate_name']);
-        $issuing_organization = trim($_POST['issuing_organization']);
-        $issue_date = $_POST['issue_date'];
-        $expiration_date = $_POST['expiration_date'];
-        $certificate_level = trim($_POST['certificate_level']);
-        $certificate_number = trim($_POST['certificate_number']);
-        $notes = trim($_POST['notes']);
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Temel doğrulama ve XSS koruması için verileri temizle
+    $user_id = filter_input(INPUT_POST, 'user_id', FILTER_VALIDATE_INT);
+    $certificate_name = trim($_POST['certificate_name']);
+    $issuing_organization = trim($_POST['issuing_organization']);
+    $issue_date = $_POST['issue_date'];
+    $expiration_date = $_POST['expiration_date'];
+    $certificate_level = trim($_POST['certificate_level']);
+    $certificate_number = trim($_POST['certificate_number']);
+    $notes = trim($_POST['notes']);
 
-        // Gerekli alanlar kontrol ediliyor
-        if (!empty($user_id) && !empty($certificate_name)) {
+    // Gerekli alanlar kontrol ediliyor
+    if (!empty($user_id) && !empty($certificate_name)) {
+        // Önce sertifika numarasının varlığı kontrol edilir (eğer boş değilse)
+        if (!empty($certificate_number)) {
+            $check_stmt = $mysqlB->prepare("SELECT id FROM certificate WHERE certificate_number = ?");
+            if ($check_stmt) {
+                $check_stmt->bind_param("s", $certificate_number);
+                $check_stmt->execute();
+                $check_stmt->store_result();
+
+                if ($check_stmt->num_rows > 0) {
+                    $error_message = "Bu sertifika numarası zaten kayıtlıdır.";
+                    $check_stmt->close();
+                } else {
+                    $check_stmt->close();
+
+                    // Sertifika ekleme sorgusu
+                    $stmt = $mysqlB->prepare("INSERT INTO certificate 
+                        (user_id, certificate_name, issuing_organization, issue_date, expiration_date, certificate_level, certificate_number, notes)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+
+                    if ($stmt) {
+                        $stmt->bind_param("isssssss", $user_id, $certificate_name, $issuing_organization, $issue_date, $expiration_date, $certificate_level, $certificate_number, $notes);
+
+                        if ($stmt->execute()) {
+                            $success_message = "Sertifika başarıyla eklendi.";
+                        } else {
+                            $error_message = "Veritabanına eklenirken bir hata oluştu: " . $stmt->error;
+                        }
+
+                        $stmt->close();
+                    } else {
+                        $error_message = "Sorgu hazırlanamadı: " . $mysqlB->error;
+                    }
+                }
+            } else {
+                $error_message = "Sorgu hazırlanamadı: " . $mysqlB->error;
+            }
+        } else {
+            // Sertifika numarası boş ise doğrudan ekle
             $stmt = $mysqlB->prepare("INSERT INTO certificate 
                 (user_id, certificate_name, issuing_organization, issue_date, expiration_date, certificate_level, certificate_number, notes)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
@@ -33,10 +71,11 @@
             } else {
                 $error_message = "Sorgu hazırlanamadı: " . $mysqlB->error;
             }
-        } else {
-            $error_message = "Kullanıcı ID ve Sertifika Adı alanları zorunludur.";
         }
+    } else {
+        $error_message = "Kullanıcı ID ve Sertifika Adı alanları zorunludur.";
     }
+}
 ?>
 
 <!DOCTYPE html>
@@ -50,6 +89,7 @@
 </head>
 <body>
 
+    <form method="POST" action="">
     <?php if ($success_message): ?>
         <div class="success"><?php echo $success_message; ?></div>
     <?php endif; ?>
@@ -57,8 +97,7 @@
     <?php if ($error_message): ?>
         <div class="error"><?php echo $error_message; ?></div>
     <?php endif; ?>
-
-    <form method="POST" action="">
+    
         <h2>Sertifika Bilgisi Ekle</h2>
 
         <label for="user_id">Kullanıcı ID:</label>
