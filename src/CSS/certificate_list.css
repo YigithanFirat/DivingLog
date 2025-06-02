@@ -1,9 +1,10 @@
 /* Genel gövde stili */
 body {
-    background-color: #f5f9fc;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #333;
-    padding-bottom: 70px;
+    background-color: #1e3c57;
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Başlık */
@@ -54,30 +55,28 @@ h1 {
 }
 
 /* Footer */
-
-/* Footer (en alta sabit ve sabit renkli) */
 footer {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: #1c2b3a; /* sabit arka plan rengi */
-    color: #fafafa; /* yazı rengi */
+    background-color: #1c2b3a;
+    color: #fafafa;
     text-align: center;
     padding: 10px 0;
     font-weight: bolder;
     z-index: 999;
 }
 
+footer p {
+    font-weight: bolder;
+}
+
+/* Butonları hizala */
 .action-buttons {
     display: flex;
     gap: 5px;
     justify-content: center;
-}
-
-footer p
-{
-    font-weight: bolder;
 }
 
 /* Responsive tablo */
