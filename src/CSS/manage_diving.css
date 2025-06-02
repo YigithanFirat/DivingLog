@@ -1,42 +1,81 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #1e3c57;
+    background-color: #1e3c57; /* Koyu mavi arka plan */
     color: #333;
     margin: 0;
     padding: 0;
 }
 
+.container {
+    background-color: rgba(255, 255, 255, 0.95);
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 12px;
+    width: 95%;
+    max-width: 1200px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid #000;
+}
+
 h2 {
     text-align: center;
     font-size: 24px;
-    color: #fff;
-    margin: 20px 0;
+    color: #1e3c57;
+    margin-bottom: 20px;
 }
 
+/* ===== Tablo stil güncellemeleri ===== */
 table {
-    width: 90%;
-    margin: 20px auto;
-    border-collapse: collapse;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px; /* Hücreler arası düşey boşluk */
+    background-color: #000;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    color: #1e3c57;
+    border: 1px solid #000000;
+    border-radius: 12px;
+    overflow: hidden;
+    word-wrap: break-word;
 }
 
-th {
-    background-color: #2a77cc;
-    color: #fff;
-    padding: 12px;
+thead tr {
+    background-color: #1e3c57;
+    color: #fafafa;
+}
+
+thead th {
+    background-color: #1e3c57 !important;
+    color: #fafafa !important;
+    padding: 14px 18px; /* Padding artırıldı */
+    border-bottom: none;
+}
+
+th, td {
+    padding: 14px 18px; /* Daha geniş padding */
+    border-bottom: none; /* Alt çizgi kaldırıldı, table-spacing ile boşluk yapıyoruz */
     text-align: left;
+    white-space: normal;
+    vertical-align: middle;
 }
 
-td {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
+tbody tr {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: background-color 0.3s ease;
+    margin-bottom: 8px;
 }
 
-tr:hover {
+tbody tr:hover {
     background-color: #f4f4f4;
 }
 
+/* Link ve buton renkleri */
 a {
     color: #2a77cc;
     text-decoration: none;
@@ -50,142 +89,105 @@ a:active {
     color: #e63946;
 }
 
-.success_message,
-.error_message {
-    padding: 15px;
-    margin: 20px auto;
-    border-radius: 5px;
-    font-weight: bold;
-    text-align: center;
-    width: 90%;
-    max-width: 600px;
-}
-
-.success_message {
-    background-color: #4caf50;
-    color: #fff;
-}
-
-.error_message {
-    background-color: #f44336;
-    color: #fff;
-}
-
-.confirm_message {
-    color: #333;
-    font-size: 16px;
-    text-align: center;
-}
-
-footer {
-    text-align: center;
-    margin-top: 440px;
-    color: #d3d3d3;
-    padding: 10px 0;
-    background-color: #1c2b3a;
-    position: relative;
-    bottom: 0;
-    width: 100%;
-}
-
-footer p {
-    font-weight: bold;
-}
-
-.action-buttons {
-    display: flex;
-    gap: 8px;
-}
-
-.action-buttons a {
-    padding: 6px 12px;
-    border-radius: 5px;
-    font-size: 13px;
-    font-weight: bold;
-    border: 1px solid transparent;
-    color: white;
-    display: flex;
+/* İşlem butonlarının kapsayıcısı */
+.d-flex.gap-2.flex-wrap {
+    display: flex !important;
+    flex-wrap: nowrap !important; /* Tek satırda göster */
+    gap: 12px !important; /* Butonlar arasında daha fazla boşluk */
+    justify-content: flex-start;
     align-items: center;
-    justify-content: center;
+    white-space: nowrap;
 }
 
-.edit-btn,
-.export-btn {
-    background-color: #ff9900;
-    border-color: #ff9900;
-}
-
-.edit-btn:hover,
-.export-btn:hover {
-    background-color: #e88c00;
-}
-
-.delete-btn {
-    background-color: #ff5733;
-    border-color: #ff5733;
-}
-
-.delete-btn:hover {
-    background-color: #ff2e00;
-}
-
-/* Modal Styling */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-.modal-content {
-    background-color: #fff;
-    padding: 24px;
-    border-radius: 10px;
-    width: 350px;
-    max-width: 90%;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-    text-align: center;
-    animation: fadeInScale 0.3s ease-out;
-}
-
-@keyframes fadeInScale {
-    0% {
-        opacity: 0;
-        transform: scale(0.9);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-.modal-actions {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
-}
-
-.modal-actions button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
+/* Butonlar */
+.btn-sm {
+    min-width: 100px; /* Minimum genişlik */
+    padding: 6px 10px;
     font-size: 14px;
 }
 
-.confirm-btn {
-    background-color: #dc3545;
-    color: white;
+/* Renkli butonlar */
+.btn-warning {
+    background-color: #ff9900;
+    border-color: #ff9900;
+    color: #fff;
 }
 
-.cancel-btn {
+.btn-warning:hover {
+    background-color: #e88c00;
+}
+
+.btn-info {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+    color: #fff;
+}
+
+.btn-info:hover {
+    background-color: #138496;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: #fff;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+/* Modal İçin */
+.modal-content {
+    background-color: #1e3c57;
+    color: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    border: none;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.modal-header {
+    border-bottom: 1px solid #4a4a4a;
+}
+
+.modal-footer {
+    border-top: 1px solid #4a4a4a;
+    display: flex;
+    justify-content: space-between;
+}
+
+.modal-title {
+    color: #fff;
+}
+
+.btn-close {
+    filter: invert(1);
+}
+
+.btn-secondary {
     background-color: #6c757d;
-    color: white;
+    border: none;
+    color: #fff;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+/* Mobil görünümde yatay kaydırma */
+@media (max-width: 768px) {
+    .table-wrapper {
+        overflow-x: auto;
+    }
+
+    .d-flex.gap-2.flex-wrap {
+        flex-wrap: nowrap !important;
+        overflow-x: auto;
+    }
+
+    .btn-sm {
+        min-width: 90px;
+        flex-shrink: 0;
+    }
 }
