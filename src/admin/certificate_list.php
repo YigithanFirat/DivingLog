@@ -1,7 +1,7 @@
 <?php
-include('../../config.php'); // Veritabanı bağlantısı
+include('../../config.php');
 
-// Kullanıcı adını 'ad' ve 'soyad' sütunlarını birleştirerek alıyoruz
+// Sertifikalar ve kullanıcı adını çek
 $query = "SELECT c.*, CONCAT(u.ad, ' ', u.soyad) AS user_name
           FROM certificate c
           LEFT JOIN users u ON c.user_id = u.id
@@ -51,7 +51,7 @@ $result = mysqli_query($mysqlB, $query);
                         <td><?= nl2br(htmlspecialchars($row['notes'])) ?></td>
                         <td class="action-buttons">
                             <a href="edit_certificate.php?id=<?= $row['id'] ?>" class="btn btn-warning btn-sm">Düzenle</a>
-                            <a href="#" class="btn btn-danger btn-sm" onclick="confirmDelete(<?= $row['id'] ?>)">Sil</a>
+                            <button class="btn btn-danger btn-sm" onclick="setDeleteId(<?= $row['id'] ?>)" data-bs-toggle="modal" data-bs-target="#deleteModal">Sil</button>
                             <a href="export_certificate_pdf.php?id=<?= $row['id'] ?>" class="btn btn-primary btn-sm">PDF</a>
                         </td>
                     </tr>
@@ -63,17 +63,35 @@ $result = mysqli_query($mysqlB, $query);
     <?php endif; ?>
 </div>
 
+<!-- Silme Onay Modali -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="deleteModalLabel">Silme Onayı</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
+      </div>
+      <div class="modal-body">
+        Bu sertifikayı silmek istediğinize emin misiniz?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+        <a href="#" class="btn btn-danger" id="confirmDeleteBtn">Evet, Sil</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <footer>
     <p>&copy; 2025 DivingLog Uygulaması</p>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    function confirmDelete(id) {
-    if (confirm("Bu sertifikayı silmek istediğinizden emin misiniz?")) {
-        window.location.href = 'delete_certificate.php?id=' + id;
+    function setDeleteId(id) {
+        const deleteBtn = document.getElementById("confirmDeleteBtn");
+        deleteBtn.href = 'delete_certificate.php?id=' + id;
     }
-}
 </script>
 </body>
 </html>
