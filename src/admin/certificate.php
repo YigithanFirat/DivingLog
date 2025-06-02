@@ -126,5 +126,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <input type="submit" value="Sertifikayı Kaydet">
     </form>
+    <footer>
+        <p>&copy; 2025 DivingLog Uygulaması</p>
+    </footer>
 </body>
 </html>
