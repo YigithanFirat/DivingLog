@@ -21,7 +21,7 @@ Web sitesine ait ikon eklenmiştir ve fotoğraf paylaşılmıştır.
 ## Admin Dashboard
 Admin dashboard eklendi. Dashboard üstünden kullanıcıları yönetebilme, dalışları yönetebilme, hesabınız çıkış yapma veya anasayfaya yönlendirme gibi işlemler eklendi.
 
-![alt text](admindashboard.png)
+![alt text](dashboardadmin.png)
 
 ## Reset Password
 Adminler tarafından şifrelerini unutan kullanıcıların şifrelerinin sıfırlanabilmesi sağlandı.
