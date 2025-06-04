@@ -17,6 +17,7 @@ $result = mysqli_query($mysqlB, $query);
     <title>DivingLog | Sertifika Listesi</title>
     <link rel="stylesheet" href="../CSS/certificate_list.css">
     <link rel="icon" href="../images/divinglog.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -51,7 +52,7 @@ $result = mysqli_query($mysqlB, $query);
                         <td><?= nl2br(htmlspecialchars($row['notes'])) ?></td>
                         <td class="action-buttons">
                             <a href="edit_certificate.php?id=<?= $row['id'] ?>" class="btn btn-warning btn-sm">Düzenle</a>
-                            <button class="btn btn-danger btn-sm" onclick="setDeleteId(<?= $row['id'] ?>)" data-bs-toggle="modal" data-bs-target="#deleteModal">Sil</button>
+                            <button class="btn btn-danger btn-sm" onclick="setDeleteId(<?= $row['id'] ?>)" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fas fa-exclamation-triangle"></i>Sil</button>
                             <a href="export_certificate_pdf.php?id=<?= $row['id'] ?>" class="btn btn-primary btn-sm">PDF</a>
                         </td>
                     </tr>
