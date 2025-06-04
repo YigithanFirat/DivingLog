@@ -1,5 +1,5 @@
 /* Genel gövde stili */
-body {
+html, body {
     background-color: #1e3c57;
     font-family: Arial, sans-serif;
     padding: 20px;
@@ -18,10 +18,11 @@ h1 {
 
 /* Tablo stilleri */
 .table {
-    background-color: white;
+    background-color: #1e3c57;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0, 90, 135, 0.1);
+    box-shadow: 0 2px 10px #000;
+    border: 1px solid #000;
 }
 
 /* Tablo başlıkları */
@@ -43,7 +44,8 @@ h1 {
 
 /* Alternatif satır renkleri */
 .table-striped tbody tr:nth-of-type(odd) {
-    background-color: #f0f8ff;
+    background-color: #1e3c57;
+    border-radius: 30px;
 }
 
 /* Bilgi kutusu */
@@ -83,6 +85,7 @@ footer p {
 @media (max-width: 768px) {
     .table thead {
         display: none;
+        border-radius: 30px;
     }
 
     .table, .table tbody, .table tr, .table td {
