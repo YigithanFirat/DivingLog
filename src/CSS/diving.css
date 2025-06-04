@@ -31,7 +31,11 @@ header h1
     padding: 0 10px;
 }
 
-table input[type="number"] {
+table input[type="number"],
+table input[type="text"],
+table select,
+table textarea
+{
     width: 100%;
     padding: 10px;
     font-size: 16px;
@@ -41,6 +45,18 @@ table input[type="number"] {
     border-radius: 5px;
     margin-bottom: 10px;
     box-sizing: border-box;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+#map
+{
+    height: 400px;
+    width: 100%;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
 }
 
 .plan-details
@@ -51,6 +67,7 @@ table input[type="number"] {
     border-radius: 15px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     width: 100%;
+    max-width: 900px;
 }
 
 table
@@ -65,22 +82,6 @@ table td
     padding: 12px;
     text-align: left;
     font-size: 16px;
-}
-
-table input[type="text"], table select
-{
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    background-color: #34495e;
-    color: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    box-sizing: border-box;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
 }
 
 footer
@@ -98,7 +99,6 @@ footer p
     font-weight: bolder;
     font-size: 16px;
 }
-
 
 header p
 {
@@ -119,12 +119,14 @@ p
     margin: 40px;
 }
 
-input[type="text"]:focus
+input[type="text"]:focus,
+textarea:focus,
+select:focus,
+input[type="number"]:focus
 {
     border-color: #00bcd4;
     outline: none;
 }
-
 
 input[type="text"]:disabled
 {
@@ -197,4 +199,27 @@ table select
     margin-bottom: 20px;
     text-align: center;
     font-weight: bolder;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.saveButton {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #FF9900;
+    color: #fff;
+    border: 1px solid #000;
+    border-radius: 5px;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease;
+}
+
+.saveButton:hover {
+    background-color: #e68a00;
 }
