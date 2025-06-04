@@ -89,7 +89,7 @@ if (isset($_GET['login'])) {
 </div>
 
 <!-- Silme Modal -->
-<div id="confirmModal" class="modal-overlay" style="display:none;">
+<div id="confirmModal" class="modal-overlay">
     <div class="modal-box">
         <h3><i class="fas fa-triangle-exclamation"></i> Dikkat!</h3>
         <p>Bu kullanıcıyı silmek istediğinize emin misiniz?</p>
@@ -110,11 +110,11 @@ if (isset($_GET['login'])) {
 <script>
     function openConfirmModal(userId) {
         document.getElementById('deleteUserId').value = userId;
-        document.getElementById('confirmModal').style.display = 'block';
+        document.getElementById('confirmModal').classList.add('active');
     }
 
     function closeConfirmModal() {
-        document.getElementById('confirmModal').style.display = 'none';
+        document.getElementById('confirmModal').classList.remove('active');
     }
 </script>
 </body>
