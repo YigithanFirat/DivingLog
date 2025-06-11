@@ -1,24 +1,53 @@
 <?php
 include('../../config.php');
 
-// Silme işlemi (POST ile)
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
-    $delete_id = intval($_POST['delete_id']);
-    $stmt = $mysqlB->prepare("DELETE FROM diving_plans WHERE id = ?");
-    $stmt->bind_param('i', $delete_id);
-    if ($stmt->execute()) {
-        $message = "Dalış planı başarıyla silindi.";
-        $message_type = "success";
-    } else {
-        $message = "Silme işlemi başarısız oldu.";
-        $message_type = "error";
-    }
-    $stmt->close();
-}
+$limit = 1;
+$page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
+if ($page < 1) $page = 1;
+$offset = ($page - 1) * $limit;
 
-// Verileri çek
-$sql = "SELECT * FROM diving_plans ORDER BY created_at DESC";
-$result = $mysqlB->query($sql);
+$tcFilter = '';
+$result = false;
+$totalRecords = 0;
+$totalPages = 0;
+$totalMinutes = 0;
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['tcno'])) {
+    $tcFilter = trim($_GET['tcno']);
+
+    // Toplam kayıt sayısını al
+    $countStmt = $mysqlB->prepare("SELECT COUNT(*) FROM diving_plans WHERE tcno = ?");
+    $countStmt->bind_param('s', $tcFilter);
+    $countStmt->execute();
+    $countStmt->bind_result($totalRecords);
+    $countStmt->fetch();
+    $countStmt->close();
+
+    $totalPages = ceil($totalRecords / $limit);
+
+    // Tüm dalışların toplam süresini al (sayfalama dışı)
+    $sumStmt = $mysqlB->prepare("SELECT SUM(minutes) FROM diving_plans WHERE tcno = ?");
+    $sumStmt->bind_param('s', $tcFilter);
+    $sumStmt->execute();
+    $sumStmt->bind_result($totalMinutes);
+    $sumStmt->fetch();
+    $sumStmt->close();
+
+    $totalMinutes = $totalMinutes ?? 0;
+
+    // Sayfaya ait kayıtları çek
+    $stmt = $mysqlB->prepare("
+        SELECT diving_plans.*, users.ad, users.soyad 
+        FROM diving_plans 
+        LEFT JOIN users ON diving_plans.tcno = users.tcno 
+        WHERE diving_plans.tcno = ? 
+        ORDER BY diving_plans.created_at DESC
+        LIMIT ? OFFSET ?
+    ");
+    $stmt->bind_param('sii', $tcFilter, $limit, $offset);
+    $stmt->execute();
+    $result = $stmt->get_result();
+}
 ?>
 
 <!DOCTYPE html>
@@ -26,7 +55,7 @@ $result = $mysqlB->query($sql);
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>DivingLog | Dalışları Yönet</title>
+    <title>DivingLog | TC'ye Göre Dalışları Listele</title>
     <link rel="icon" href="../images/divinglog.png" />
     <link rel="stylesheet" href="../CSS/manage_diving.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -34,21 +63,34 @@ $result = $mysqlB->query($sql);
 </head>
 <body>
 <div class="container my-4">
-    <h2 class="text-center mb-4">Diving Planları Yönetimi</h2>
+    <h2 class="text-center mb-4">TC Numarasına Göre Dalış Planlarını Listele</h2>
 
-    <?php if (!empty($message)): ?>
-        <div class="alert alert-<?= $message_type === 'success' ? 'success' : 'danger' ?> text-center" role="alert">
-            <?= htmlspecialchars($message) ?>
+    <form method="GET" class="row g-3 justify-content-center mb-4">
+        <div class="col-auto">
+            <input 
+                type="text" name="tcno" 
+                class="form-control" 
+                style="width: 400px; height: 45px; text-align: center;" 
+                placeholder="TC Kimlik No" 
+                value="<?= htmlspecialchars($tcFilter) ?>" 
+                required />
         </div>
-    <?php endif; ?>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Listele</button>
+        </div>
+    </form>
 
     <?php if ($result && $result->num_rows > 0): ?>
+        <p class="text-end"><strong>Toplam Kayıt:</strong> <?= $totalRecords ?></p>
+
         <div class="table-responsive">
             <table class="table table-striped table-bordered align-middle text-nowrap">
                 <thead class="table-primary">
                     <tr>
                         <th>ID</th>
                         <th>T.C</th>
+                        <th>Ad</th>
+                        <th>Soyad</th>
                         <th>Dakika</th>
                         <th>Lokasyon</th>
                         <th>Dalış Ortamı</th>
@@ -69,6 +111,8 @@ $result = $mysqlB->query($sql);
                         <tr>
                             <td><?= htmlspecialchars($row['id']) ?></td>
                             <td><?= htmlspecialchars($row['tcno']) ?></td>
+                            <td><?= htmlspecialchars($row['ad']) ?></td>
+                            <td><?= htmlspecialchars($row['soyad']) ?></td>
                             <td><?= htmlspecialchars($row['minutes']) ?></td>
                             <td><?= htmlspecialchars($row['diving_location']) ?></td>
                             <td><?= htmlspecialchars($row['water_type']) ?></td>
@@ -101,11 +145,66 @@ $result = $mysqlB->query($sql);
                         </tr>
                     <?php endwhile; ?>
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="17" class="text-end fw-bold">
+                            Toplam Süre: <?= ($totalMinutes > 0) ? htmlspecialchars($totalMinutes) . ' dakika' : 'Kayıt bulunamadı' ?>
+                        </td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
-    <?php else: ?>
-        <div class="alert alert-warning text-center">
-            Hiçbir diving planı bulunamadı.
+
+        <!-- Sayfalama -->
+        <?php if ($totalPages > 1): ?>
+            <nav aria-label="Sayfa numaraları">
+                <ul class="pagination justify-content-center">
+                    <!-- Önceki sayfa -->
+                    <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
+                        <a class="page-link" href="?tcno=<?= urlencode($tcFilter) ?>&page=<?= $page - 1 ?>" aria-label="Önceki">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+
+                    <?php
+                    $startPage = max(1, $page - 3);
+                    $endPage = min($totalPages, $page + 3);
+
+                    if ($startPage > 1) {
+                        echo '<li class="page-item"><a class="page-link" href="?tcno=' . urlencode($tcFilter) . '&page=1">1</a></li>';
+                        if ($startPage > 2) {
+                            echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                        }
+                    }
+
+                    for ($i = $startPage; $i <= $endPage; $i++):
+                    ?>
+                        <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
+                            <a class="page-link" href="?tcno=<?= urlencode($tcFilter) ?>&page=<?= $i ?>"><?= $i ?></a>
+                        </li>
+                    <?php endfor;
+
+                    if ($endPage < $totalPages) {
+                        if ($endPage < $totalPages - 1) {
+                            echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                        }
+                        echo '<li class="page-item"><a class="page-link" href="?tcno=' . urlencode($tcFilter) . '&page=' . $totalPages . '">' . $totalPages . '</a></li>';
+                    }
+                    ?>
+
+                    <!-- Sonraki sayfa -->
+                    <li class="page-item <?= ($page >= $totalPages) ? 'disabled' : '' ?>">
+                        <a class="page-link" href="?tcno=<?= urlencode($tcFilter) ?>&page=<?= $page + 1 ?>" aria-label="Sonraki">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        <?php endif; ?>
+
+    <?php elseif (isset($_GET['tcno'])): ?>
+        <div class="alert alert-danger text-center">
+            Belirtilen TC numarasına ait dalış planı bulunamadı.
         </div>
     <?php endif; ?>
 </div>
@@ -113,33 +212,33 @@ $result = $mysqlB->query($sql);
 <!-- Silme Onay Modal -->
 <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
-    <form method="POST" class="modal-content">
+    <form method="POST" action="delete_diving_plan.php" class="modal-content">
       <div class="modal-header bg-danger text-white">
         <h5 class="modal-title" id="confirmDeleteModalLabel">Silme Onayı</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
       </div>
       <div class="modal-body">
-        Bu dalış planını silmek istediğinize emin misiniz?
-        <input type="hidden" name="delete_id" id="delete_id" value="">
+        Bu dalış kaydını silmek istediğinize emin misiniz?
+        <input type="hidden" name="id" id="delete-id" />
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
         <button type="submit" class="btn btn-danger">Sil</button>
       </div>
     </form>
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-// Modal açılırken id bilgisini forma aktar
-var confirmDeleteModal = document.getElementById('confirmDeleteModal');
-confirmDeleteModal.addEventListener('show.bs.modal', function (event) {
-  var button = event.relatedTarget;
-  var id = button.getAttribute('data-id');
-  var inputDeleteId = confirmDeleteModal.querySelector('#delete_id');
-  inputDeleteId.value = id;
-});
+  const deleteModal = document.getElementById('confirmDeleteModal');
+  deleteModal.addEventListener('show.bs.modal', function (event) {
+    const button = event.relatedTarget;
+    const id = button.getAttribute('data-id');
+    const input = deleteModal.querySelector('#delete-id');
+    input.value = id;
+  });
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
