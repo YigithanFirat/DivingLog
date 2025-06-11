@@ -48,8 +48,8 @@ if (isset($_SESSION['tcno'])) {
     <link rel="icon" href="images/divinglog.png" />
 </head>
 <body>
+    <h2>İskenderun Teknik Üniversitesi Su Altı Dalış Teknolojisi Programı</h2>
     <h1>DivingLog</h1>
-    <h2>Web Uygulamasına Hoşgeldiniz</h2>
     <div class="content">
         <h3>Hoş geldin, <?= htmlspecialchars(buyukHarfTR($user['ad'] ?? 'MİSAFİR ÜYE')) ?>! 👋</h3>
         <p>Web uygulamanızda dalış geçmişinizi kaydedebilir ve yönetebilirsiniz.</p>
