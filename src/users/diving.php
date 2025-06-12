@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Veritabanı insert işlemi
             $stmt = mysqli_prepare($mysqlB, "INSERT INTO diving_plans
             (tcno, minutes, diving_location, water_type, depth_feet, depth_meter, respiration, clothing, diving_purpose, tools, tools_devices, supervisor) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            VALUES (?, ?, ?, ?, NULLIF(?, ''), ?, ?, ?, ?, ?, ?, ?)");
 
             if ($stmt) {
                 mysqli_stmt_bind_param($stmt, "ssssssssssss", $tcno, $minutes, $diving_location, $water_type, $depth_feet, $depth_meter, $respiration, $clothing, $diving_purpose, $tools, $tools_devices, $supervisor);
@@ -110,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </tr>
                 <tr>
                     <td>Dalış Derinliği (Feet):</td>
-                    <td><input type="text" name="depth_feet" value="<?php echo htmlspecialchars($depth_feet ?? ''); ?>" required></td>
+                    <td><input type="text" name="depth_feet" value="<?php echo htmlspecialchars($depth_feet ?? ''); ?>"></td>
                 </tr>
                 <tr>
                     <td>Dalış Derinliği (Metre):</td>
