@@ -43,7 +43,7 @@ if (isset($_SESSION['tcno'])) {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>DivingLog | WebApp</title>
+    <title>DivingLog | Dalış Planlama Uygulaması</title>
     <link rel="stylesheet" href="CSS/index.css" />
     <link rel="icon" href="images/divinglog.png" />
 </head>
