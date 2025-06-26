@@ -1,28 +1,33 @@
 <?php
-include('../../config.php');
+require_once('../../config.php');
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id = $_POST['id'] ?? null;
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("Location: certificate_list.php?error=method_not_allowed");
+    exit;
+}
 
-    if (!$id) {
-        echo "Geçersiz istek.";
-        exit;
-    }
+if (!isset($_POST['id']) || !filter_var($_POST['id'], FILTER_VALIDATE_INT)) {
+    header("Location: certificate_list.php?error=invalid_id");
+    exit;
+}
 
-    // Sertifikayı sil
-    $query = "DELETE FROM certificate WHERE id = ?";
-    $stmt = mysqli_prepare($mysqlB, $query);
-    mysqli_stmt_bind_param($stmt, "i", $id);
-    $result = mysqli_stmt_execute($stmt);
+$certificateId = (int) $_POST['id'];
 
-    if ($result) {
-        header("Location: certificate_list.php?success=deleted");
-        exit;
-    } else {
-        echo "Silme işlemi başarısız.";
-    }
+$stmt = $mysqlB->prepare("DELETE FROM certificate WHERE id = ?");
+if (!$stmt) {
+    header("Location: certificate_list.php?error=stmt_prepare_failed");
+    exit;
+}
 
+$stmt->bind_param("i", $certificateId);
+
+if ($stmt->execute()) {
+    $stmt->close();
+    header("Location: certificate_list.php?success=deleted");
+    exit;
 } else {
-    echo "Geçersiz istek yöntemi.";
+    $stmt->close();
+    header("Location: certificate_list.php?error=delete_failed");
+    exit;
 }
 ?>
