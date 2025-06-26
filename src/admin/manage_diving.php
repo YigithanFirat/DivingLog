@@ -1,7 +1,7 @@
 <?php
 include('../../config.php');
 
-$limit = 1;
+$limit = 25; // Sayfa başına gösterilecek kayıt sayısı
 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
 if ($page < 1) $page = 1;
 $offset = ($page - 1) * $limit;
@@ -62,22 +62,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['tcno'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
-<div class="container my-4">
-    <h2 class="text-center mb-4">TC Numarasına Göre Dalış Planlarını Listele</h2>
+    <div class="sidebar">
+        <h2>Admin Panel</h2>
+        <ul>
+            <li><a href="../index.php">Ana Sayfa</a></li>
+            <li><a href="manage_users.php">Kullanıcıları Yönet</a></li>
+            <li><a href="manage_diving.php">Dalışları Yönet</a></li>
+            <li><a href="certificate_list.php">Sertifikaları Listele</a></li>
+            <li><a href="health_inspection_list.php">Sağlık Raporlarını Listele</a></li>
+            <li><a href="../users/exit.php">Çıkış Yap</a></li>
+        </ul>
+    </div>
+<div class="main-content" style="margin-left: 250px; padding: 30px;">
+    <h2>TC Numarasına Göre Dalış Planlarını Listele</h2>
 
-    <form method="GET" class="row g-3 justify-content-center mb-4">
-        <div class="col-auto">
-            <input 
-                type="text" name="tcno" 
-                class="form-control" 
-                style="width: 400px; height: 45px; text-align: center;" 
-                placeholder="TC Kimlik No" 
-                value="<?= htmlspecialchars($tcFilter) ?>" 
-                required />
-        </div>
-        <div class="col-auto">
-            <button type="submit" class="btn btn-primary">Listele</button>
-        </div>
+    <form method="GET" class="d-flex gap-3 align-items-center mb-4">
+        <input 
+            type="text" name="tcno" 
+            class="form-control" 
+            style="max-width: 400px; height: 45px; text-align: center;" 
+            placeholder="TC Kimlik No" 
+            value="<?= htmlspecialchars($tcFilter) ?>" 
+            required />
+        <button type="submit" class="btn btn-primary">Listele</button>
     </form>
 
     <?php if ($result && $result->num_rows > 0): ?>
@@ -94,7 +101,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['tcno'])) {
                         <th>Dakika</th>
                         <th>Lokasyon</th>
                         <th>Dalış Ortamı</th>
-                        <th>Derinlik (Feet)</th>
                         <th>Derinlik (Metre)</th>
                         <th>Solunum</th>
                         <th>Elbise</th>
@@ -116,7 +122,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['tcno'])) {
                             <td><?= htmlspecialchars($row['minutes']) ?></td>
                             <td><?= htmlspecialchars($row['diving_location']) ?></td>
                             <td><?= htmlspecialchars($row['water_type']) ?></td>
-                            <td><?= htmlspecialchars($row['depth_feet']) ?></td>
                             <td><?= htmlspecialchars($row['depth_meter']) ?></td>
                             <td><?= htmlspecialchars($row['respiration']) ?></td>
                             <td><?= htmlspecialchars($row['clothing']) ?></td>
@@ -131,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['tcno'])) {
                                         <i class="fas fa-edit"></i> Düzenle
                                     </a>
                                     <a href="edit_diving_plan_export_pdf.php?id=<?= urlencode($row['id']) ?>" class="btn btn-info btn-sm">
-                                        <i class="fas fa-file-pdf"></i> PDF Dışa Aktar
+                                        <i class="fas fa-file-pdf"></i> PDF
                                     </a>
                                     <button type="button" 
                                         class="btn btn-danger btn-sm" 
@@ -157,7 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['tcno'])) {
 
         <!-- Sayfalama -->
         <?php if ($totalPages > 1): ?>
-            <nav aria-label="Sayfa numaraları">
+            <nav aria-label="Sayfa numaraları" class="mt-4">
                 <ul class="pagination justify-content-center">
                     <!-- Önceki sayfa -->
                     <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
@@ -167,8 +172,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['tcno'])) {
                     </li>
 
                     <?php
-                    $startPage = max(1, $page - 3);
-                    $endPage = min($totalPages, $page + 3);
+                    $startPage = max(1, $page - 2);
+                    $endPage = min($totalPages, $page + 2);
 
                     if ($startPage > 1) {
                         echo '<li class="page-item"><a class="page-link" href="?tcno=' . urlencode($tcFilter) . '&page=1">1</a></li>';
@@ -238,6 +243,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['tcno'])) {
     input.value = id;
   });
 </script>
+
+<footer>
+    <p>&copy; 2025 DivingLog Uygulaması</p>
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
