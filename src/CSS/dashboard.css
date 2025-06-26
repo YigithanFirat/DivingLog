@@ -6,53 +6,24 @@ body
     padding: 0;
 }
 
-header
-{
-    background-color: #1e3c58;
-    color: white;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-header nav ul
-{
-    list-style-type: none;
-    padding: 0;
+html, body {
+    height: 100%;
     margin: 0;
-    text-align: center;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
 }
 
-header nav ul li
-{
-    display: inline-block;
-    margin: 10px;
-}
-
-header nav ul li a
-{
-    color: #fafafa;
-    background-color: #005A8D;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 16px;
-    padding: 12px 25px;
-    border-radius: 8px;
-    display: inline-block;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    text-align: center;
-}
-
-header nav ul li a:hover
-{
-    background-color: #FF9900;
-    color: #ffffff;
+.wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .container
 {
     text-align: center;
-    margin-top: 100px;
+    margin-top: 20px;
     flex-grow: 1;
 }
 
@@ -72,7 +43,7 @@ header nav ul li a:hover
     cursor: pointer;
     padding: 15px;
     border-radius: 10px;
-    margin-top: 100px;
+    margin-top: 20px;
 }
 
 .container ul li:hover
@@ -129,12 +100,6 @@ h2
 {
     font-size: 15px;
     color: #333;
-}
-
-header nav ul li a.active, header nav ul li a:focus
-{
-    background-color: #FF9900;
-    color: white;
 }
 
 .user-table tr
@@ -196,13 +161,12 @@ header nav ul li a.active, header nav ul li a:focus
     color: white;
 }
 
-footer
-{
+footer {
+    margin-top: auto; /* Dinamik boşluk */
     text-align: center;
-    margin-top: 203px;
     color: #d3d3d3;
     padding: 10px;
-    width: 98.7%;
+    width: 98.4%;
     background-color: #1c2b3a;
 }
 
@@ -213,6 +177,16 @@ footer p
 
 @media screen and (max-width: 768px)
 {
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+    
     .container ul
     {
         flex-direction: column;
@@ -232,26 +206,10 @@ footer p
         padding: 20px;
     }
 
-    header nav ul li
-    {
-        display: block;
-        margin: 10px 0;
-    }
-
-    header nav ul li a
-    {
-        font-size: 18px;
-    }
-
     .user-table th, .user-table td
     {
         font-size: 14px;
         padding: 12px;
-    }
-
-    header h1
-    {
-        font-size: 1.5em;
     }
 }
 
@@ -260,25 +218,183 @@ a, button
     transition: all 0.3s ease-in-out;
 }
 
-header, footer
-{
-    box-shadow: 0px 4px 10px rgba(0,0,0,0.15);
-}
-
-header h1
-{
-    font-size: 2.2em;
-}
-
 .container p 
 {
     color: #ffffff;
     font-size: 18px;
     font-weight: bold;
-    background-color: #005A8D;
+    background-color: transparent;
     display: inline-block;
     padding: 12px 25px;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     margin-top: 20px;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: 100vh;
+    background-color: #0d2c43;
+    padding: 20px;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+}
+
+.sidebar h2 {
+    color: #ffffff;
+    font-size: 22px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 15px;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    display: block;
+    padding: 10px 15px;
+    border-radius: 6px;
+    background-color: #005a8d;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar ul li a:hover {
+    background-color: #FF9900;
+    color: #ffffff;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-left: 240px; /* varsa sidebar için */
+}
+
+
+.total-user-count {
+    position: relative;
+    background-color: #FFCC00; /* Daha koyu sarı kutu */
+    width: 250px;
+    height: 160px;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease;
+    border: 3px solid #000;
+}
+
+.total-diving-count
+{
+    position: relative;
+    background-color: #33CC33; /* Yeşil kutu */
+    width: 250px;
+    height: 160px;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease;
+    border: 3px solid #000;
+}
+
+.total-certificate-count
+{
+    position: relative;
+    background-color: #5762FF; /* Sarı kutu */
+    width: 250px;
+    height: 160px;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease;
+    border: 3px solid #000;
+}
+
+.total-health-inspections-count
+{
+    position: relative;
+    background-color: #FF8282; /* Kırmızı kutu */
+    width: 250px;
+    height: 160px;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease;
+    border: 3px solid #000;
+}
+
+.total-user-count:hover, .total-diving-count:hover, .total-certificate-count:hover, .total-health-inspections-count:hover {
+    transform: translateY(-5px);
+}
+
+.total-user-count .count-text, .total-diving-count .count-text, .total-certificate-count .count-text, .total-health-inspections-count .count-text {
+    z-index: 2;
+}
+
+.total-user-count .count, .total-diving-count .count, .total-certificate-count .count, .total-health-inspections-count .count {
+    font-size: 32px;
+    font-weight: bold;
+    margin: 0;
+    color: #000000;
+}
+
+.total-user-count .label, .total-diving-count .label, .total-certificate-count .label, .total-health-inspections-count .label {
+    font-size: 16px;
+    margin-top: 10px;
+    color: #000000;
+}
+
+.total-user-count .icon, .total-diving-count .icon, .total-certificate-count .icon, .total-health-inspections-count .icon {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 50px;
+    color: rgb(255, 255, 255, 0.5);
+}
+
+.total-user-count .more-info, .total-diving-count .more-info, .total-certificate-count .more-info, .total-health-inspections-count .more-info {
+    display: block;
+    text-align: center;
+    background-color: rgba(0,0,0,0.1);
+    color: #000000;
+    padding: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 10px 10px 10px 10px;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.total-user-count .more-info:hover, .total-diving-count .more-info:hover, .total-certificate-count .more-info:hover, .total-health-inspections-count .more-info:hover {
+    background-color: rgba(0,0,0,0.2);
+}
+
+.dashboard-cards {
+    display: flex;
+    gap: 20px; /* iki kutu arası boşluk */
+    flex-wrap: wrap; /* mobilde alta geçmesini sağlar */
+    justify-content: center;
+    margin-top: 40px;
 }
