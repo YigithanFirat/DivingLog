@@ -308,38 +308,46 @@ footer p
     width: 220px;
     height: 100vh;
     background-color: #0d2c43;
-    padding: 20px;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+    padding: 20px 15px;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    overflow-y: auto;
 }
 
 .sidebar h2 {
     color: #ffffff;
-    font-size: 22px;
+    font-size: 20px;
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
+    font-weight: 600;
+    letter-spacing: 1px;
 }
 
 .sidebar ul {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
 .sidebar ul li {
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 
 .sidebar ul li a {
-    text-decoration: none;
-    color: #fff;
-    font-weight: bold;
     display: block;
-    padding: 10px 15px;
+    padding: 10px 12px;
     border-radius: 6px;
-    background-color: #005a8d;
-    transition: background-color 0.3s ease;
+    background-color: #00699c;
+    color: #ffffff;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 15px;
 }
 
 .sidebar ul li a:hover {
     background-color: #FF9900;
     color: #ffffff;
+    transform: translateX(4px);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
