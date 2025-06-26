@@ -75,7 +75,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['tcno'])) {
     </div>
 <div class="main-content" style="margin-left: 250px; padding: 30px;">
     <h2>TC Numarasına Göre Dalış Planlarını Listele</h2>
-
     <form method="GET" class="d-flex flex-column align-items-center gap-3 mb-4">
         <input 
             type="text" name="tcno" 
@@ -86,7 +85,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['tcno'])) {
             required />
         <button type="submit" class="btn btn-primary">Listele</button>
     </form>
-
+    <?php if ($result && $result->num_rows > 0): ?>
+        <div class="d-flex justify-content-end mb-3 gap-2">
+            <a href="export_user_all_diving_plan_pdf.php?tcno=<?= urlencode($tcFilter) ?>" target="_blank" class="btn btn-success">
+                <i class="fas fa-file-pdf"></i> Kullanıcıya Ait Tüm Dalışları PDF Olarak İndir
+            </a>
+            <a href="export_all_diving_plans_pdf.php" target="_blank" class="btn btn-dark">
+                <i class="fas fa-file-pdf"></i> Tüm Dalışları PDF Olarak İndir
+            </a>
+        </div>
+    <?php endif; ?>
     <?php if ($result && $result->num_rows > 0): ?>
         <p class="text-end"><strong>Toplam Kayıt:</strong> <?= $totalRecords ?></p>
 
@@ -104,8 +112,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['tcno'])) {
                         <th>Elbise</th>
                         <th>Amaç</th>
                         <th>Takım</th>
-                        <th>Amir</th>
-                        <th>Tarih</th>
                         <th>İşlem</th>
                     </tr>
                 </thead>
@@ -121,8 +127,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['tcno'])) {
                             <td><?= htmlspecialchars($row['respiration']) ?></td>
                             <td><?= htmlspecialchars($row['clothing']) ?></td>
                             <td><?= htmlspecialchars($row['diving_purpose']) ?></td>
-                            <td><?= htmlspecialchars($row['tools_devices']) ?></td>
-                            <td><?= htmlspecialchars($row['supervisor']) ?></td>
                             <td><?= htmlspecialchars($row['created_at']) ?></td>
                             <td>
                                 <div class="d-flex gap-2 flex-wrap">
