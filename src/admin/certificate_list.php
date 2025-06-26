@@ -2,7 +2,7 @@
 include('../../config.php');
 
 // Sayfa başına gösterilecek sertifika sayısı
-$perPage = 1;
+$perPage = 25;
 
 // Aktif sayfa numarası
 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int) $_GET['page'] : 1;
@@ -37,62 +37,78 @@ $result = mysqli_query($mysqlB, $query);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<div class="container mt-4">
-    <h1 class="mb-4">Sertifika Listesi</h1>
+    <div class="page-wrapper">
+        <div class="sidebar">
+            <h2>Admin Panel</h2>
+            <ul>
+                <li><a href="../index.php">Ana Sayfa</a></li>
+                <li><a href="manage_users.php">Kullanıcıları Yönet</a></li>
+                <li><a href="manage_diving.php">Dalışları Yönet</a></li>
+                <li><a href="certificate_list.php">Sertifikaları Listele</a></li>
+                <li><a href="health_inspection_list.php">Sağlık Raporlarını Listele</a></li>
+                <li><a href="../users/exit.php">Çıkış Yap</a></li>
+            </ul>
+        </div>
 
-    <?php if (mysqli_num_rows($result) > 0): ?>
-        <table class="table table-bordered table-striped">
-            <thead class="table-dark">
-                <tr>
-                    <th>Ad - Soyad</th>
-                    <th>TC</th>
-                    <th>Sertifika Adı</th>
-                    <th>Veren Kuruluş</th>
-                    <th>Veriliş Tarihi</th>
-                    <th>Geçerlilik Tarihi</th>
-                    <th>Seviye</th>
-                    <th>Sertifika No</th>
-                    <th>Notlar</th>
-                    <th>İşlemler</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($row = mysqli_fetch_assoc($result)): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($row['full_name'] ?? 'Bilinmiyor') ?></td>
-                        <td><?= htmlspecialchars($row['tc']) ?></td>
-                        <td><?= htmlspecialchars($row['certificate_name']) ?></td>
-                        <td><?= htmlspecialchars($row['issuing_organization']) ?></td>
-                        <td><?= htmlspecialchars($row['issue_date']) ?></td>
-                        <td><?= htmlspecialchars($row['expiration_date']) ?></td>
-                        <td><?= htmlspecialchars($row['certificate_level']) ?></td>
-                        <td><?= htmlspecialchars($row['certificate_number']) ?></td>
-                        <td><?= nl2br(htmlspecialchars($row['notes'])) ?></td>
-                        <td class="action-buttons">
-                            <a href="edit_certificate.php?id=<?= $row['id'] ?>" class="btn btn-warning btn-sm">Düzenle</a>
-                            <button class="btn btn-danger btn-sm" onclick="setDeleteId(<?= $row['id'] ?>)" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                                <i class="fas fa-exclamation-triangle"></i> Sil
-                            </button>
-                            <a href="export_certificate_pdf.php?id=<?= $row['id'] ?>" class="btn btn-primary btn-sm">PDF</a>
-                        </td>
-                    </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
+        <main class="content-container">
+            <div class="container mt-4">
+                <h1 class="mb-4">Sertifika Listesi</h1>
 
-        <!-- Sayfalama -->
-        <?php if ($totalPages > 1): ?>
-            <div class="pagination">
-                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                    <a href="?page=<?= $i ?>" class="<?= ($i == $page) ? 'active' : '' ?>"><?= $i ?></a>
-                <?php endfor; ?>
+                <?php if (mysqli_num_rows($result) > 0): ?>
+                    <table class="table table-bordered table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Ad - Soyad</th>
+                                <th>TC</th>
+                                <th>Sertifika Adı</th>
+                                <th>Veren Kuruluş</th>
+                                <th>Veriliş Tarihi</th>
+                                <th>Geçerlilik Tarihi</th>
+                                <th>Seviye</th>
+                                <th>Sertifika No</th>
+                                <th>Notlar</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php while ($row = mysqli_fetch_assoc($result)): ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($row['full_name'] ?? 'Bilinmiyor') ?></td>
+                                    <td><?= htmlspecialchars($row['tc']) ?></td>
+                                    <td><?= htmlspecialchars($row['certificate_name']) ?></td>
+                                    <td><?= htmlspecialchars($row['issuing_organization']) ?></td>
+                                    <td><?= htmlspecialchars($row['issue_date']) ?></td>
+                                    <td><?= htmlspecialchars($row['expiration_date']) ?></td>
+                                    <td><?= htmlspecialchars($row['certificate_level']) ?></td>
+                                    <td><?= htmlspecialchars($row['certificate_number']) ?></td>
+                                    <td><?= nl2br(htmlspecialchars($row['notes'])) ?></td>
+                                    <td class="action-buttons">
+                                        <a href="edit_certificate.php?id=<?= $row['id'] ?>" class="btn btn-warning btn-sm">Düzenle</a>
+                                        <button class="btn btn-danger btn-sm" onclick="setDeleteId(<?= $row['id'] ?>)" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                            <i class="fas fa-exclamation-triangle"></i> Sil
+                                        </button>
+                                        <a href="export_certificate_pdf.php?id=<?= $row['id'] ?>" class="btn btn-primary btn-sm">PDF</a>
+                                    </td>
+                                </tr>
+                            <?php endwhile; ?>
+                        </tbody>
+                    </table>
+
+                    <!-- Sayfalama -->
+                    <?php if ($totalPages > 1): ?>
+                        <div class="pagination">
+                            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                                <a href="?page=<?= $i ?>" class="<?= ($i == $page) ? 'active' : '' ?>"><?= $i ?></a>
+                            <?php endfor; ?>
+                        </div>
+                    <?php endif; ?>
+
+                <?php else: ?>
+                    <div class="alert alert-info text-center">Henüz kayıtlı sertifika bulunmamaktadır.</div>
+                <?php endif; ?>
             </div>
-        <?php endif; ?>
-
-    <?php else: ?>
-        <div class="alert alert-info text-center">Henüz kayıtlı sertifika bulunmamaktadır.</div>
-    <?php endif; ?>
-</div>
+        </main>
+    </div>
 
 <!-- Silme Onay Modali -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
