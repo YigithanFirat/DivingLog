@@ -1,9 +1,11 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #1e3c57; /* Koyu mavi arka plan */
+    background-color: #1e3c57;
     margin: 0;
     padding: 0;
-    padding-bottom: 60px; /* footer yüksekliği kadar */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 html, body {
@@ -12,41 +14,47 @@ html, body {
 }
 
 .container {
-    background-color: rgba(255, 255, 255, 0.95);
-    margin: 20px auto;
-    padding: 20px;
-    border-radius: 12px;
-    width: 95%;
-    max-width: 1200px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.2);
-    border: 1px solid #000;
+    margin-left: 300px; /* Sidebar genişliği + boşluk */
+    width: calc(100% - 260px); /* Sağlıklı oran için */
+    max-width: none; /* Genişliği kısıtlamasın */
+    padding: 30px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
 }
 
-.table-wrapper {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    border: 1px solid #000;
+.table-responsive {
+    max-height: calc(100vh - 250px);
+    overflow-y: auto;
+    margin-bottom: 10px;
 }
 
 h2 {
     text-align: center;
     font-size: 24px;
     color: #1e3c57;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+    margin-top: 0;
 }
 
-/* ===== Tablo stil güncellemeleri ===== */
+/* Tablo stilleri */
 table {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 0 8px; /* Hücreler arası düşey boşluk */
-    background-color: #000;
+    border-spacing: 0;
+    background-color: #fff;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     color: #1e3c57;
     border: 1px solid #000000;
-    border-radius: 12px;
+    border-radius: 8px;
     overflow: hidden;
-    word-wrap: break-word;
+}
+
+thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
 }
 
 thead tr {
@@ -57,162 +65,243 @@ thead tr {
 thead th {
     background-color: #1e3c57 !important;
     color: #fafafa !important;
-    padding: 14px 18px; /* Padding artırıldı */
+    padding: 12px 15px;
     border-bottom: none;
+    white-space: nowrap;
+    font-size: 14px;
 }
 
 th, td {
-    padding: 14px 18px; /* Daha geniş padding */
-    border-bottom: none; /* Alt çizgi kaldırıldı, table-spacing ile boşluk yapıyoruz */
+    padding: 10px 15px;
+    border-bottom: 1px solid #dee2e6;
     text-align: left;
-    white-space: normal;
+    white-space: nowrap;
     vertical-align: middle;
+    font-size: 14px;
 }
 
 tbody tr {
     background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     transition: background-color 0.3s ease;
-    margin-bottom: 8px;
 }
 
 tbody tr:hover {
-    background-color: #f4f4f4;
+    background-color: #f8f9fa;
 }
 
-/* Link ve buton renkleri */
-a {
-    color: #2a77cc;
-    text-decoration: none;
+/* Buton stilleri */
+.btn-sm {
+    padding: 4px 8px;
+    font-size: 13px;
+    min-width: 80px;
 }
 
-a:hover {
-    text-decoration: underline;
-}
-
-a:active {
-    color: #e63946;
-}
-
-/* İşlem butonlarının kapsayıcısı */
 .d-flex.gap-2.flex-wrap {
     display: flex !important;
-    flex-wrap: nowrap !important; /* Tek satırda göster */
-    gap: 12px !important; /* Butonlar arasında daha fazla boşluk */
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
     justify-content: flex-start;
     align-items: center;
-    white-space: nowrap;
 }
 
-/* Butonlar */
-.btn-sm {
-    min-width: 100px; /* Minimum genişlik */
+/* Sayfalama stilleri */
+.pagination {
+    margin-top: 10px;
+    margin-bottom: 0;
+    padding-bottom: 5px;
+}
+
+.page-link {
+    color: #1e3c57;
+    border: 1px solid #dee2e6;
+    padding: 8px 12px;
+}
+
+.page-item.active .page-link {
+    background-color: #1e3c57;
+    border-color: #1e3c57;
+}
+
+/* Form stilleri */
+.form-control {
+    border: 1px solid #ced4da;
+    border-radius: 4px;
     padding: 6px 10px;
+    height: 38px;
     font-size: 14px;
 }
 
-/* Renkli butonlar */
-.btn-warning {
-    background-color: #ff9900;
-    border-color: #ff9900;
-    color: #fff;
-}
-
-.btn-warning:hover {
-    background-color: #e88c00;
-}
-
-.btn-info {
-    background-color: #17a2b8;
-    border-color: #17a2b8;
-    color: #fff;
-}
-
-.btn-info:hover {
-    background-color: #138496;
-}
-
-.btn-danger {
-    background-color: #dc3545;
-    border-color: #dc3545;
-    color: #fff;
-}
-
-.btn-danger:hover {
-    background-color: #c82333;
-}
-
-/* Modal İçin */
-.modal-content {
+.btn-primary {
     background-color: #1e3c57;
-    color: #fff;
-    border-radius: 12px;
-    padding: 20px;
+    border-color: #1e3c57;
+    height: 38px;
+    padding: 0 15px;
+    font-size: 14px;
+}
+
+.btn-primary:hover {
+    background-color: #152a3f;
+    border-color: #152a3f;
+}
+
+/* Form container spacing */
+.row.g-3.justify-content-center.mb-4 {
+    margin-bottom: 0.75rem !important;
+}
+
+/* Modal stilleri */
+.modal-content {
+    background-color: #fff;
+    color: #1e3c57;
+    border-radius: 8px;
     border: none;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
 
 .modal-header {
-    border-bottom: 1px solid #4a4a4a;
+    border-bottom: 1px solid #dee2e6;
+    background-color: #1e3c57;
+    color: #fff;
 }
 
 .modal-footer {
-    border-top: 1px solid #4a4a4a;
-    display: flex;
-    justify-content: space-between;
+    border-top: 1px solid #dee2e6;
 }
 
-.modal-title {
-    color: #fff;
+/* Alert message spacing */
+.alert {
+    margin-bottom: 10px;
+    padding: 8px 15px;
 }
 
-.btn-close {
-    filter: invert(1);
+/* Total records text */
+.text-end {
+    margin-bottom: 8px;
 }
 
-.btn-secondary {
-    background-color: #6c757d;
-    border: none;
-    color: #fff;
-}
-
-.btn-secondary:hover {
-    background-color: #5a6268;
-}
-
-/* Mobil görünümde yatay kaydırma */
+/* Responsive tasarım */
 @media (max-width: 768px) {
-    .table-wrapper {
-        overflow-x: auto;
+    .container {
+        width: 100%;
+        margin: 10px 0;
+        padding: 10px;
     }
 
-    .d-flex.gap-2.flex-wrap {
-        flex-wrap: nowrap !important;
-        overflow-x: auto;
+    .table-responsive {
+        max-height: calc(100vh - 250px);
+    }
+
+    th, td {
+        padding: 8px 10px;
+        font-size: 13px;
     }
 
     .btn-sm {
-        min-width: 90px;
-        flex-shrink: 0;
+        min-width: 70px;
+        padding: 3px 6px;
+        font-size: 12px;
+    }
+
+    .d-flex.gap-2.flex-wrap {
+        gap: 4px !important;
+    }
+
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        box-shadow: none;
+    }
+
+    .main-content {
+        margin-left: 0 !important;
+        padding: 15px !important;
     }
 }
 
-footer {
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: #1c2b3a;
-    color: #d3d3d3;
-    text-align: center;
-    padding: 15px 10px;
-    font-size: 0.9rem;
-    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.4);
-    z-index: 1000;
+/* Scrollbar stilleri */
+.table-responsive::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
 }
 
-footer p {
-    margin: 0;
+.table-responsive::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background: #1e3c57;
+    border-radius: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+    background: #152a3f;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: 100vh;
+    background-color: #0d2c43;
+    padding: 20px 15px;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.sidebar h2 {
+    color: #ffffff;
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 25px;
     font-weight: 600;
-    color: #fafafa;
+    letter-spacing: 1px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 12px;
+}
+
+.sidebar ul li a {
+    display: block;
+    padding: 10px 12px;
+    border-radius: 6px;
+    background-color: #00699c;
+    color: #ffffff;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 15px;
+}
+
+.sidebar ul li a:hover {
+    background-color: #FF9900;
+    color: #ffffff;
+    transform: translateX(4px);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+footer
+{
+    background-color: #1c2b3a;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+footer p
+{
+    font-weight: bolder;
 }
