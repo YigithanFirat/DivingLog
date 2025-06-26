@@ -1,29 +1,37 @@
 <?php
-    include('../../config.php');
+require_once('../../config.php');
 
-    // ID doğrulama ve güvenli alma
-    if (!isset($_GET['id']) || !filter_var($_GET['id'], FILTER_VALIDATE_INT)) {
-        die('Geçerli bir ID belirtilmedi.');
-    }
+// Yalnızca POST yöntemiyle çalışmasına izin ver
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("Location: manage_diving.php?error=gecersiz_istek");
+    exit();
+}
 
-    $id = (int)$_GET['id'];
+// ID ve TC kontrolü
+if (
+    !isset($_POST['id']) || !filter_var($_POST['id'], FILTER_VALIDATE_INT) ||
+    !isset($_POST['tcno']) || !preg_match('/^\d{11}$/', $_POST['tcno']) // TC 11 haneli olmalı
+) {
+    header("Location: manage_diving.php?error=gecersiz_veri");
+    exit();
+}
 
-    // Sorguyu hazırla
-    $stmt = $mysqlB->prepare("DELETE FROM diving_plans WHERE id = ?");
-    if (!$stmt) {
-        die("Sorgu hazırlanamadı: " . $mysqlB->error);
-    }
+$id = (int) $_POST['id'];
+$tcno = $_POST['tcno'];
 
-    // Parametreyi bağla ve çalıştır
-    $stmt->bind_param("i", $id);
-    if ($stmt->execute()) {
-        // Başarılıysa yönlendir
-        header("Location: manage_diving.php?deleted=1");
-        exit();
-    } else {
-        // Hata varsa göster
-        echo "Silme işlemi başarısız: " . $stmt->error;
-    }
+// Silme sorgusu
+$stmt = $mysqlB->prepare("DELETE FROM diving_plans WHERE id = ?");
+if (!$stmt) {
+    header("Location: manage_diving.php?tcno=$tcno&error=sorgu_hazirlanamadi");
+    exit();
+}
 
-    $stmt->close();
+$stmt->bind_param("i", $id);
+if ($stmt->execute()) {
+    header("Location: manage_diving.php?tcno=$tcno&success=silindi");
+} else {
+    header("Location: manage_diving.php?tcno=$tcno&error=silinemedi");
+}
+$stmt->close();
+exit();
 ?>
