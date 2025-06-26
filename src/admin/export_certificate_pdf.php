@@ -12,7 +12,7 @@ $certificate_id = intval($_GET['id']);
 // Veritabanından veriyi al
 $query = "SELECT c.*, CONCAT(u.ad, ' ', u.soyad) AS user_name
           FROM certificate c
-          LEFT JOIN users u ON c.user_id = u.id
+          LEFT JOIN users u ON c.id = u.id
           WHERE c.id = $certificate_id";
 
 $result = mysqli_query($mysqlB, $query);
