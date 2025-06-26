@@ -168,3 +168,9 @@ input[type="text"], input[type="password"], input[type="date"], input[type="emai
         width: 90%;
     }
 }
+
+.g-recaptcha
+{
+    display: flex;
+    justify-content: center;
+}
