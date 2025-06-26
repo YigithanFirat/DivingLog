@@ -1,0 +1,69 @@
+<?php
+require_once('../../config.php');
+require_once('../TCPDF-main/tcpdf.php'); // TCPDF dizin yolunu kendi sistemine göre ayarla
+
+// Veriyi çek
+$stmt = $mysqlB->prepare("
+    SELECT muayene_tarihi, created_at, onaylayan, onaylanan 
+    FROM health_inspections 
+    ORDER BY muayene_tarihi DESC
+");
+$stmt->execute();
+$result = $stmt->get_result();
+
+// Veri kontrolü
+if (!$result || $result->num_rows === 0) {
+    die('Hiç sağlık raporu bulunamadı.');
+}
+
+// PDF nesnesi
+$pdf = new TCPDF();
+$pdf->SetCreator('DivingLog');
+$pdf->SetAuthor('DivingLog Sistemi');
+$pdf->SetTitle('Tüm Sağlık Raporları');
+$pdf->SetMargins(20, 20, 20);
+$pdf->SetAutoPageBreak(true, 20);
+$pdf->SetFont('dejavusans', '', 12);
+
+// Kapak sayfası
+$pdf->AddPage();
+
+// Opaklığı %30 yap (0.0 - 1.0 arası değer alır)
+$pdf->SetAlpha(0.3);
+
+// Logo: sayfa ortasına yakın yatay, yukarıdan biraz aşağı
+$logoPath = __DIR__ . '/../images/sb.png';
+$pdf->Image($logoPath, 55, 40, 100, '', 'PNG', '', 'T', false, 300, '', false, false, 0);
+
+// Opaklığı eski haline getir (tam opak)
+$pdf->SetAlpha(1);
+
+// Metinleri logonun hemen altına ve ortalanmış şekilde yaz
+$coverHtml = '
+    <div style="text-align: center; margin-top: 15px;">
+        <h2 style="color: #FF0000; margin-bottom: 10px;">T.C. Sağlık Bakanlığı</h2>
+        <h1 style="margin-top: 0; margin-bottom: 20px;">Tüm Sağlık Raporları</h1>
+        <p style="margin: 0;">' . date('d.m.Y H:i') . ' tarihinde oluşturulmuştur</p>
+    </div>';
+$pdf->writeHTMLCell(0, 0, 0, 145, $coverHtml, 0, 1, 0, true, 'C', true);
+
+// 📄 Her kayıt için yeni sayfa
+while ($row = $result->fetch_assoc()) {
+    $pdf->AddPage();
+
+    $html = '
+    <h2 style="text-align:center;">Sağlık Raporu</h2>
+    <table border="1" cellpadding="6" cellspacing="0" style="font-size:12pt;">
+        <tr><td><b>Muayene Tarihi</b></td><td>' . date('d.m.Y', strtotime($row['muayene_tarihi'])) . '</td></tr>
+        <tr><td><b>Onaylayan Doktor</b></td><td>' . htmlspecialchars($row['onaylayan']) . '</td></tr>
+        <tr><td><b>Onaylanan Kişi</b></td><td>' . htmlspecialchars($row['onaylanan']) . '</td></tr>
+        <tr><td><b>Kayıt Tarihi</b></td><td>' . date('d.m.Y H:i', strtotime($row['created_at'])) . '</td></tr>
+    </table>';
+    
+    $pdf->writeHTML($html, true, false, true, false, '');
+}
+
+// PDF çıktısı
+$pdf->Output('saglik_raporlari.pdf', 'I');
+exit();
+?>
