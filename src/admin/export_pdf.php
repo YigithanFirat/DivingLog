@@ -63,6 +63,9 @@ $pdf->SetFillColor(245, 245, 245);
 $pdf->SetTextColor(33, 33, 33);
 
 foreach ($user as $key => $value) {
+    if (in_array($key, ['created_at', 'sifre', 'login', 'reset_token', 'token_expiry', 'admin'])) {
+        continue;
+    }
     $label = ucfirst(str_replace('_', ' ', $key));
     $pdf->SetFont('dejavusans', 'B', 11);
     $pdf->MultiCell(50, 10, $label . ':', 1, 'L', 1, 0, '', '', true);
