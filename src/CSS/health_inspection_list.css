@@ -95,6 +95,17 @@ tr:hover {
     background-color: #00b4ff;
 }
 
+.content {
+    margin-left: 220px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* yukarı hizala, tam ortalama kaldırıldı */
+    align-items: center;
+    padding: 60px 20px 20px 20px; /* üstten 60px boşluk, sağ-sol 20px */
+    box-sizing: border-box;
+}
+
 .container {
     max-width: 920px;
     margin: 40px auto 80px;
