@@ -207,3 +207,19 @@ h1 {
 .container.mt-4 {
     max-width: 100%;
 }
+
+footer
+{
+    background-color: #1c2b3a;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+footer p
+{
+    font-weight: bolder;
+}
