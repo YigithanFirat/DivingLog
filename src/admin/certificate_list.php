@@ -53,7 +53,11 @@ $result = mysqli_query($mysqlB, $query);
         <main class="content-container">
             <div class="container mt-4">
                 <h1 class="mb-4">Sertifika Listesi</h1>
-
+                <div class="all_pdf d-flex justify-content-end mb-3">
+                    <a href="export_all_certificate_pdf.php" class="btn btn-dark">
+                        <i class="fas fa-file-pdf"></i> Tüm Sertifikaları PDF Olarak İndir
+                    </a>
+                </div>
                 <?php if (mysqli_num_rows($result) > 0): ?>
                     <table class="table table-bordered table-striped">
                         <thead class="table-dark">
@@ -131,5 +135,8 @@ $result = mysqli_query($mysqlB, $query);
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../JS/certificate_list.js"></script>
+<footer>
+    <p>&copy; 2025 DivingLog Uygulaması</p>
+</footer>
 </body>
 </html>
