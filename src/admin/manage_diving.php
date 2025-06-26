@@ -219,6 +219,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['tcno'])) {
       <div class="modal-body">
         Bu dalış kaydını silmek istediğinize emin misiniz?
         <input type="hidden" name="id" id="delete-id" />
+        <input type="hidden" name="tcno" value="<?= htmlspecialchars($tcFilter) ?>" />
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
@@ -232,16 +233,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['tcno'])) {
     <p>&copy; 2025 DivingLog Uygulaması</p>
 </footer>
 
-<script>
-  const deleteModal = document.getElementById('confirmDeleteModal');
-  deleteModal.addEventListener('show.bs.modal', function (event) {
-    const button = event.relatedTarget;
-    const id = button.getAttribute('data-id');
-    const input = deleteModal.querySelector('#delete-id');
-    input.value = id;
-  });
-</script>
-
+<script src="../JS/manage_diving.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
