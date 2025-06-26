@@ -84,7 +84,7 @@ $result = mysqli_query($mysqlB, $query);
                                     <td><?= nl2br(htmlspecialchars($row['notes'])) ?></td>
                                     <td class="action-buttons">
                                         <a href="edit_certificate.php?id=<?= $row['id'] ?>" class="btn btn-warning btn-sm">Düzenle</a>
-                                        <button class="btn btn-danger btn-sm" onclick="setDeleteId(<?= $row['id'] ?>)" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                        <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setDeleteId(<?= $row['id'] ?>)">
                                             <i class="fas fa-exclamation-triangle"></i> Sil
                                         </button>
                                         <a href="export_certificate_pdf.php?id=<?= $row['id'] ?>" class="btn btn-primary btn-sm">PDF</a>
@@ -110,30 +110,26 @@ $result = mysqli_query($mysqlB, $query);
         </main>
     </div>
 
-<!-- Silme Onay Modali -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
+    <form method="POST" action="delete_certificate.php" class="modal-content">
       <div class="modal-header bg-danger text-white">
         <h5 class="modal-title" id="deleteModalLabel">Silme Onayı</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
       </div>
       <div class="modal-body">
         Bu sertifikayı silmek istediğinize emin misiniz?
+        <input type="hidden" name="id" id="deleteCertificateId" value="">
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
-        <a href="#" class="btn btn-danger" id="confirmDeleteBtn">Evet, Sil</a>
+        <button type="submit" class="btn btn-danger">Evet, Sil</button>
       </div>
-    </div>
+    </form>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    function setDeleteId(id) {
-        document.getElementById("confirmDeleteBtn").href = 'delete_certificate.php?id=' + id;
-    }
-</script>
+<script src="../JS/certificate_list.js"></script>
 </body>
 </html>
