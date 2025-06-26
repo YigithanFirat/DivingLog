@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['tcno'])) {
 <div class="main-content" style="margin-left: 250px; padding: 30px;">
     <h2>TC Numarasına Göre Dalış Planlarını Listele</h2>
 
-    <form method="GET" class="d-flex gap-3 align-items-center mb-4">
+    <form method="GET" class="d-flex flex-column align-items-center gap-3 mb-4">
         <input 
             type="text" name="tcno" 
             class="form-control" 
@@ -94,8 +94,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['tcno'])) {
             <table class="table table-striped table-bordered align-middle text-nowrap">
                 <thead class="table-primary">
                     <tr>
-                        <th>ID</th>
-                        <th>T.C</th>
                         <th>Ad</th>
                         <th>Soyad</th>
                         <th>Dakika</th>
@@ -105,7 +103,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['tcno'])) {
                         <th>Solunum</th>
                         <th>Elbise</th>
                         <th>Amaç</th>
-                        <th>Alet ve Cihaz</th>
                         <th>Takım</th>
                         <th>Amir</th>
                         <th>Tarih</th>
@@ -115,8 +112,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['tcno'])) {
                 <tbody>
                     <?php while ($row = $result->fetch_assoc()): ?>
                         <tr>
-                            <td><?= htmlspecialchars($row['id']) ?></td>
-                            <td><?= htmlspecialchars($row['tcno']) ?></td>
                             <td><?= htmlspecialchars($row['ad']) ?></td>
                             <td><?= htmlspecialchars($row['soyad']) ?></td>
                             <td><?= htmlspecialchars($row['minutes']) ?></td>
@@ -126,7 +121,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['tcno'])) {
                             <td><?= htmlspecialchars($row['respiration']) ?></td>
                             <td><?= htmlspecialchars($row['clothing']) ?></td>
                             <td><?= htmlspecialchars($row['diving_purpose']) ?></td>
-                            <td><?= htmlspecialchars($row['tools']) ?></td>
                             <td><?= htmlspecialchars($row['tools_devices']) ?></td>
                             <td><?= htmlspecialchars($row['supervisor']) ?></td>
                             <td><?= htmlspecialchars($row['created_at']) ?></td>
@@ -234,6 +228,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['tcno'])) {
   </div>
 </div>
 
+<footer>
+    <p>&copy; 2025 DivingLog Uygulaması</p>
+</footer>
+
 <script>
   const deleteModal = document.getElementById('confirmDeleteModal');
   deleteModal.addEventListener('show.bs.modal', function (event) {
@@ -243,10 +241,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['tcno'])) {
     input.value = id;
   });
 </script>
-
-<footer>
-    <p>&copy; 2025 DivingLog Uygulaması</p>
-</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
