@@ -135,13 +135,6 @@ $result = $stmt->get_result();
     </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    const confirmDeleteModal = document.getElementById('confirmDeleteModal');
-    confirmDeleteModal.addEventListener('show.bs.modal', event => {
-        const button = event.relatedTarget;
-        const id = button.getAttribute('data-id');
-        document.getElementById('confirmDeleteBtn').href = 'health_inspection_delete.php?id=' + encodeURIComponent(id);
-    });
-</script>
+<script src="../JS/health_inspection_list.js"></script>
 </body>
 </html>
