@@ -2,14 +2,33 @@
 session_start();
 include('../../config.php');
 
-$sql = "SELECT * FROM users";
-$result = mysqli_query($mysqlB, $sql);
-
 function e($str) {
     return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
 }
 
-// login parametresi sadece belirlenen değerler için mesaj gösterimi:
+// Sayfa başına gösterilecek kullanıcı sayısı
+$usersPerPage = 1;
+
+// Aktif sayfa numarası
+$page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int) $_GET['page'] : 1;
+if ($page < 1) $page = 1;
+
+// Toplam kullanıcı sayısını al
+$totalUsersResult = mysqli_query($mysqlB, "SELECT COUNT(*) as total FROM users");
+$totalUsersRow = mysqli_fetch_assoc($totalUsersResult);
+$totalUsers = $totalUsersRow['total'];
+
+// Toplam sayfa sayısı
+$totalPages = ceil($totalUsers / $usersPerPage);
+
+// Başlangıç noktası
+$offset = ($page - 1) * $usersPerPage;
+
+// Kullanıcıları çek
+$sql = "SELECT * FROM users LIMIT $usersPerPage OFFSET $offset";
+$result = mysqli_query($mysqlB, $sql);
+
+// login parametresi sadece belirlenen değerler için mesaj gösterimi
 $loginStatus = null;
 if (isset($_GET['login'])) {
     $loginParam = $_GET['login'];
@@ -32,15 +51,17 @@ if (isset($_GET['login'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
-<header>
-    <h1>DivingLog | Kullanıcıları Yönet</h1>
-    <nav>
+    <div class="sidebar">
+        <h2>Admin Panel</h2>
         <ul>
             <li><a href="../index.php">Ana Sayfa</a></li>
+            <li><a href="manage_users.php">Kullanıcıları Yönet</a></li>
+            <li><a href="manage_diving.php">Dalışları Yönet</a></li>
+            <li><a href="certificate_list.php">Sertifikaları Listele</a></li>
+            <li><a href="health_inspection_list.php">Sağlık Raporlarını Listele</a></li>
             <li><a href="../users/exit.php">Çıkış Yap</a></li>
         </ul>
-    </nav>
-</header>
+    </div>
 
 <div class="container">
     <?php if ($loginStatus === 'success'): ?>
@@ -55,22 +76,25 @@ if (isset($_GET['login'])) {
         <table>
             <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Adı</th>
                     <th>Soyadı</th>
                     <th>E-posta</th>
-                    <th>Durum</th>
+                    <th>Telefon</th>
+                    <th>Haber Verilecek Kişi</th>
                     <th>İşlemler</th>
                 </tr>
             </thead>
+            <div class="all_pdf">
+                <a href="export_all_users_pdf.php" class="btn">Tüm Kullanıcıları PDF Olarak İndir</a>
+            </div>
             <tbody>
                 <?php while ($user = mysqli_fetch_assoc($result)): ?>
                     <tr>
-                        <td><?= e($user['id']) ?></td>
                         <td><?= e($user['ad']) ?></td>
                         <td><?= e($user['soyad']) ?></td>
                         <td><?= e($user['email']) ?></td>
-                        <td><?= ($user['login'] == 1) ? 'Çevrim İçi' : 'Çevrim Dışı' ?></td>
+                        <td><?= e($user['telefon']) ?></td>
+                        <td><?= e($user['kaza_haber_kişi_ad_soyad']) ?></td>
                         <td>
                             <a href="edit_user.php?id=<?= urlencode($user['id']) ?>" class="btn">Düzenle</a>
                             <a href="admin_reset_password.php?id=<?= urlencode($user['id']) ?>" class="btn">Şifre Sıfırla</a>
@@ -83,6 +107,18 @@ if (isset($_GET['login'])) {
                 <?php endwhile; ?>
             </tbody>
         </table>
+
+        <!-- Sayfalama -->
+        <?php if ($totalPages > 1): ?>
+            <div class="pagination">
+                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                    <a href="?page=<?= $i ?>" class="<?= ($i == $page) ? 'active' : '' ?>">
+                        <?= $i ?>
+                    </a>
+                <?php endfor; ?>
+            </div>
+        <?php endif; ?>
+
     <?php else: ?>
         <p>Henüz kullanıcı bulunmamaktadır.</p>
     <?php endif; ?>
