@@ -41,6 +41,7 @@ $result = $stmt->get_result();
     <title>DivingLog | Sağlık Raporları Listesi</title>
     <link rel="stylesheet" href="../CSS/health_inspection_list.css" />
     <link rel="icon" href="../images/divinglog.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -59,7 +60,13 @@ $result = $stmt->get_result();
     <div class="content">
         <div class="container mt-4">
             <h1 class="text-center">Sağlık Raporları Listesi</h1>
-
+            <div class="all-pdf">
+                <div class="all_pdf d-flex justify-content-end mb-3">
+                    <a href="export_all_health_inspection_pdf.php" target="_blank" class="btn btn-dark">
+                        <i class="fas fa-file-pdf"></i> Tüm Sağlık Raporlarını PDF Olarak İndir
+                    </a>
+                </div>
+            </div>
             <?php if (isset($_SESSION['message'])): ?>
                 <div class="alert alert-<?= htmlspecialchars($_SESSION['message']['type'], ENT_QUOTES) ?> alert-dismissible fade show mt-3" role="alert">
                     <?= htmlspecialchars($_SESSION['message']['text'], ENT_QUOTES) ?>
