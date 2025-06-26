@@ -62,7 +62,6 @@ if (isset($_GET['login'])) {
             <li><a href="../users/exit.php">Çıkış Yap</a></li>
         </ul>
     </div>
-
 <div class="container">
     <?php if ($loginStatus === 'success'): ?>
         <div class="success_message">İşlem başarıyla gerçekleşti.</div>
@@ -138,18 +137,7 @@ if (isset($_GET['login'])) {
         </div>
     </div>
 </div>
-
-<script>
-    function openConfirmModal(userId) {
-        document.getElementById('deleteUserId').value = userId;
-        document.getElementById('confirmModal').classList.add('active');
-    }
-
-    function closeConfirmModal() {
-        document.getElementById('confirmModal').classList.remove('active');
-    }
-</script>
-
+<script src="../JS/manage_users.js"></script>
 <footer>
     <p>&copy; 2025 DivingLog Uygulaması</p>
 </footer>
