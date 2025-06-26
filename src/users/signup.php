@@ -21,6 +21,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (!preg_match('/^\d{11}$/', $tcno)) {
         $error_messages[] = "TC Kimlik Numarası 11 haneli olmalıdır.";
     }
+    $tekrarsifre = $_POST['tekrarsifre'] ?? '';
+    if ($sifre !== $tekrarsifre) {
+        $error_messages[] = "Şifreler uyuşmuyor. Lütfen aynı şifreyi iki kez girin.";
+    }
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error_messages[] = "Geçerli bir e-posta adresi girin.";
     }
@@ -61,6 +65,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $error_messages[] = "Veritabanı sorgusu hazırlanamadı.";
         }
     }
+}
+
+$recaptcha_secret = '6LcpwGwrAAAAAHRXcDsC1bLEbk_RBFGihKTm7NI6';
+$recaptcha_response = $_POST['g-recaptcha-response'] ?? '';
+
+$verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" . $recaptcha_secret . "&response=" . $recaptcha_response);
+$response_data = json_decode($verify);
+
+if (!$response_data->success) {
+    $error_messages[] = "Lütfen reCAPTCHA doğrulamasını geçin.";
 }
 ?>
 
@@ -127,6 +141,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <label for="sifre">Şifre:</label><br />
             <input type="password" id="sifre" name="sifre" required /><br /><br />
 
+            <label for="tekrarsifre">Şifre Onayla:</label><br />
+            <input type="password" id="tekrarsifre" name="tekrarsifre" required /><br /><br /> 
+
+            <div class="g-recaptcha" data-sitekey="6LcpwGwrAAAAAA2kUVfXGEpbnE0WmdFXu0DDdfF7"></div><br /><br /> 
+
             <button type="submit" class="btn">Kayıt Ol</button>
         </form>
         <?php endif; ?>
@@ -135,5 +154,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <footer>
         <p>&copy; 2025 DivingLog Uygulaması</p>
     </footer>
+    <script src="../JS/signup.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </body>
 </html>
