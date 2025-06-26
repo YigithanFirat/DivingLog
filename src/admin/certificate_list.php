@@ -1,11 +1,27 @@
 <?php
 include('../../config.php');
 
-// Sertifikalar ve kullanıcı adını çek
-$query = "SELECT c.*, CONCAT(u.ad, ' ', u.soyad) AS user_name
-          FROM certificate c
-          LEFT JOIN users u ON c.user_id = u.id
-          ORDER BY c.issue_date DESC";
+// Sayfa başına gösterilecek sertifika sayısı
+$perPage = 1;
+
+// Aktif sayfa numarası
+$page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int) $_GET['page'] : 1;
+if ($page < 1) $page = 1;
+
+// Toplam sertifika sayısını al
+$countQuery = "SELECT COUNT(*) AS total FROM certificate";
+$countResult = mysqli_query($mysqlB, $countQuery);
+$totalCertificates = mysqli_fetch_assoc($countResult)['total'];
+$totalPages = ceil($totalCertificates / $perPage);
+
+// Başlangıç verisi
+$offset = ($page - 1) * $perPage;
+
+// Sertifikaları ve kullanıcı adlarını çek
+$query = "SELECT *
+        FROM certificate
+        ORDER BY issue_date DESC
+        LIMIT $perPage OFFSET $offset";
 
 $result = mysqli_query($mysqlB, $query);
 ?>
@@ -28,7 +44,8 @@ $result = mysqli_query($mysqlB, $query);
         <table class="table table-bordered table-striped">
             <thead class="table-dark">
                 <tr>
-                    <th>Kullanıcı</th>
+                    <th>Ad - Soyad</th>
+                    <th>TC</th>
                     <th>Sertifika Adı</th>
                     <th>Veren Kuruluş</th>
                     <th>Veriliş Tarihi</th>
@@ -42,7 +59,8 @@ $result = mysqli_query($mysqlB, $query);
             <tbody>
                 <?php while ($row = mysqli_fetch_assoc($result)): ?>
                     <tr>
-                        <td><?= htmlspecialchars($row['user_name'] ?? 'Bilinmiyor') ?></td>
+                        <td><?= htmlspecialchars($row['full_name'] ?? 'Bilinmiyor') ?></td>
+                        <td><?= htmlspecialchars($row['tc']) ?></td>
                         <td><?= htmlspecialchars($row['certificate_name']) ?></td>
                         <td><?= htmlspecialchars($row['issuing_organization']) ?></td>
                         <td><?= htmlspecialchars($row['issue_date']) ?></td>
@@ -52,13 +70,25 @@ $result = mysqli_query($mysqlB, $query);
                         <td><?= nl2br(htmlspecialchars($row['notes'])) ?></td>
                         <td class="action-buttons">
                             <a href="edit_certificate.php?id=<?= $row['id'] ?>" class="btn btn-warning btn-sm">Düzenle</a>
-                            <button class="btn btn-danger btn-sm" onclick="setDeleteId(<?= $row['id'] ?>)" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fas fa-exclamation-triangle"></i>Sil</button>
+                            <button class="btn btn-danger btn-sm" onclick="setDeleteId(<?= $row['id'] ?>)" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                <i class="fas fa-exclamation-triangle"></i> Sil
+                            </button>
                             <a href="export_certificate_pdf.php?id=<?= $row['id'] ?>" class="btn btn-primary btn-sm">PDF</a>
                         </td>
                     </tr>
                 <?php endwhile; ?>
             </tbody>
         </table>
+
+        <!-- Sayfalama -->
+        <?php if ($totalPages > 1): ?>
+            <div class="pagination">
+                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                    <a href="?page=<?= $i ?>" class="<?= ($i == $page) ? 'active' : '' ?>"><?= $i ?></a>
+                <?php endfor; ?>
+            </div>
+        <?php endif; ?>
+
     <?php else: ?>
         <div class="alert alert-info text-center">Henüz kayıtlı sertifika bulunmamaktadır.</div>
     <?php endif; ?>
@@ -83,15 +113,10 @@ $result = mysqli_query($mysqlB, $query);
   </div>
 </div>
 
-<footer>
-    <p>&copy; 2025 DivingLog Uygulaması</p>
-</footer>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     function setDeleteId(id) {
-        const deleteBtn = document.getElementById("confirmDeleteBtn");
-        deleteBtn.href = 'delete_certificate.php?id=' + id;
+        document.getElementById("confirmDeleteBtn").href = 'delete_certificate.php?id=' + id;
     }
 </script>
 </body>
