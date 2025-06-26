@@ -2,13 +2,29 @@
 session_start();
 require_once('../../config.php');
 
-// JOIN kaldırıldı çünkü onaylayan/onaylanan varchar olarak ad soyad bilgisini içeriyor
+// Sayfa başına gösterilecek sağlık raporu sayısı
+$perPage = 1;
+
+// Aktif sayfa numarası
+$page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int) $_GET['page'] : 1;
+if ($page < 1) $page = 1;
+
+// Toplam sağlık raporu sayısını al
+$countQuery = "SELECT COUNT(*) AS total FROM health_inspections";
+$countResult = mysqli_query($mysqlB, $countQuery);
+$totalRecords = mysqli_fetch_assoc($countResult)['total'];
+$totalPages = ceil($totalRecords / $perPage);
+
+// OFFSET hesapla
+$offset = ($page - 1) * $perPage;
+
+// Sağlık raporlarını tarih sırasına göre çek
 $query = "
     SELECT id, muayene_tarihi, created_at, onaylayan, onaylanan
     FROM health_inspections
     ORDER BY muayene_tarihi DESC
+    LIMIT $perPage OFFSET $offset
 ";
-
 $result = mysqli_query($mysqlB, $query);
 ?>
 
@@ -60,6 +76,16 @@ $result = mysqli_query($mysqlB, $query);
                 <?php endwhile; ?>
             </tbody>
         </table>
+
+        <!-- Sayfalama -->
+        <?php if ($totalPages > 1): ?>
+            <div class="pagination">
+                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                    <a href="?page=<?= $i ?>" class="<?= ($i === $page) ? 'active' : '' ?>"><?= $i ?></a>
+                <?php endfor; ?>
+            </div>
+        <?php endif; ?>
+
     <?php else: ?>
         <p class="text-center mt-5 fw-bold fs-5">Henüz kayıtlı sağlık raporu yok.</p>
     <?php endif; ?>
@@ -91,11 +117,10 @@ $result = mysqli_query($mysqlB, $query);
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     const confirmDeleteModal = document.getElementById('confirmDeleteModal');
-    confirmDeleteModal.addEventListener('show.bs.modal', function (event) {
+    confirmDeleteModal.addEventListener('show.bs.modal', event => {
         const button = event.relatedTarget;
         const id = button.getAttribute('data-id');
-        const confirmButton = document.getElementById('confirmDeleteBtn');
-        confirmButton.href = 'health_inspection_delete.php?id=' + id;
+        document.getElementById('confirmDeleteBtn').href = 'health_inspection_delete.php?id=' + id;
     });
 </script>
 </body>
