@@ -7,7 +7,7 @@ function e($str) {
 }
 
 // Sayfa başına gösterilecek kullanıcı sayısı
-$usersPerPage = 1;
+$usersPerPage = 25;
 
 // Aktif sayfa numarası
 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int) $_GET['page'] : 1;
@@ -139,10 +139,6 @@ if (isset($_GET['login'])) {
     </div>
 </div>
 
-<footer>
-    <p>&copy; 2025 DivingLog Uygulaması</p>
-</footer>
-
 <script>
     function openConfirmModal(userId) {
         document.getElementById('deleteUserId').value = userId;
@@ -153,5 +149,9 @@ if (isset($_GET['login'])) {
         document.getElementById('confirmModal').classList.remove('active');
     }
 </script>
+
+<footer>
+    <p>&copy; 2025 DivingLog Uygulaması</p>
+</footer>
 </body>
 </html>
