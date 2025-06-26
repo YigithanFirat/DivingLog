@@ -82,3 +82,16 @@ footer p
     font-weight: bolder;
     color: #fafafa;
 }
+
+.admin-btn {
+    background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+    color: white;
+    border: none;
+    margin-top: 10px;
+}
+
+.admin-btn:hover {
+    background: linear-gradient(135deg, #b21f1f, #1a2a6c);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
