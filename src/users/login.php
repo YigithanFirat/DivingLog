@@ -11,14 +11,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($tcno && $sifre) {
         // Kullanıcıyı hazırlıklı ifade ile sorgula
-        $stmt = mysqli_prepare($mysqlB, "SELECT sifre FROM users WHERE tcno = ?");
+        $stmt = mysqli_prepare($mysqlB, "SELECT sifre, admin FROM users WHERE tcno = ?");
         if ($stmt) {
             mysqli_stmt_bind_param($stmt, "s", $tcno);
             mysqli_stmt_execute($stmt);
             mysqli_stmt_store_result($stmt);
 
             if (mysqli_stmt_num_rows($stmt) > 0) {
-                mysqli_stmt_bind_result($stmt, $hashed_password);
+                mysqli_stmt_bind_result($stmt, $hashed_password, $administrator);
                 mysqli_stmt_fetch($stmt);
 
                 if (password_verify($sifre, $hashed_password)) {
@@ -29,9 +29,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if ($update_stmt) {
                         mysqli_stmt_bind_param($update_stmt, "s", $tcno);
                         if (mysqli_stmt_execute($update_stmt)) {
+                            // Session bilgilerini ayarla
                             $_SESSION['tcno'] = $tcno;
+                            $_SESSION['administrator'] = $administrator;
+
                             mysqli_stmt_close($update_stmt);
-                            header("Location: ../index.php");
+
+                            // Adminse admin paneline, değilse index.php'ye yönlendir
+                            if ($administrator == 1) {
+                                header("Location: ../admin/dashboard.php");
+                            } else {
+                                header("Location: ../index.php");
+                            }
                             exit();
                         } else {
                             $error_message = "Veritabanı güncellenirken bir hata oluştu.";
