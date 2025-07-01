@@ -42,8 +42,6 @@ $pdf->SetAlpha(1);
 $coverHtml = '
     <div style="text-align: center; margin-top: 15px;">
         <h2 style="color: #FF0000; margin-bottom: 10px;">T.C. Sağlık Bakanlığı</h2>
-        <h1 style="margin-top: 0; margin-bottom: 20px;">Tüm Sağlık Raporları</h1>
-        <p style="margin: 0;">' . date('d.m.Y H:i') . ' tarihinde oluşturulmuştur</p>
     </div>';
 $pdf->writeHTMLCell(0, 0, 0, 145, $coverHtml, 0, 1, 0, true, 'C', true);
 
