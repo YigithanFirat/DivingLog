@@ -1,8 +1,19 @@
 function openConfirmModal(userId) {
-    document.getElementById('deleteUserId').value = userId;
-    document.getElementById('confirmModal').style.display = 'flex';
+    const modal = document.getElementById('confirmModal');
+    const input = document.getElementById('deleteUserId');
+
+    if (!modal || !input) {
+        console.error("Silme modali ya da gizli input bulunamadı.");
+        return;
+    }
+
+    input.value = userId;
+    modal.classList.add('active'); // CSS'te 'display: flex' için bu class kullanılabilir
 }
 
 function closeConfirmModal() {
-    document.getElementById('confirmModal').style.display = 'none';
+    const modal = document.getElementById('confirmModal');
+    if (!modal) return;
+
+    modal.classList.remove('active');
 }
