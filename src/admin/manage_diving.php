@@ -66,14 +66,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['tcno'])) {
         <h2>Admin Panel</h2>
         <ul>
             <li><a href="../index.php">Ana Sayfa</a></li>
+            <li><a href="dashboard.php">Dashboard</a></li>
             <li><a href="manage_users.php">Kullanıcıları Yönet</a></li>
+            <li><a href="diving.php">Dalış Oluştur</a></li>
             <li><a href="manage_diving.php">Dalışları Yönet</a></li>
+            <li><a href="certificate.php">Sertifika Oluştur</a></li>
             <li><a href="certificate_list.php">Sertifikaları Listele</a></li>
+            <li><a href="health_inspection.php">Sağlık Raporu Oluştur</a></li>
             <li><a href="health_inspection_list.php">Sağlık Raporlarını Listele</a></li>
             <li><a href="../users/exit.php">Çıkış Yap</a></li>
         </ul>
     </div>
-<div class="main-content" style="margin-left: 250px; padding: 30px;">
+<div class="main-content">
     <h2>TC Numarasına Göre Dalış Planlarını Listele</h2>
     <form method="GET" class="d-flex flex-column align-items-center gap-3 mb-4">
         <input 
@@ -127,7 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['tcno'])) {
                             <td><?= htmlspecialchars($row['respiration']) ?></td>
                             <td><?= htmlspecialchars($row['clothing']) ?></td>
                             <td><?= htmlspecialchars($row['diving_purpose']) ?></td>
-                            <td><?= htmlspecialchars($row['created_at']) ?></td>
+                            <td><?= htmlspecialchars($row['tools']) ?></td>
                             <td>
                                 <div class="d-flex gap-2 flex-wrap">
                                     <a href="edit_diving_plan.php?id=<?= urlencode($row['id']) ?>" class="btn btn-warning btn-sm">
@@ -232,12 +236,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['tcno'])) {
     </form>
   </div>
 </div>
-
+<script src="../JS/manage_diving.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <footer>
     <p>&copy; 2025 DivingLog Uygulaması</p>
 </footer>
-
-<script src="../JS/manage_diving.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
