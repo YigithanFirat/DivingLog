@@ -1,22 +1,26 @@
 <?php
 require_once('../../config.php');
 
-// Yalnızca GET yerine POST kullanmak daha güvenlidir
+// Yalnızca POST isteklerine izin ver
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header("Location: manage_users.php?status=error&msg=Geçersiz+istek+yöntemi");
     exit();
 }
 
-// ID kontrolü
-if (!isset($_POST['id']) || !filter_var($_POST['id'], FILTER_VALIDATE_INT)) {
-    header("Location: manage_users.php?status=error&msg=Geçersiz+ID");
+// Kullanıcı ID'sini filtrele
+$userId = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+if (!$userId || $userId <= 0) {
+    header("Location: manage_users.php?status=error&msg=Geçersiz+veya+eksik+ID");
     exit();
 }
 
-$userId = (int) $_POST['id'];
-
-// Önce böyle bir kullanıcı gerçekten var mı diye kontrol etmek isteyebilirsin
+// Kullanıcının gerçekten var olup olmadığını kontrol et
 $checkStmt = $mysqlB->prepare("SELECT id FROM users WHERE id = ?");
+if (!$checkStmt) {
+    error_log("Kullanıcı kontrol sorgusu hazırlanamadı: " . $mysqlB->error);
+    header("Location: manage_users.php?status=error&msg=Sistem+hatasi");
+    exit();
+}
 $checkStmt->bind_param("i", $userId);
 $checkStmt->execute();
 $checkResult = $checkStmt->get_result();
@@ -28,19 +32,21 @@ if ($checkResult->num_rows === 0) {
 }
 $checkStmt->close();
 
-// Kullanıcıyı sil
-$stmt = $mysqlB->prepare("DELETE FROM users WHERE id = ?");
-if (!$stmt) {
-    header("Location: manage_users.php?status=error&msg=Sorgu+hazırlanamadı");
+// Silme işlemi
+$deleteStmt = $mysqlB->prepare("DELETE FROM users WHERE id = ?");
+if (!$deleteStmt) {
+    error_log("Silme sorgusu hazırlanamadı: " . $mysqlB->error);
+    header("Location: manage_users.php?status=error&msg=Silme+hazırlığı+başarısız");
     exit();
 }
+$deleteStmt->bind_param("i", $userId);
 
-$stmt->bind_param("i", $userId);
-if ($stmt->execute()) {
+if ($deleteStmt->execute()) {
     header("Location: manage_users.php?status=success&msg=Kullanıcı+başarıyla+silindi");
 } else {
-    header("Location: manage_users.php?status=error&msg=Silme+i̇şlemi+başarısız");
+    error_log("Silme işlemi başarısız: " . $deleteStmt->error);
+    header("Location: manage_users.php?status=error&msg=Kullanıcı+silinemedi");
 }
-$stmt->close();
+$deleteStmt->close();
 exit();
 ?>
