@@ -58,12 +58,6 @@ if (isset($_SESSION['tcno'])) {
             <a href="users/login.php" class="btn">Giriş Yap</a>
             <a href="users/signup.php" class="btn">Kaydol</a>
         <?php else: ?>
-            <?php if ($ag): ?>
-                <a href="admin/dashboard.php" class="btn">Dashboard</a>
-                <a href="users/diving.php" class="btn">Diving Plan</a>
-                <a href="admin/certificate.php" class="btn">Sertifika</a>
-                <a href="admin/health_inspection.php" class="btn">Sağlık Raporu</a>
-            <?php endif; ?>
             <a href="users/exit.php" class="btn">Çıkış Yap</a>
         <?php endif; ?>
     </div>
