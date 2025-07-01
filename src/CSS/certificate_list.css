@@ -146,17 +146,20 @@ h1 {
     font-weight: bold;
 }
 
+/* SIDEBAR */
 .sidebar {
     position: fixed;
     top: 0;
     left: 0;
-    width: 220px;
+    width: 240px;
     height: 100vh;
     background-color: #0d2c43;
     padding: 20px 15px;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
     z-index: 1000;
-    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
 .sidebar h2 {
@@ -165,58 +168,58 @@ h1 {
     text-align: center;
     margin-bottom: 25px;
     font-weight: 600;
-    letter-spacing: 1px;
 }
 
 .sidebar ul {
     list-style: none;
     padding: 0;
     margin: 0;
-}
-
-.sidebar ul li {
-    margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .sidebar ul li a {
-    display: block;
-    padding: 10px 12px;
-    border-radius: 6px;
-    background-color: #00699c;
-    color: #ffffff;
-    font-weight: 500;
     text-decoration: none;
-    transition: all 0.3s ease;
-    font-size: 15px;
+    color: #fff;
+    font-weight: bold;
+    background-color: #005a8d;
+    padding: 10px 15px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+    display: block;
 }
 
 .sidebar ul li a:hover {
-    background-color: #FF9900;
-    color: #ffffff;
-    transform: translateX(4px);
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #ff9900;
+    color: #fff;
 }
 
 .content-container {
-    margin-left: 220px; /* Sidebar genişliği kadar boşluk bırak */
-    padding: 20px;
-    flex: 1; /* Kalan alanı kapla */
-    background-color: #f9f9f9; /* İçerik arka planı */
+    margin-left: 240px;
+    padding: 30px 25px 80px 25px; /* Alt padding footer çakışmasını önler */
+    background-color: #f2f6fa;
+    min-height: 100vh;
+    flex: 1;
 }
 
 .container.mt-4 {
     max-width: 100%;
 }
 
-footer
-{
+/* FOOTER */
+footer {
     background-color: #1c2b3a;
-    color: white;
+    color: #ffffff;
     text-align: center;
-    padding: 15px;
-    position: fixed;
+    font-weight: bold;
+    padding: 12px 0;
     width: 100%;
+    position: fixed;
+    left: 0;
     bottom: 0;
+    z-index: 999;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
 }
 
 footer p
