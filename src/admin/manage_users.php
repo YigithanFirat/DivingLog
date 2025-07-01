@@ -6,29 +6,20 @@ function e($str) {
     return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
 }
 
-// Sayfa başına gösterilecek kullanıcı sayısı
 $usersPerPage = 25;
-
-// Aktif sayfa numarası
 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int) $_GET['page'] : 1;
 if ($page < 1) $page = 1;
 
-// Toplam kullanıcı sayısını al
 $totalUsersResult = mysqli_query($mysqlB, "SELECT COUNT(*) as total FROM users");
 $totalUsersRow = mysqli_fetch_assoc($totalUsersResult);
 $totalUsers = $totalUsersRow['total'];
 
-// Toplam sayfa sayısı
 $totalPages = ceil($totalUsers / $usersPerPage);
-
-// Başlangıç noktası
 $offset = ($page - 1) * $usersPerPage;
 
-// Kullanıcıları çek
 $sql = "SELECT * FROM users LIMIT $usersPerPage OFFSET $offset";
 $result = mysqli_query($mysqlB, $sql);
 
-// login parametresi sadece belirlenen değerler için mesaj gösterimi
 $loginStatus = null;
 if (isset($_GET['login'])) {
     $loginParam = $_GET['login'];
@@ -39,7 +30,6 @@ if (isset($_GET['login'])) {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -55,9 +45,13 @@ if (isset($_GET['login'])) {
         <h2>Admin Panel</h2>
         <ul>
             <li><a href="../index.php">Ana Sayfa</a></li>
+            <li><a href="dashboard.php">Dashboard</a></li>
             <li><a href="manage_users.php">Kullanıcıları Yönet</a></li>
+            <li><a href="diving.php">Dalış Oluştur</a></li>
             <li><a href="manage_diving.php">Dalışları Yönet</a></li>
+            <li><a href="certificate.php">Sertifika Oluştur</a></li>
             <li><a href="certificate_list.php">Sertifikaları Listele</a></li>
+            <li><a href="health_inspection.php">Sağlık Raporu Oluştur</a></li>
             <li><a href="health_inspection_list.php">Sağlık Raporlarını Listele</a></li>
             <li><a href="../users/exit.php">Çıkış Yap</a></li>
         </ul>
@@ -72,6 +66,10 @@ if (isset($_GET['login'])) {
     <h2>Kullanıcılar Listesi</h2>
 
     <?php if ($result && mysqli_num_rows($result) > 0): ?>
+        <div class="all_pdf">
+            <a href="export_all_users_pdf.php" class="btn">Tüm Kullanıcıları PDF Olarak İndir</a>
+        </div>
+        <div class="table-responsive">
         <table>
             <thead>
                 <tr>
@@ -83,9 +81,6 @@ if (isset($_GET['login'])) {
                     <th>İşlemler</th>
                 </tr>
             </thead>
-            <div class="all_pdf">
-                <a href="export_all_users_pdf.php" class="btn">Tüm Kullanıcıları PDF Olarak İndir</a>
-            </div>
             <tbody>
                 <?php while ($user = mysqli_fetch_assoc($result)): ?>
                     <tr>
@@ -95,19 +90,20 @@ if (isset($_GET['login'])) {
                         <td><?= e($user['telefon']) ?></td>
                         <td><?= e($user['kaza_haber_kişi_ad_soyad']) ?></td>
                         <td>
-                            <a href="edit_user.php?id=<?= urlencode($user['id']) ?>" class="btn">Düzenle</a>
-                            <a href="admin_reset_password.php?id=<?= urlencode($user['id']) ?>" class="btn">Şifre Sıfırla</a>
-                            <a href="export_pdf.php?id=<?= urlencode($user['id']) ?>" class="btn">Dışa Aktar (PDF)</a>
-                            <a href="#" class="btn delete-btn" onclick="openConfirmModal(<?= (int)$user['id'] ?>); return false;">
-                                <i class="fas fa-exclamation-triangle"></i> Sil
-                            </a>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <a href="edit_user.php?id=<?= urlencode($user['id']) ?>" class="btn">Düzenle</a>
+                                <a href="admin_reset_password.php?id=<?= urlencode($user['id']) ?>" class="btn">Şifre Sıfırla</a>
+                                <a href="export_pdf.php?id=<?= urlencode($user['id']) ?>" class="btn">Dışa Aktar (PDF)</a>
+                                <a href="#" class="btn delete-btn" onclick="openConfirmModal(<?= (int)$user['id'] ?>); return false;">
+                                    <i class="fas fa-exclamation-triangle"></i> Sil
+                                </a>
+                            </div>
                         </td>
                     </tr>
                 <?php endwhile; ?>
             </tbody>
         </table>
-
-        <!-- Sayfalama -->
+        </div>
         <?php if ($totalPages > 1): ?>
             <div class="pagination">
                 <?php for ($i = 1; $i <= $totalPages; $i++): ?>
@@ -117,7 +113,6 @@ if (isset($_GET['login'])) {
                 <?php endfor; ?>
             </div>
         <?php endif; ?>
-
     <?php else: ?>
         <p>Henüz kullanıcı bulunmamaktadır.</p>
     <?php endif; ?>
