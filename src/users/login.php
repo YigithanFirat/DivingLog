@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         if (mysqli_stmt_execute($update_stmt)) {
                             // Session bilgilerini ayarla
                             $_SESSION['tcno'] = $tcno;
-                            $_SESSION['administrator'] = $administrator;
+                            $_SESSION['admin'] = $administrator;
 
                             mysqli_stmt_close($update_stmt);
 
