@@ -46,7 +46,7 @@ $html = '
 
 <h1>Sertifika Bilgisi</h1>
 <table>
-    <tr><th>Kullanıcı</th><td>' . htmlspecialchars($data['user_name']) . '</td></tr>
+    <tr><th>Ad</th><td>' . htmlspecialchars($data['full_name']) . '</td></tr>
     <tr><th>Sertifika Adı</th><td>' . htmlspecialchars($data['certificate_name']) . '</td></tr>
     <tr><th>Veren Kuruluş</th><td>' . htmlspecialchars($data['issuing_organization']) . '</td></tr>
     <tr><th>Veriliş Tarihi</th><td>' . htmlspecialchars($data['issue_date']) . '</td></tr>
