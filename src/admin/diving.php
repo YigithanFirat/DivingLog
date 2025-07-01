@@ -1,0 +1,218 @@
+<?php
+session_start();
+include('../../config.php');
+
+$equipment_options = ['Scuba', 'Nargile', 'MK-17', 'MK-18', 'Tam Yüz Maskesi', 'Basınç OD', 'Diğer'];
+$water_type_options = ['Tatlı Su', 'Tuzlu Su', 'Sahil', 'Bot-Tekne', 'Diğer', 'Dalga', 'Rüzgar', 'Akıntı'];
+$gas_options = ['Hava', 'Nitrox', 'Helioks', 'Trimks', 'Oksijen'];
+$clothing_options = ['Kuru', 'Islak', 'Diğer'];
+
+$success_message = '';
+$error_message = '';
+$date = date('d/m/Y');
+
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        $error_message = "Geçersiz form gönderimi.";
+    } else {
+        $ad_soyad = trim($_POST['ad_soyad'] ?? '');
+        $minutes = trim($_POST['minutes'] ?? '');
+        $diving_location = trim($_POST['diving_location'] ?? '');
+        $water_type = $_POST['water_type'] ?? '';
+        $depth_feet = trim($_POST['depth_feet'] ?? '');
+        $depth_meter = trim($_POST['depth_meter'] ?? '');
+        $respiration = $_POST['respiration'] ?? '';
+        $clothing = $_POST['clothing'] ?? '';
+        $diving_purpose = trim($_POST['diving_purpose'] ?? '');
+        $tools = trim($_POST['tools'] ?? '');
+        $tools_devices = $_POST['tools_devices'] ?? '';
+        $supervisor = trim($_POST['supervisor'] ?? '');
+
+        // TCNO'yu Ad Soyad'a göre çek
+        $tcno_query = mysqli_prepare($mysqlB, "SELECT tcno FROM users WHERE CONCAT(ad, ' ', soyad) = ?");
+        mysqli_stmt_bind_param($tcno_query, "s", $ad_soyad);
+        mysqli_stmt_execute($tcno_query);
+        mysqli_stmt_bind_result($tcno_query, $tcno_result);
+        mysqli_stmt_fetch($tcno_query);
+        mysqli_stmt_close($tcno_query);
+
+        $tcno = $tcno_result ?? null;
+
+        if (!$tcno) {
+            $error_message = "Girilen ad-soyad ile eşleşen bir kullanıcı bulunamadı.";
+        } elseif (!is_numeric($minutes) || $minutes < 0) {
+            $error_message = "Dalış süresi geçerli bir sayı olmalıdır.";
+        } elseif (!in_array($water_type, $water_type_options)) {
+            $error_message = "Geçersiz dalış ortamı seçimi.";
+        } elseif (!in_array($respiration, $gas_options)) {
+            $error_message = "Geçersiz solunum gazı seçimi.";
+        } elseif (!in_array($clothing, $clothing_options)) {
+            $error_message = "Geçersiz dalış elbisesi seçimi.";
+        } elseif (!in_array($tools_devices, $equipment_options)) {
+            $error_message = "Geçersiz dalış takımı seçimi.";
+        } else {
+            $stmt = mysqli_prepare($mysqlB, "INSERT INTO diving_plans
+            (tcno, minutes, diving_location, water_type, depth_feet, depth_meter, respiration, clothing, diving_purpose, tools, tools_devices, supervisor) 
+            VALUES (?, ?, ?, ?, NULLIF(?, ''), ?, ?, ?, ?, ?, ?, ?)");
+
+            if ($stmt) {
+                mysqli_stmt_bind_param($stmt, "ssssssssssss", $tcno, $minutes, $diving_location, $water_type, $depth_feet, $depth_meter, $respiration, $clothing, $diving_purpose, $tools, $tools_devices, $supervisor);
+
+                if (mysqli_stmt_execute($stmt)) {
+                    $success_message = "Dalış planı başarıyla kaydedildi!";
+                    $minutes = $diving_location = $water_type = $depth_feet = $depth_meter = $respiration = $clothing = $diving_purpose = $tools = $tools_devices = $supervisor = $ad_soyad = '';
+                } else {
+                    $error_message = "Kayıt sırasında hata oluştu. Lütfen tekrar deneyin.";
+                }
+                mysqli_stmt_close($stmt);
+            } else {
+                $error_message = "Veritabanı sorgusu hazırlanamadı.";
+            }
+        }
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DivingLog | Dalış Planı</title>
+    <link rel="stylesheet" href="../CSS/diving.css" />
+    <link rel="icon" href="../images/divinglog.png" />
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Admin Panel</h2>
+        <ul>
+            <li><a href="../index.php">Ana Sayfa</a></li>
+            <li><a href="dashboard.php">Dashboard</a></li>
+            <li><a href="manage_users.php">Kullanıcıları Yönet</a></li>
+            <li><a href="diving.php">Dalış Oluştur</a></li>
+            <li><a href="manage_diving.php">Dalışları Yönet</a></li>
+            <li><a href="certificate.php">Sertifika Oluştur</a></li>
+            <li><a href="certificate_list.php">Sertifikaları Listele</a></li>
+            <li><a href="health_inspection.php">Sağlık Raporu Oluştur</a></li>
+            <li><a href="health_inspection_list.php">Sağlık Raporlarını Listele</a></li>
+            <li><a href="../users/exit.php">Çıkış Yap</a></li>
+        </ul>
+    </div>
+    <div class="diving-plan-container">
+        <header>
+            <h1>Dalış Planı</h1>
+            <p>İSTE | Tarih: <?php echo htmlspecialchars($date); ?></p>
+        </header>
+
+        <div class="plan-details">
+            <?php if ($success_message): ?>
+                <div class="success"><?php echo htmlspecialchars($success_message); ?></div>
+            <?php endif; ?>
+            <?php if ($error_message): ?>
+                <div class="error"><?php echo htmlspecialchars($error_message); ?></div>
+            <?php endif; ?>
+
+            <form action="" method="POST">
+                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>" />
+
+                <table>
+                    <tr>
+                        <td>Ad Soyad:</td>
+                        <td><input type="text" name="ad_soyad" value="<?php echo htmlspecialchars($ad_soyad ?? ''); ?>" required></td>
+                    </tr>
+                    <tr>
+                        <td>Dalış Mevki:</td>
+                        <td>
+                            <input type="text" name="diving_location" id="diving_location" value="<?php echo htmlspecialchars($diving_location ?? ''); ?>" required>
+                            <div id="map"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Dalış Derinliği (Feet):</td>
+                        <td><input type="text" name="depth_feet" value="<?php echo htmlspecialchars($depth_feet ?? ''); ?>"></td>
+                    </tr>
+                    <tr>
+                        <td>Dalış Derinliği (Metre):</td>
+                        <td><input type="text" name="depth_meter" value="<?php echo htmlspecialchars($depth_meter ?? ''); ?>" required></td>
+                    </tr>
+                    <tr>
+                        <td>Dalış Süresi (Dakika):</td>
+                        <td><input type="text" name="minutes" value="<?php echo htmlspecialchars($minutes ?? ''); ?>" required></td>
+                    </tr>
+                    <tr>
+                        <td>Dalış Ortamı:</td>
+                        <td>
+                            <select name="water_type" required>
+                                <option value="">Seçiniz</option>
+                                <?php foreach ($water_type_options as $option): ?>
+                                    <option value="<?php echo $option; ?>" <?php if (($water_type ?? '') === $option) echo 'selected'; ?>><?php echo $option; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Solunum Gazı:</td>
+                        <td>
+                            <select name="respiration" required>
+                                <option value="">Seçiniz</option>
+                                <?php foreach ($gas_options as $option): ?>
+                                    <option value="<?php echo $option; ?>" <?php if (($respiration ?? '') === $option) echo 'selected'; ?>><?php echo $option; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Dalış Elbisesi:</td>
+                        <td>
+                            <select name="clothing" required>
+                                <option value="">Seçiniz</option>
+                                <?php foreach ($clothing_options as $option): ?>
+                                    <option value="<?php echo $option; ?>" <?php if (($clothing ?? '') === $option) echo 'selected'; ?>><?php echo $option; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Dalış Amacı:</td>
+                        <td><input type="text" name="diving_purpose" value="<?php echo htmlspecialchars($diving_purpose ?? ''); ?>"></td>
+                    </tr>
+                    <tr>
+                        <td>Aletler:</td>
+                        <td><input type="text" name="tools" value="<?php echo htmlspecialchars($tools ?? ''); ?>"></td>
+                    </tr>
+                    <tr>
+                        <td>Dalış Takımı:</td>
+                        <td>
+                            <select name="tools_devices" required>
+                                <option value="">Seçiniz</option>
+                                <?php foreach ($equipment_options as $option): ?>
+                                    <option value="<?php echo $option; ?>" <?php if (($tools_devices ?? '') === $option) echo 'selected'; ?>>
+                                        <?php echo $option; ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Gözetmen:</td>
+                        <td><input type="text" name="supervisor" value="<?php echo htmlspecialchars($supervisor ?? ''); ?>"></td>
+                    </tr>
+                </table>
+
+                <button class="saveButton" type="submit">Kaydet</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Google Maps JS -->
+    <script src="../JS/diving.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAQG41CCNkw229rccG5xTlkBk3OKv1kVyY&callback=initMap" async defer></script>
+    <footer>
+        <p>&copy; 2025 DivingLog Uygulaması</p>
+    </footer>
+</body>
+</html>
