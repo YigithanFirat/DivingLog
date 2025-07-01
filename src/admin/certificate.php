@@ -81,7 +81,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="icon" href="../images/divinglog.png">
 </head>
 <body>
-
+    <div class="sidebar">
+        <h2>Admin Panel</h2>
+        <ul>
+            <li><a href="../index.php">Ana Sayfa</a></li>
+            <li><a href="dashboard.php">Dashboard</a></li>
+            <li><a href="manage_users.php">Kullanıcıları Yönet</a></li>
+            <li><a href="diving.php">Dalış Oluştur</a></li>
+            <li><a href="manage_diving.php">Dalışları Yönet</a></li>
+            <li><a href="certificate.php">Sertifika Oluştur</a></li>
+            <li><a href="certificate_list.php">Sertifikaları Listele</a></li>
+            <li><a href="health_inspection.php">Sağlık Raporu Oluştur</a></li>
+            <li><a href="health_inspection_list.php">Sağlık Raporlarını Listele</a></li>
+            <li><a href="../users/exit.php">Çıkış Yap</a></li>
+        </ul>
+    </div>
 <form method="POST" action="">
     <?php if ($success_message): ?>
         <div class="success"><?= htmlspecialchars($success_message) ?></div>
