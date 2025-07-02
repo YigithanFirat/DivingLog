@@ -5,3 +5,8 @@ confirmDeleteModal.addEventListener('show.bs.modal', function (event) {
     const confirmButton = document.getElementById('confirmDeleteBtn');
     confirmButton.href = 'health_inspection_delete.php?id=' + id;
 });
+
+function toggleSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    sidebar.classList.toggle('hidden');
+}
