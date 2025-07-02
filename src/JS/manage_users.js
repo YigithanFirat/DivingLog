@@ -17,3 +17,8 @@ function closeConfirmModal() {
 
     modal.classList.remove('active');
 }
+
+function toggleSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    sidebar.classList.toggle('hidden');
+}
