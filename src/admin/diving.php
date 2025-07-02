@@ -85,8 +85,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>DivingLog | Dalış Planı</title>
     <link rel="stylesheet" href="../CSS/diving.css" />
     <link rel="icon" href="../images/divinglog.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
+    <div class="menu-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </div>
     <div class="sidebar">
         <h2>Admin Panel</h2>
         <ul>
