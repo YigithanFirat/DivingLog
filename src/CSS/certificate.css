@@ -1,5 +1,5 @@
 html, body {
-    height: 100%;
+    min-height: 100vh;
     margin: 0;
     padding: 0;
 }
@@ -18,7 +18,7 @@ form {
     padding: 25px;
     border-radius: 10px;
     max-width: 600px;
-    margin: auto;
+    margin: 40px auto 100px auto;
     box-shadow: 0 0 15px rgba(0,0,0,0.1);
 }
 
@@ -64,6 +64,11 @@ input[type="submit"]:hover {
     margin-bottom: 20px;
     border-radius: 6px;
     text-align: center;
+}
+
+.certificate
+{
+    margin-left: 545px;
 }
 
 /* Footer */
@@ -165,4 +170,30 @@ footer p {
 .sidebar ul li a:hover {
     background-color: #FF9900;
     color: #ffffff;
+}
+
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 999;
+    background-color: #1e3c57;
+    padding: 10px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    font-size: 20px;
+    transition: background 0.3s ease;
+}
+
+.menu-toggle:hover {
+    background-color: #2a4c6e;
+}
+
+.sidebar {
+    transition: transform 0.3s ease;
+}
+
+.sidebar.hidden {
+    transform: translateX(-100%);
 }
