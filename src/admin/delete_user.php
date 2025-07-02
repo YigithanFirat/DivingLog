@@ -7,46 +7,58 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit();
 }
 
-// Kullanıcı ID'sini filtrele
 $userId = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 if (!$userId || $userId <= 0) {
     header("Location: manage_users.php?status=error&msg=Geçersiz+veya+eksik+ID");
     exit();
 }
 
-// Kullanıcının gerçekten var olup olmadığını kontrol et
-$checkStmt = $mysqlB->prepare("SELECT id FROM users WHERE id = ?");
-if (!$checkStmt) {
-    error_log("Kullanıcı kontrol sorgusu hazırlanamadı: " . $mysqlB->error);
-    header("Location: manage_users.php?status=error&msg=Sistem+hatasi");
+// Kullanıcının tcno'sunu al
+$getUserStmt = $mysqlB->prepare("SELECT tcno FROM users WHERE id = ?");
+if (!$getUserStmt) {
+    error_log("TCNO sorgusu hazırlanamadı: " . $mysqlB->error);
+    header("Location: manage_users.php?status=error&msg=TCNO+çekilemedi");
     exit();
 }
-$checkStmt->bind_param("i", $userId);
-$checkStmt->execute();
-$checkResult = $checkStmt->get_result();
+$getUserStmt->bind_param("i", $userId);
+$getUserStmt->execute();
+$result = $getUserStmt->get_result();
 
-if ($checkResult->num_rows === 0) {
-    $checkStmt->close();
+if ($result->num_rows === 0) {
+    $getUserStmt->close();
     header("Location: manage_users.php?status=error&msg=Kullanıcı+bulunamadı");
     exit();
 }
-$checkStmt->close();
+$user = $result->fetch_assoc();
+$tcno = $user['tcno'];
+$getUserStmt->close();
 
-// Silme işlemi
-$deleteStmt = $mysqlB->prepare("DELETE FROM users WHERE id = ?");
-if (!$deleteStmt) {
-    error_log("Silme sorgusu hazırlanamadı: " . $mysqlB->error);
+// 1. Bu kullanıcıya ait tüm diving_plans kayıtlarını sil
+$deleteDivesStmt = $mysqlB->prepare("DELETE FROM diving_plans WHERE tcno = ?");
+if (!$deleteDivesStmt) {
+    error_log("Dalış kayıtları silme sorgusu hazırlanamadı: " . $mysqlB->error);
+    header("Location: manage_users.php?status=error&msg=Dalış+silme+hazırlığı+başarısız");
+    exit();
+}
+$deleteDivesStmt->bind_param("s", $tcno);
+$deleteDivesStmt->execute();
+$deleteDivesStmt->close();
+
+// 2. Kullanıcıyı sil
+$deleteUserStmt = $mysqlB->prepare("DELETE FROM users WHERE id = ?");
+if (!$deleteUserStmt) {
+    error_log("Kullanıcı silme sorgusu hazırlanamadı: " . $mysqlB->error);
     header("Location: manage_users.php?status=error&msg=Silme+hazırlığı+başarısız");
     exit();
 }
-$deleteStmt->bind_param("i", $userId);
+$deleteUserStmt->bind_param("i", $userId);
 
-if ($deleteStmt->execute()) {
-    header("Location: manage_users.php?status=success&msg=Kullanıcı+başarıyla+silindi");
+if ($deleteUserStmt->execute()) {
+    header("Location: manage_users.php?status=success&msg=Kullanıcı+ve+Dalışlar+silindi");
 } else {
-    error_log("Silme işlemi başarısız: " . $deleteStmt->error);
+    error_log("Kullanıcı silinemedi: " . $deleteUserStmt->error);
     header("Location: manage_users.php?status=error&msg=Kullanıcı+silinemedi");
 }
-$deleteStmt->close();
+$deleteUserStmt->close();
 exit();
 ?>
