@@ -25,25 +25,7 @@ $pdf->SetMargins(20, 20, 20);
 $pdf->SetAutoPageBreak(true, 20);
 $pdf->SetFont('dejavusans', '', 12);
 
-// Kapak sayfası
-$pdf->AddPage();
-
-// Opaklığı %30 yap (0.0 - 1.0 arası değer alır)
-$pdf->SetAlpha(0.3);
-
-// Logo: sayfa ortasına yakın yatay, yukarıdan biraz aşağı
-$logoPath = __DIR__ . '/../images/sb.png';
-$pdf->Image($logoPath, 55, 40, 100, '', 'PNG', '', 'T', false, 300, '', false, false, 0);
-
-// Opaklığı eski haline getir (tam opak)
-$pdf->SetAlpha(1);
-
-// Metinleri logonun hemen altına ve ortalanmış şekilde yaz
-$coverHtml = '
-    <div style="text-align: center; margin-top: 15px;">
-        <h2 style="color: #FF0000; margin-bottom: 10px;">T.C. Sağlık Bakanlığı</h2>
-    </div>';
-$pdf->writeHTMLCell(0, 0, 0, 145, $coverHtml, 0, 1, 0, true, 'C', true);
+// Kapak sayfasını atla (logo ve yazılar kaldırıldı)
 
 // 📄 Her kayıt için yeni sayfa
 while ($row = $result->fetch_assoc()) {
