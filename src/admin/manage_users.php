@@ -41,6 +41,9 @@ if (isset($_GET['login'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
+    <div class="menu-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </div>
     <div class="sidebar">
         <h2>Admin Panel</h2>
         <ul>
@@ -67,7 +70,9 @@ if (isset($_GET['login'])) {
 
     <?php if ($result && mysqli_num_rows($result) > 0): ?>
         <div class="all_pdf">
-            <a href="export_all_users_pdf.php" class="btn">Tüm Kullanıcıları PDF Olarak İndir</a>
+            <a href="export_all_users_pdf.php" class="btn">
+                <i class="fa-solid fa-file-pdf"></i>Tüm Kullanıcıları PDF Olarak İndir
+            </a>
         </div>
         <div class="table-responsive">
         <table>
