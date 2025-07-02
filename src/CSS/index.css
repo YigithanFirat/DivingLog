@@ -14,7 +14,7 @@ body
     justify-content: space-between;
 }
 
-h1
+h1.h1title
 {
     text-align: center;
     color: #00bcd4;
@@ -22,15 +22,49 @@ h1
     margin-top: 50px;
 }
 
-h2
+h1.titleh1
+{
+    text-align: center;
+    color: #00bcd4;
+    font-size: 3em;
+    margin-right: 250px;
+}
+
+h2.h2title
 {
     text-align: center;
     color: #d3d3d3;
     font-size: 1.5em;
     margin-top: 20px;
+    margin-left: 200px;
+}
+
+h2.titleh2
+{
+    text-align: center;
+    color: #d3d3d3;
+    font-size: 1.5rem;
+}
+
+.title
+{
+    margin-left: 250px;
+}
+
+body h1
+{
+    margin-left: 250px;
 }
 
 .content
+{
+    text-align: center;
+    margin-top: 100px;
+    flex-grow: 1;
+    margin-left: 250px;
+}
+
+.content1
 {
     text-align: center;
     margin-top: 100px;
@@ -94,4 +128,73 @@ footer p
     background: linear-gradient(135deg, #b21f1f, #1a2a6c);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: 100vh;
+    background-color: #0d2c43;
+    padding: 20px;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+}
+
+.sidebar h2 {
+    color: #ffffff;
+    font-size: 22px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 15px;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    display: block;
+    padding: 10px 15px;
+    border-radius: 6px;
+    background-color: #005a8d;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar ul li a:hover {
+    background-color: #FF9900;
+    color: #ffffff;
+}
+
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 999;
+    background-color: #1e3c57;
+    padding: 10px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    font-size: 20px;
+    transition: background 0.3s ease;
+}
+
+.menu-toggle:hover {
+    background-color: #2a4c6e;
+}
+
+.sidebar {
+    transition: transform 0.3s ease;
+}
+
+.sidebar.hidden {
+    transform: translateX(-100%);
 }
