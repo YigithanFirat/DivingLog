@@ -62,6 +62,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['tcno'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
+    <div class="menu-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </div>
     <div class="sidebar">
         <h2>Admin Panel</h2>
         <ul>
@@ -92,10 +95,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['tcno'])) {
     <?php if ($result && $result->num_rows > 0): ?>
         <div class="d-flex justify-content-end mb-3 gap-2">
             <a href="export_user_all_diving_plan_pdf.php?tcno=<?= urlencode($tcFilter) ?>" target="_blank" class="btn btn-success">
-                <i class="fas fa-file-pdf"></i> Kullanıcıya Ait Tüm Dalışları PDF Olarak İndir
+                <i class="fa-solid fa-file-pdf"></i> Kullanıcıya Ait Tüm Dalışları PDF Olarak İndir
             </a>
             <a href="export_all_diving_plans_pdf.php" target="_blank" class="btn btn-dark">
-                <i class="fas fa-file-pdf"></i> Tüm Dalışları PDF Olarak İndir
+                <i class="fa-solid fa-file-pdf"></i> Tüm Dalışları PDF Olarak İndir
             </a>
         </div>
     <?php endif; ?>
