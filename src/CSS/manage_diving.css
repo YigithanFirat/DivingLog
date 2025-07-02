@@ -15,7 +15,7 @@ html, body {
     position: fixed;
     top: 0;
     left: 0;
-    width: 261px;
+    width: 262px;
     height: 100vh;
     background-color: #0d2c43;
     padding: 20px;
@@ -24,9 +24,10 @@ html, body {
 
 .sidebar h2 {
     color: #ffffff;
-    font-size: 22px;
+    font-size: 23px;
     text-align: center;
     margin-bottom: 25px;
+    margin-top: 13px;
 }
 
 .sidebar ul {
@@ -35,7 +36,7 @@ html, body {
 }
 
 .sidebar ul li {
-    margin-bottom: 15px;
+    margin-bottom: 14px;
 }
 
 .sidebar ul li a {
@@ -304,4 +305,30 @@ footer p
         margin-left: 0;
         width: 100%;
     }
+}
+
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 999;
+    background-color: #1e3c57;
+    padding: 10px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    font-size: 20px;
+    transition: background 0.3s ease;
+}
+
+.menu-toggle:hover {
+    background-color: #2a4c6e;
+}
+
+.sidebar {
+    transition: transform 0.3s ease;
+}
+
+.sidebar.hidden {
+    transform: translateX(-100%);
 }
