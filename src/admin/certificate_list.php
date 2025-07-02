@@ -17,29 +17,30 @@ $totalPages = ceil($totalCertificates / $perPage);
 // Başlangıç verisi
 $offset = ($page - 1) * $perPage;
 
-// Sertifikaları ve kullanıcı adlarını çek
-$query = "SELECT *
-        FROM certificate
-        ORDER BY issue_date DESC
-        LIMIT $perPage OFFSET $offset";
-
+// Sertifikaları çek
+$query = "SELECT * FROM certificate ORDER BY issue_date DESC LIMIT $perPage OFFSET $offset";
 $result = mysqli_query($mysqlB, $query);
 ?>
 
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>DivingLog | Sertifika Listesi</title>
-    <link rel="stylesheet" href="../CSS/certificate_list.css">
-    <link rel="icon" href="../images/divinglog.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="../images/divinglog.png" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../CSS/certificate_list.css" />
 </head>
 <body>
     <div class="page-wrapper">
         <div class="sidebar">
-            <h2>Admin Panel</h2>
+            <div class="sidebar-header">
+                <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h2>Admin Panel</h2>
+            </div>
             <ul>
                 <li><a href="../index.php">Ana Sayfa</a></li>
                 <li><a href="dashboard.php">Dashboard</a></li>
@@ -54,6 +55,10 @@ $result = mysqli_query($mysqlB, $query);
             </ul>
         </div>
 
+        <button class="menu-toggle fixed-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar">
+            <i class="fas fa-bars"></i>
+        </button>
+
         <main class="content-container">
             <div class="container mt-4">
                 <h1 class="mb-4">Sertifika Listesi</h1>
@@ -62,6 +67,7 @@ $result = mysqli_query($mysqlB, $query);
                         <i class="fas fa-file-pdf"></i> Tüm Sertifikaları PDF Olarak İndir
                     </a>
                 </div>
+
                 <?php if (mysqli_num_rows($result) > 0): ?>
                     <table class="table table-bordered table-striped">
                         <thead class="table-dark">
@@ -118,29 +124,30 @@ $result = mysqli_query($mysqlB, $query);
         </main>
     </div>
 
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <form method="POST" action="delete_certificate.php" class="modal-content">
-      <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title" id="deleteModalLabel">Silme Onayı</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
+    <!-- Silme Modalı -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <form method="POST" action="delete_certificate.php" class="modal-content">
+          <div class="modal-header bg-danger text-white">
+            <h5 class="modal-title" id="deleteModalLabel">Silme Onayı</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
+          </div>
+          <div class="modal-body">
+            Bu sertifikayı silmek istediğinize emin misiniz?
+            <input type="hidden" name="id" id="deleteCertificateId" value="">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+            <button type="submit" class="btn btn-danger">Evet, Sil</button>
+          </div>
+        </form>
       </div>
-      <div class="modal-body">
-        Bu sertifikayı silmek istediğinize emin misiniz?
-        <input type="hidden" name="id" id="deleteCertificateId" value="">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
-        <button type="submit" class="btn btn-danger">Evet, Sil</button>
-      </div>
-    </form>
-  </div>
-</div>
+    </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="../JS/certificate_list.js"></script>
-<footer>
-    <p>&copy; 2025 DivingLog Uygulaması</p>
-</footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../JS/certificate_list.js"></script>
+    <footer>
+        <p>&copy; 2025 DivingLog Uygulaması</p>
+    </footer>
 </body>
 </html>
