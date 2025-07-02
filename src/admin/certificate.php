@@ -79,8 +79,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>DivingLog | Sertifika Ekle</title>
     <link rel="stylesheet" href="../CSS/certificate.css">
     <link rel="icon" href="../images/divinglog.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
+    <div class="menu-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </div>
     <div class="sidebar">
         <h2>Admin Panel</h2>
         <ul>
@@ -96,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <li><a href="../users/exit.php">Çıkış Yap</a></li>
         </ul>
     </div>
-<form method="POST" action="">
+<form class="certificate" method="POST" action="">
     <?php if ($success_message): ?>
         <div class="success"><?= htmlspecialchars($success_message) ?></div>
     <?php endif; ?>
@@ -140,5 +144,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <footer>
     <p>&copy; 2025 DivingLog Uygulaması</p>
 </footer>
+<script src="../JS/certificate.js"></script>
 </body>
 </html>
