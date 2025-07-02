@@ -1,149 +1,24 @@
-/* Genel gövde stili */
+/* GENEL GÖVDE */
 html, body {
+    margin: 0;
+    padding: 0;
     background-color: #1e3c57;
     font-family: Arial, sans-serif;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
 }
 
-/* Başlık */
-h1 {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #005a87;
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-/* Tablo stilleri */
-.table {
-    background-color: #1e3c57;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 10px #000;
-    border: 1px solid #000;
-}
-
-/* Tablo başlıkları */
-.table thead th {
-    background-color: #005a87;
-    color: #fff;
-    text-align: center;
-    vertical-align: middle;
-    font-size: 0.95rem;
-}
-
-/* Tablo hücreleri */
-.table td {
-    vertical-align: middle;
-    text-align: center;
-    font-size: 0.9rem;
-    padding: 12px;
-}
-
-/* Alternatif satır renkleri */
-.table-striped tbody tr:nth-of-type(odd) {
-    background-color: #1e3c57;
-    border-radius: 30px;
-}
-
-/* Bilgi kutusu */
-.alert-info {
-    background-color: #d9f0ff;
-    color: #005a87;
-    font-size: 1rem;
-    border: 1px solid #b3e0ff;
-}
-
-/* Butonları hizala */
-.action-buttons {
-    display: flex;
-    gap: 5px;
-    justify-content: center;
-}
-
-/* Responsive tablo */
-@media (max-width: 768px) {
-    .page-wrapper {
-        flex-direction: column;
-    }
-
-    .content-container {
-        margin-left: 0;
-        padding: 10px;
-    }
-    
-    .table thead {
-        display: none;
-        border-radius: 30px;
-    }
-
-    .table, .table tbody, .table tr, .table td {
-        display: block;
-        width: 100%;
-    }
-
-    .sidebar {
-        position: relative;
-        width: 100%;
-        height: auto;
-        box-shadow: none;
-    }
-
-    .table tr {
-        margin-bottom: 15px;
-        background-color: #fff;
-        box-shadow: 0 1px 5px rgba(0,0,0,0.05);
-        border-radius: 8px;
-        padding: 10px;
-    }
-
-    .table td {
-        text-align: right;
-        position: relative;
-        padding-left: 50%;
-    }
-
-    .table td::before {
-        content: attr(data-label);
-        position: absolute;
-        left: 15px;
-        width: 45%;
-        padding-right: 10px;
-        font-weight: bold;
-        text-align: left;
-        color: #005a87;
-    }
-}
-
-.pagination {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center; /* Sayfa numaralarını ortalar */
-    gap: 8px; /* Sayfalar arasında boşluk bırakır */
-    flex-wrap: wrap; /* Gerekirse alt satıra geçer */
-}
-
+/* SAYFA YAPISI */
 .page-wrapper {
     display: flex;
     min-height: 100vh;
+    position: relative;
 }
 
-.pagination a {
-    display: inline-block;
-    padding: 8px 12px;
-    color: #333;
-    background-color: #eee;
-    text-decoration: none;
-    border-radius: 4px;
-    transition: background-color 0.3s;
-}
-
-.pagination a.active {
-    background-color: #2c3e50;
-    color: #fff;
-    font-weight: bold;
+.content-container {
+    margin-left: 240px;
+    padding: 30px 25px 90px 25px;
+    background-color: #f2f6fa;
+    flex: 1;
+    transition: margin-left 0.3s ease;
 }
 
 /* SIDEBAR */
@@ -154,22 +29,79 @@ h1 {
     width: 240px;
     height: 100vh;
     background-color: #0d2c43;
-    padding: 20px 15px;
+    padding: 0px 15px;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
     z-index: 1000;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    transition: transform 0.3s ease;
 }
 
+.sidebar.hidden {
+    transform: translateX(-100%);
+}
+
+/* SIDEBAR BAŞLIK */
 .sidebar h2 {
     color: #ffffff;
-    font-size: 20px;
+    font-size: 22px;
     text-align: center;
-    margin-bottom: 25px;
-    font-weight: 600;
+    margin-bottom: 30px;
 }
 
+/* HAMBURGER BUTON (SIDEBAR İÇİNDE) */
+.menu-toggle {
+    background-color: #113452;
+    padding: 8px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+}
+
+.menu-toggle:hover {
+    background-color: #1a4b6d;
+}
+
+/* SABİT HAMBURGER (SIDEBAR KAPALIYKEN GÖRÜNÜR) */
+.menu-toggle.fixed-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1100;
+    background-color: #154064;
+    padding: 10px 12px;
+    border-radius: 5px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+    color: white;
+    font-size: 20px;
+    border: none;
+    display: none; /* default gizli */
+    transition: background-color 0.3s ease;
+    user-select: none;
+}
+
+.menu-toggle.fixed-toggle:hover {
+    background-color: #1a4b6d;
+}
+
+/* Sidebar kapandığında fixed toggle görünür */
+.sidebar.hidden ~ .menu-toggle.fixed-toggle {
+    display: flex;
+}
+
+/* Sidebar açıkken fixed toggle gizli */
+.sidebar:not(.hidden) ~ .menu-toggle.fixed-toggle {
+    display: none;
+}
+
+/* MENÜ */
 .sidebar ul {
     list-style: none;
     padding: 0;
@@ -195,16 +127,81 @@ h1 {
     color: #fff;
 }
 
-.content-container {
-    margin-left: 240px;
-    padding: 30px 25px 80px 25px; /* Alt padding footer çakışmasını önler */
-    background-color: #f2f6fa;
-    min-height: 100vh;
-    flex: 1;
+/* BAŞLIK */
+h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #005a87;
+    text-align: center;
+    margin-bottom: 30px;
 }
 
-.container.mt-4 {
-    max-width: 100%;
+/* TABLO */
+.table {
+    background-color: #1e3c57;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px #000;
+    border: 1px solid #000;
+}
+
+.table thead th {
+    background-color: #005a87;
+    color: #fff;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 0.95rem;
+}
+
+.table td {
+    vertical-align: middle;
+    text-align: center;
+    font-size: 0.9rem;
+    padding: 12px;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #1e3c57;
+}
+
+/* ACTION BUTONLAR */
+.action-buttons {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+}
+
+/* BİLGİ MESAJI */
+.alert-info {
+    background-color: #d9f0ff;
+    color: #005a87;
+    font-size: 1rem;
+    border: 1px solid #b3e0ff;
+}
+
+/* PAGINATION */
+.pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.pagination a {
+    display: inline-block;
+    padding: 8px 12px;
+    color: #333;
+    background-color: #eee;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.pagination a.active {
+    background-color: #2c3e50;
+    color: #fff;
+    font-weight: bold;
 }
 
 /* FOOTER */
@@ -218,11 +215,74 @@ footer {
     position: fixed;
     left: 0;
     bottom: 0;
-    z-index: 999;
+    z-index: 900;
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
 }
 
-footer p
-{
+footer p {
     font-weight: bolder;
+}
+
+/* SIDEBAR KAPANDIĞINDA CONTENT FULL WIDTH OLSUN */
+.sidebar.hidden ~ .content-container {
+    margin-left: 0;
+}
+
+/* RESPONSIVE TASARIM */
+@media (max-width: 768px) {
+    .page-wrapper {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        position: fixed;
+        width: 100%;
+        height: auto;
+        transform: translateY(-100%);
+        z-index: 1000;
+        transition: transform 0.3s ease;
+    }
+
+    .sidebar.hidden {
+        transform: translateY(0);
+    }
+
+    .content-container {
+        margin-left: 0;
+        padding: 20px 15px 90px 15px;
+    }
+
+    .table thead {
+        display: none;
+    }
+
+    .table, .table tbody, .table tr, .table td {
+        display: block;
+        width: 100%;
+    }
+
+    .table tr {
+        margin-bottom: 15px;
+        background-color: #fff;
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+        border-radius: 8px;
+        padding: 10px;
+    }
+
+    .table td {
+        text-align: right;
+        position: relative;
+        padding-left: 50%;
+    }
+
+    .table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 15px;
+        width: 45%;
+        padding-right: 10px;
+        font-weight: bold;
+        text-align: left;
+        color: #005a87;
+    }
 }
