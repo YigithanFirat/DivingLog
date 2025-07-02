@@ -5,3 +5,8 @@ deleteModal.addEventListener('show.bs.modal', function (event) {
     const input = deleteModal.querySelector('#delete-id');
     input.value = id;
 });
+
+function toggleSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    sidebar.classList.toggle('hidden');
+}
