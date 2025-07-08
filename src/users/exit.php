@@ -1,5 +1,5 @@
 <?php
-session_start();
+include('../session_guard.php');
 include('../../config.php');
 
 if (isset($_SESSION['tcno'])) {
