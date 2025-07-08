@@ -1,4 +1,5 @@
 <?php
+include('../session_guard.php');
 include('../../config.php');
 
 $success_message = '';
@@ -15,13 +16,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $telefon = trim($_POST['telefon'] ?? '');
     $email = trim($_POST['email'] ?? '');
     $sifre = $_POST['sifre'] ?? '';
-    $fotograf = trim($_POST['fotograf'] ?? '');
+    $tekrarsifre = $_POST['tekrarsifre'] ?? '';
 
     // Validasyonlar
     if (!preg_match('/^\d{11}$/', $tcno)) {
         $error_messages[] = "TC Kimlik Numarası 11 haneli olmalıdır.";
     }
-    $tekrarsifre = $_POST['tekrarsifre'] ?? '';
     if ($sifre !== $tekrarsifre) {
         $error_messages[] = "Şifreler uyuşmuyor. Lütfen aynı şifreyi iki kez girin.";
     }
@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $error_messages[] = "Şifre en az 6 karakter olmalıdır.";
     }
 
-    // TCNO kontrolü
+    // TCNO tekrar kontrolü
     $tcno_check_query = mysqli_prepare($mysqlB, "SELECT id FROM users WHERE tcno = ?");
     if ($tcno_check_query) {
         mysqli_stmt_bind_param($tcno_check_query, "s", $tcno);
@@ -48,12 +48,46 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $error_messages[] = "Veritabanı kontrolü sırasında hata oluştu.";
     }
 
+    // Fotoğraf yükleme
+    $foto_yolu = '';
+    if (isset($_FILES['fotograf']) && $_FILES['fotograf']['error'] === UPLOAD_ERR_OK) {
+        $uploadDir = '../uploads/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
+        $tmpName = $_FILES['fotograf']['tmp_name'];
+        $fileName = basename($_FILES['fotograf']['name']);
+        $targetPath = $uploadDir . time() . '_' . $fileName;
+
+        $fileType = mime_content_type($tmpName);
+        if (strpos($fileType, 'image') !== 0) {
+            $error_messages[] = "Yüklenen dosya bir resim olmalıdır.";
+        } elseif (move_uploaded_file($tmpName, $targetPath)) {
+            $foto_yolu = $targetPath;
+        } else {
+            $error_messages[] = "Fotoğraf yüklenemedi.";
+        }
+    } else {
+        $error_messages[] = "Fotoğraf seçilmedi ya da yükleme hatası oluştu.";
+    }
+
+    // Captcha kontrolü
+    $recaptcha_secret = '6LcpwGwrAAAAAHRXcDsC1bLEbk_RBFGihKTm7NI6';
+    $recaptcha_response = $_POST['g-recaptcha-response'] ?? '';
+    $verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" . $recaptcha_secret . "&response=" . $recaptcha_response);
+    $response_data = json_decode($verify);
+    if (!$response_data->success) {
+        $error_messages[] = "Lütfen reCAPTCHA doğrulamasını geçin.";
+    }
+
+    // Kayıt işlemi
     if (empty($error_messages)) {
         $hashed_sifre = password_hash($sifre, PASSWORD_DEFAULT);
 
         $stmt = mysqli_prepare($mysqlB, "INSERT INTO users (ad, soyad, tcno, dogum_tarihi, milliyet, adres, kaza_haber_kişi_ad_soyad, telefon, email, sifre, fotograf) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         if ($stmt) {
-            mysqli_stmt_bind_param($stmt, "sssssssssss", $ad, $soyad, $tcno, $dogum_tarihi, $milliyet, $adres, $kaza_haber_kişi_ad_soyad, $telefon, $email, $hashed_sifre, $fotograf);
+            mysqli_stmt_bind_param($stmt, "sssssssssss", $ad, $soyad, $tcno, $dogum_tarihi, $milliyet, $adres, $kaza_haber_kişi_ad_soyad, $telefon, $email, $hashed_sifre, $foto_yolu);
 
             if (mysqli_stmt_execute($stmt)) {
                 $success_message = "Kayıt başarılı! Giriş yapmak için <a href='login.php' class='login-link'>buraya tıklayın</a>.";
@@ -65,16 +99,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $error_messages[] = "Veritabanı sorgusu hazırlanamadı.";
         }
     }
-}
-
-$recaptcha_secret = '6LcpwGwrAAAAAHRXcDsC1bLEbk_RBFGihKTm7NI6';
-$recaptcha_response = $_POST['g-recaptcha-response'] ?? '';
-
-$verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" . $recaptcha_secret . "&response=" . $recaptcha_response);
-$response_data = json_decode($verify);
-
-if (!$response_data->success) {
-    $error_messages[] = "Lütfen reCAPTCHA doğrulamasını geçin.";
 }
 ?>
 
@@ -91,7 +115,6 @@ if (!$response_data->success) {
     <h1>DivingLog | Kayıt Ol</h1>
     <h2>Yeni Hesap Oluştur</h2>
     <div class="content">
-
         <?php if (!empty($error_messages) || $success_message): ?>
             <div class="<?= $success_message ? 'success' : 'error' ?>">
                 <?php if ($success_message): ?>
@@ -107,7 +130,7 @@ if (!$response_data->success) {
         <?php endif; ?>
 
         <?php if (!$success_message): ?>
-        <form action="signup.php" method="POST">
+        <form action="signup.php" method="POST" enctype="multipart/form-data">
             <div class="form-row">
                 <label for="ad">Ad:</label>
                 <input type="text" id="ad" name="ad" required />
@@ -132,8 +155,8 @@ if (!$response_data->success) {
             <label for="telefon">Telefon Numarası:</label><br />
             <input type="text" id="telefon" name="telefon" required pattern="^\+?\d{10,15}$" title="Telefon numarasını +90xxxxxxxxxx formatında girin" /><br /><br />
 
-            <label for="fotograf">Fotoğraf:</label>
-            <input type="text" id="fotograf" name="fotograf" required /><br /><br />
+            <label for="fotograf">Fotoğraf Yükle:</label><br />
+            <input type="file" id="fotograf" name="fotograf" accept="image/*" required /><br /><br />
 
             <label for="email">E-posta:</label><br />
             <input type="email" id="email" name="email" required /><br /><br />
