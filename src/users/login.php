@@ -10,32 +10,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sifre = $_POST['sifre'] ?? '';
 
     if ($tcno && $sifre) {
-        // Kullanıcıyı hazırlıklı ifade ile sorgula
-        $stmt = mysqli_prepare($mysqlB, "SELECT sifre, admin FROM users WHERE tcno = ?");
+        $stmt = mysqli_prepare($mysqlB, "SELECT id, sifre, admin FROM users WHERE tcno = ?");
         if ($stmt) {
             mysqli_stmt_bind_param($stmt, "s", $tcno);
             mysqli_stmt_execute($stmt);
             mysqli_stmt_store_result($stmt);
 
             if (mysqli_stmt_num_rows($stmt) > 0) {
-                mysqli_stmt_bind_result($stmt, $hashed_password, $administrator);
+                mysqli_stmt_bind_result($stmt, $user_id, $hashed_password, $administrator);
                 mysqli_stmt_fetch($stmt);
 
                 if (password_verify($sifre, $hashed_password)) {
                     mysqli_stmt_close($stmt);
 
-                    // Kullanıcı giriş durumunu güncelle
+                    // login = 1 olarak güncelle
                     $update_stmt = mysqli_prepare($mysqlB, "UPDATE users SET login = 1 WHERE tcno = ?");
                     if ($update_stmt) {
                         mysqli_stmt_bind_param($update_stmt, "s", $tcno);
                         if (mysqli_stmt_execute($update_stmt)) {
-                            // Session bilgilerini ayarla
-                            $_SESSION['tcno'] = $tcno;
-                            $_SESSION['admin'] = $administrator;
-
                             mysqli_stmt_close($update_stmt);
 
-                            // Adminse admin paneline, değilse index.php'ye yönlendir
+                            // Güvenli oturum başlat
+                            session_regenerate_id(true); // Oturum ID'sini yenile
+                            $_SESSION['user_id'] = $user_id;
+                            $_SESSION['tcno'] = $tcno;
+                            $_SESSION['admin'] = $administrator;
+                            $_SESSION['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
+                            $_SESSION['last_activity'] = time();
+
+                            // Yönlendirme
                             if ($administrator == 1) {
                                 header("Location: ../admin/dashboard.php");
                             } else {
@@ -46,13 +49,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $error_message = "Veritabanı güncellenirken bir hata oluştu.";
                         }
                     } else {
-                        $error_message = "Veritabanı güncelleme için sorgu hazırlanamadı.";
+                        $error_message = "Giriş kaydı güncellenemedi.";
                     }
                 } else {
                     $error_message = "Geçersiz şifre.";
                 }
             } else {
-                $error_message = "Kullanıcı bulunamadı.";
+                $error_message = "TC Kimlik Numarası hatalı.";
             }
             mysqli_stmt_close($stmt);
         } else {
