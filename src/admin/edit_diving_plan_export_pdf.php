@@ -1,4 +1,5 @@
 <?php
+include('../session_guard.php');
     include('../../config.php');
     require_once('../TCPDF-main/tcpdf.php');
 
