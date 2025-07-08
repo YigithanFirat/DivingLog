@@ -1,5 +1,5 @@
 <?php
-session_start();
+include('../session_guard.php');
 
 require_once '../PHPMailer-master/src/Exception.php';
 require_once '../PHPMailer-master/src/PHPMailer.php';
