@@ -1,0 +1,159 @@
+/* GENEL AYARLAR */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #1e3c57;
+    color: #ffffff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* KONTEYNER */
+.container {
+    margin-left: 250px; /* sidebar genişliği */
+    padding: 30px;
+    flex-grow: 1;
+}
+
+/* BAŞLIK */
+h1 {
+    text-align: center;
+    color: #00bcd4;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+}
+
+/* SIDEBAR */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: 100vh;
+    background-color: #0d2c43;
+    padding: 20px;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+    overflow-y: auto;
+}
+
+.sidebar h2 {
+    color: #ffffff;
+    font-size: 22px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 15px;
+}
+
+.sidebar ul li a {
+    display: block;
+    padding: 10px 15px;
+    color: #fff;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 6px;
+    background-color: #005a8d;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar ul li a.active,
+.sidebar ul li a:hover {
+    background-color: #FF9900;
+    color: #fff;
+}
+
+/* TABLO */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    color: #333;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+thead {
+    background-color: #008c9e;
+    color: #fff;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+tbody tr:hover {
+    background-color: #e0f7fa;
+}
+
+/* BİLGİ MESAJI */
+.container p {
+    font-size: 1.2rem;
+    text-align: center;
+    margin-top: 40px;
+    color: #ccc;
+}
+
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 999;
+    background-color: #1e3c57;
+    padding: 10px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    font-size: 20px;
+    transition: background 0.3s ease;
+}
+
+.menu-toggle:hover {
+    background-color: #2a4c6e;
+}
+
+.sidebar {
+    transition: transform 0.3s ease;
+}
+
+.sidebar.hidden {
+    transform: translateX(-100%);
+}
+
+/* FOOTER */
+footer {
+    background-color: #1c2b3a;
+    color: #d3d3d3;
+    text-align: center;
+    padding: 10px 0;
+    margin-top: auto;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .container {
+        margin-left: 0;
+        padding: 20px;
+    }
+
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        box-shadow: none;
+    }
+
+    table {
+        font-size: 0.9rem;
+    }
+}
