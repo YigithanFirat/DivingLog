@@ -1,4 +1,5 @@
 <?php
+include('../session_guard.php');
 include('../../config.php');
 
 // POST isteğiyle geldiyse devam et
