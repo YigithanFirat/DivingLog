@@ -1,71 +1,77 @@
 <?php
-    include('../../config.php');
+include('../session_guard.php');
+include('../../config.php');
+include('../sidebarmenu.php');
 
-    // POST isteği: Güncelleme işlemi
-    if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        // Giriş doğrulama (örnek: sadece rakam ve 11 karakter kontrolü)
-        $tcno = trim($_POST['tcno']);
-        if (!preg_match('/^\d{11}$/', $tcno)) {
-            die("Geçersiz T.C. Kimlik Numarası.");
-        }
-
-        $stmt = $mysqlB->prepare("UPDATE diving_plans SET 
-            tcno = ?, minutes = ?, diving_location = ?, water_type = ?, 
-            depth_feet = ?, depth_meter = ?, respiration = ?, clothing = ?, 
-            diving_purpose = ?, tools = ?, tools_devices = ?, supervisor = ? 
-            WHERE id = ?");
-        if (!$stmt) {
-            die("Sorgu hatası: " . $mysqlB->error);
-        }
-
-        $stmt->bind_param(
-            "sissddssssssi",
-            $tcno,
-            $_POST['minutes'],
-            $_POST['diving_location'],
-            $_POST['water_type'],
-            $_POST['depth_feet'],
-            $_POST['depth_meter'],
-            $_POST['respiration'],
-            $_POST['clothing'],
-            $_POST['diving_purpose'],
-            $_POST['tools'],
-            $_POST['tools_devices'],
-            $_POST['supervisor'],
-            $_POST['id']
-        );
-
-        if ($stmt->execute()) {
-            header("Location: manage_diving.php?success=1");
-            exit();
-        } else {
-            die("Güncelleme hatası: " . $stmt->error);
-        }
-        $stmt->close();
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $tcno = trim($_POST['tcno']);
+    if (!preg_match('/^\d{11}$/', $tcno)) {
+        die("Geçersiz T.C. Kimlik Numarası.");
     }
 
-    // GET isteği: Mevcut veriyi çekme
-    if (isset($_GET['id']) && filter_var($_GET['id'], FILTER_VALIDATE_INT)) {
-        $id = (int)$_GET['id'];
+    $stmt = $mysqlB->prepare("UPDATE diving_plans SET 
+        tcno = ?, minutes = ?, diving_location = ?, water_type = ?, 
+        depth_feet = ?, depth_meter = ?, respiration = ?, clothing = ?, 
+        diving_purpose = ?, tools = ?, tools_devices = ?, supervisor = ?, 
+        dive_time = ?, exit_time = ?, bottom_time = ?, avg_depth = ?, max_depth = ?, temperature = ? 
+        WHERE id = ?");
 
-        $stmt = $mysqlB->prepare("SELECT * FROM diving_plans WHERE id = ?");
-        if (!$stmt) {
-            die("Sorgu hatası: " . $mysqlB->error);
-        }
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        $result = $stmt->get_result();
+    if (!$stmt) {
+        die("Sorgu hatası: " . $mysqlB->error);
+    }
 
-        if ($result->num_rows !== 1) {
-            $stmt->close();
-            die("Geçersiz ID.");
-        }
+    $stmt->bind_param(
+        "sissddsssssssssdddi",
+        $tcno,
+        $_POST['minutes'],
+        $_POST['diving_location'],
+        $_POST['water_type'],
+        $_POST['depth_feet'],
+        $_POST['depth_meter'],
+        $_POST['respiration'],
+        $_POST['clothing'],
+        $_POST['diving_purpose'],
+        $_POST['tools'],
+        $_POST['tools_devices'],
+        $_POST['supervisor'],
+        $_POST['dive_time'],
+        $_POST['exit_time'],
+        $_POST['bottom_time'],
+        $_POST['avg_depth'],
+        $_POST['max_depth'],
+        $_POST['temperature'],
+        $_POST['id']
+    );
 
-        $row = $result->fetch_assoc();
-        $stmt->close();
+    if ($stmt->execute()) {
+        header("Location: manage_diving.php?success=1");
+        exit();
     } else {
-        die("ID belirtilmedi veya geçersiz.");
+        die("Güncelleme hatası: " . $stmt->error);
     }
+    $stmt->close();
+}
+
+if (isset($_GET['id']) && filter_var($_GET['id'], FILTER_VALIDATE_INT)) {
+    $id = (int)$_GET['id'];
+    $stmt = $mysqlB->prepare("SELECT * FROM diving_plans WHERE id = ?");
+    if (!$stmt) {
+        die("Sorgu hatası: " . $mysqlB->error);
+    }
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows !== 1) {
+        $stmt->close();
+        die("Geçersiz ID.");
+    }
+
+    $row = $result->fetch_assoc();
+    $stmt->close();
+} else {
+    die("ID belirtilmedi veya geçersiz.");
+}
 ?>
 
 <!DOCTYPE html>
@@ -78,24 +84,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-    <div class="menu-toggle" onclick="toggleSidebar()">
-        <i class="fas fa-bars"></i>
-    </div>
-    <div class="sidebar">
-        <h2>Admin Panel</h2>
-        <ul>
-            <li><a href="../index.php">Ana Sayfa</a></li>
-            <li><a href="dashboard.php">Dashboard</a></li>
-            <li><a href="manage_users.php">Kullanıcıları Yönet</a></li>
-            <li><a href="diving.php">Dalış Oluştur</a></li>
-            <li><a href="manage_diving.php">Dalışları Yönet</a></li>
-            <li><a href="certificate.php">Sertifika Oluştur</a></li>
-            <li><a href="certificate_list.php">Sertifikaları Listele</a></li>
-            <li><a href="health_inspection.php">Sağlık Raporu Oluştur</a></li>
-            <li><a href="health_inspection_list.php">Sağlık Raporlarını Listele</a></li>
-            <li><a href="../users/exit.php">Çıkış Yap</a></li>
-        </ul>
-    </div>
     <div class="container">
         <h2>Dalış Planı Düzenle</h2>
         <form action="" method="POST">
@@ -137,13 +125,31 @@
             <label>Amir:</label>
             <input type="text" name="supervisor" value="<?= htmlspecialchars($row['supervisor']) ?>">
 
+            <label>Dalış Zamanı:</label>
+            <input type="time" name="dive_time" value="<?= htmlspecialchars($row['start_time']) ?>">
+
+            <label>Çıkış Zamanı:</label>
+            <input type="time" name="exit_time" value="<?= htmlspecialchars($row['end_time']) ?>">
+
+            <label>Dip Süre (dk):</label>
+            <input type="number" name="bottom_time" value="<?= htmlspecialchars($row['bottom_time']) ?>">
+
+            <label>Ortalama Derinlik (m):</label>
+            <input type="number" step="0.1" name="avg_depth" value="<?= htmlspecialchars($row['avg_depth']) ?>">
+
+            <label>Maksimum Derinlik (m):</label>
+            <input type="number" step="0.1" name="max_depth" value="<?= htmlspecialchars($row['max_depth']) ?>">
+
+            <label>Sıcaklık (°C):</label>
+            <input type="number" step="0.1" name="temperature" value="<?= htmlspecialchars($row['temperature']) ?>">
+
             <button type="submit">Güncelle</button>
             <a href="manage_diving.php" class="cancel-btn">İptal</a>
         </form>
     </div>
-<footer>
-    <p>&copy; 2025 DivingLog Uygulaması</p>
-</footer>
+    <footer>
+        <p>&copy; 2025 DivingLog Uygulaması</p>
+    </footer>
     <script src="../JS/edit_diving_plan.js"></script>
 </body>
 </html>
