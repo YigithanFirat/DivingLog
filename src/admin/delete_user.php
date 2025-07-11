@@ -1,4 +1,6 @@
 <?php
+include('../session_guard.php');
+include('../sidebarmenu.php');
 require_once('../../config.php');
 
 // Yalnızca POST isteklerine izin ver
