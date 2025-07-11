@@ -1,5 +1,5 @@
 <?php
-session_start();
+include('../session_guard.php');
 include('../../config.php');
 require_once('../TCPDF-main/tcpdf.php'); // TCPDF kütüphane yolu (projene göre değiştir)
 
