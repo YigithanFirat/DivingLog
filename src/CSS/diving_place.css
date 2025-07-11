@@ -1,0 +1,230 @@
+/* GENEL STİL AYARLARI */
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #1e3c57;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+}
+
+/* BAŞLIK */
+h1 {
+    text-align: center;
+    color: #00bcd4;
+    font-size: 2.5em;
+    margin: 30px 0 10px 0;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 5px;
+    color: #ffffff;
+}
+
+/* FORM VE HARİTA KAPSAYICI */
+.container {
+    flex-grow: 1;
+    margin-left: 250px;
+    padding: 30px;
+}
+
+form {
+    margin-top: 20px;
+    text-align: center;
+}
+
+input[type="text"], input[type="number"] {
+    width: 80%;
+    max-width: 500px;
+    padding: 12px;
+    border: 2px solid #00bcd4;
+    border-radius: 5px;
+    font-size: 1em;
+    margin-bottom: 15px;
+    background-color: #e8f4f8;
+    color: #333;
+}
+
+/* BUTON */
+.btn, .add-region-form button {
+    background-color: #00bcd4;
+    border: none;
+    color: white;
+    padding: 12px 24px;
+    font-size: 1.1em;
+    cursor: pointer;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background 0.3s ease;
+    margin: 5px;
+}
+
+.btn:hover, .add-region-form button:hover {
+    background-color: #008c9e;
+}
+
+/* SIDEBAR */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: 100vh;
+    background-color: #0d2c43;
+    padding: 20px;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease;
+}
+
+.sidebar.hidden {
+    transform: translateX(-100%);
+}
+
+.sidebar h2 {
+    color: #ffffff;
+    font-size: 22px;
+    margin-bottom: 30px;
+    text-align: left;
+    padding-left: 10px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+}
+
+.sidebar ul li {
+    margin-bottom: 10px;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    display: block;
+    padding: 10px 15px;
+    border-radius: 6px;
+    background-color: #005a8d;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar ul li a:hover {
+    background-color: #FF9900;
+    color: #ffffff;
+}
+
+/* MENÜ BUTONU */
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 999;
+    background-color: #1e3c57;
+    padding: 10px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    font-size: 20px;
+    transition: background 0.3s ease;
+}
+
+.menu-toggle:hover {
+    background-color: #2a4c6e;
+}
+
+/* HARİTA */
+#map {
+    width: 100%;
+    height: 400px;
+    border: 2px solid #fff;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+/* FOOTER */
+footer {
+    text-align: center;
+    margin-top: auto;
+    color: #d3d3d3;
+    padding: 10px;
+    background-color: #1c2b3a;
+}
+
+footer p {
+    font-weight: bolder;
+    color: #fafafa;
+}
+
+#map {
+    width: 100%;
+    height: 300px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+/* TABLO */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 30px;
+    background-color: #fff;
+    color: #333;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ccc;
+}
+
+th {
+    background-color: #008c9e;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #e0f7fa;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .container {
+        margin-left: 0;
+        padding: 20px;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        box-shadow: none;
+    }
+
+    #map {
+        height: 300px;
+    }
+
+    input[type="text"], input[type="number"] {
+        width: 95%;
+    }
+
+    .btn, .add-region-form button {
+        width: 100%;
+    }
+
+    table {
+        font-size: 0.9em;
+    }
+}
