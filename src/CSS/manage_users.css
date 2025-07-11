@@ -156,7 +156,7 @@ footer {
     color: #ffffff;
     text-align: center;
     font-weight: bold;
-    padding: 12px 0;
+    padding: 0 0;
     width: 100%;
     position: fixed;
     left: 0;
@@ -334,7 +334,7 @@ footer p
 }
 
 .sidebar ul li {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .sidebar ul li a {
@@ -383,4 +383,16 @@ footer p
 
 .sidebar.hidden {
     transform: translateX(-100%);
+}
+
+.d-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.d-flex .btn {
+    margin: 5px 0;
 }
