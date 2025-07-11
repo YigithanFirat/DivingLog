@@ -1,0 +1,446 @@
+body
+{
+    font-family: 'Arial', sans-serif;
+    background-color: #F2F7FF;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+}
+
+html, body {
+    height: 100%;
+    background-color: #fafafa !important;
+}
+
+header
+{
+    background-color: #1e3c58;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+header nav ul
+{
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+header nav ul li
+{
+    display: inline-block;
+    margin: 10px;
+}
+
+header nav ul li a
+{
+    color: #fafafa;
+    background-color: #005A8D;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 12px 25px;
+    border-radius: 8px;
+    display: inline-block;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    text-align: center;
+}
+
+header nav ul li a:hover
+{
+    background-color: #FF9900;
+    color: #ffffff;
+}
+
+.container {
+    margin-left: 240px; /* Sidebar genişliği + boşluk */
+    width: calc(100% - 260px); /* Sağlıklı oran için */
+    max-width: none; /* Genişliği kısıtlamasın */
+    padding: 30px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+}
+
+h2
+{
+    color: #333;
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+table
+{
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.all_pdf {
+    display: flex;
+    justify-content: flex-end;
+    margin: 20px 10px;
+}
+
+.all_pdf a {
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #0d2c43;
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.all_pdf a:hover {
+    background-color: #FF9900;
+    transform: translateY(-2px);
+}
+
+table th, table td
+{
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+table th
+{
+    background-color: #005A8D;
+    color: white;
+}
+
+table tr:hover
+{
+    background-color: #f5f5f5;
+}
+
+table td a
+{
+    color: #005A8D;
+    text-decoration: none;
+    padding: 8px 15px;
+    border: 1px solid #005A8D;
+    border-radius: 5px;
+    margin: 2px;
+    display: inline-block;
+}
+
+table td a:hover
+{
+    background-color: #FF9900;
+    color: white;
+}
+
+table td a.delete
+{
+    background-color: #FF5733;
+    color: white;
+    border-color: #FF5733;
+}
+
+table td a.delete:hover
+{
+    background-color: #FF2E00;
+}
+
+/* FOOTER */
+footer {
+    background-color: #1c2b3a;
+    color: #ffffff;
+    text-align: center;
+    font-weight: bold;
+    padding: 0 0;
+    width: 100%;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    z-index: 999;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+}
+
+footer p
+{
+    font-weight: bolder;
+}
+
+.modal-overlay
+{
+    display: flex; /* Eklendi */
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden; /* Başlangıçta görünmesin */
+    opacity: 0;
+    transition: visibility 0s, opacity 0.3s ease;
+}
+
+.modal-overlay.active
+{
+    visibility: visible;
+    opacity: 1;
+}
+
+.modal-box
+{
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 400px;
+    margin: auto;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-box h3
+{
+    color: #FF5733;
+    margin-bottom: 10px;
+}
+
+.modal-box p
+{
+    font-size: 16px;
+    color: #333;
+}
+
+.modal-actions
+{
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.modal-confirm
+{
+    background-color: #FF5733;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modal-cancel
+{
+    background-color: #ccc;
+    color: #333;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modal-confirm:hover
+{
+    background-color: #FF2E00;
+}
+
+.modal-cancel:hover
+{
+    background-color: #bbb;
+}
+
+@keyframes fadeIn
+{
+    from 
+    { 
+        opacity: 0; transform: translateY(-20px); 
+    }
+    to 
+    { 
+        opacity: 1; transform: translateY(0); 
+    }
+}
+
+.delete-btn
+{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background-color: #FF5733;
+    border: 1px solid #FF5733;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.delete-btn i
+{
+    font-size: 16px;
+}
+
+.delete-btn:hover
+{
+    background-color: #FF2E00;
+}
+
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .pagination a {
+            display: inline-block;
+            margin: 0 5px;
+            padding: 8px 12px;
+            color: #333;
+            background-color: #eee;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .pagination a.active {
+            background-color: #2c3e50;
+            color: #fff;
+            font-weight: bold;
+        }
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: 100vh;
+    background-color: #0d2c43;
+    padding: 20px;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+}
+
+.sidebar h2 {
+    color: #ffffff;
+    font-size: 22px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 10px;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    display: block;
+    padding: 10px 15px;
+    border-radius: 6px;
+    background-color: #005a8d;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar ul li a:hover {
+    background-color: #FF9900;
+    color: #ffffff;
+}
+
+.table-responsive {
+    max-height: calc(100vh - 250px);
+    overflow-y: auto;
+    margin-bottom: 10px;
+}
+
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 999;
+    background-color: #1e3c57;
+    padding: 10px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    font-size: 20px;
+    transition: background 0.3s ease;
+}
+
+.menu-toggle:hover {
+    background-color: #2a4c6e;
+}
+
+.sidebar {
+    transition: transform 0.3s ease;
+}
+
+.sidebar.hidden {
+    transform: translateX(-100%);
+}
+
+.d-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.d-flex .btn {
+    margin: 5px 0;
+}
+
+/* 🔍 Arama Kutusu Stili */
+.search-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 20px auto;
+    max-width: 500px;
+    flex-wrap: wrap;
+}
+
+.search-form input[type="text"] {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: #f2f7ff;
+    color: #333;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.search-form input[type="text"]:focus {
+    border-color: #0077b6;
+    background-color: #ffffff;
+    outline: none;
+}
+
+.search-form .btn {
+    background-color: #0077b6;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-form .btn:hover {
+    background-color: #0096c7;
+    transform: scale(1.03);
+}
