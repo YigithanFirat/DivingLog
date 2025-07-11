@@ -1,4 +1,5 @@
 <?php
+include('../session_guard.php');
 require_once('../../config.php'); // Veritabanı bağlantısı
 require_once('../TCPDF-main/tcpdf.php');
 
