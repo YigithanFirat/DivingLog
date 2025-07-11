@@ -1,199 +1,227 @@
+/* Genel stil */
 html, body {
     min-height: 100vh;
     margin: 0;
     padding: 0;
-}
-
-body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', sans-serif;
     background-color: #1e3c57;
+    color: #ffffff;
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 240px;
+    height: 100%;
+    background-color: #0d2c43;
     padding: 20px;
-    display: flex;
-    flex-direction: column;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+    z-index: 100;
 }
 
-/* Form Stili */
-form {
-    background-color: #fff;
-    padding: 25px;
-    border-radius: 10px;
-    max-width: 600px;
-    margin: 40px auto 100px auto;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+.sidebar h2 {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 30px;
 }
 
-/* Giriş alanları */
-input, textarea, select {
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    margin: 12px 0;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #005a8d;
+    padding: 10px 14px;
+    display: block;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.sidebar ul li a:hover {
+    background-color: #ff9900;
+    color: #fff;
+}
+
+/* Menü toggle */
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    font-size: 20px;
+    color: white;
+    background-color: #1e3c57;
+    padding: 10px;
+    border-radius: 6px;
+    z-index: 101;
+    cursor: pointer;
+}
+
+/* İçerik alanı */
+body .certificate {
+    margin-left: 260px;
+    padding: 40px 20px;
+    max-width: 800px;
+    margin-right: auto;
+    margin-left: auto;
+    box-sizing: border-box;
+}
+
+.certificate h2 {
+    color: #fff;
+    margin-bottom: 25px;
+    text-align: center;
+    margin-left: 400px;
+}
+
+.certificate label {
+    display: block;
+    margin: 12px 0 6px;
+    font-weight: bold;
+    margin-left: 530px;
+}
+
+.certificate input[type="text"],
+.certificate input[type="date"],
+.certificate select,
+.certificate textarea {
     width: 100%;
     padding: 10px;
-    margin-top: 8px;
-    margin-bottom: 16px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-}
-
-/* Gönder butonu */
-input[type="submit"] {
-    background-color: #0077aa;
-    color: white;
     border: none;
-    cursor: pointer;
-    font-weight: bold;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    margin-left: 200px;
 }
 
-/* Buton hover efekti */
-input[type="submit"]:hover {
+.certificate input[type="submit"] {
+    background-color: #0077aa;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
+    margin-top: 10px;
+    margin-left: 550px;
+}
+
+.certificate input[type="submit"]:hover {
     background-color: #005f88;
 }
 
-/* Başarı mesajı */
+/* Başarı ve hata mesajları */
+.success, .error {
+    margin: 20px auto;
+    padding: 12px;
+    text-align: center;
+    max-width: 700px;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
 .success {
-    background-color: #4CAF50;
+    background-color: #28a745;
     color: white;
-    padding: 12px;
-    margin-bottom: 20px;
-    border-radius: 6px;
-    text-align: center;
 }
 
-/* Hata mesajı */
 .error {
-    background-color: #f44336;
+    background-color: #dc3545;
     color: white;
-    padding: 12px;
-    margin-bottom: 20px;
+}
+
+/* Arama sonuçları tablosu */
+table {
+    width: 600px;
+    max-width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: white;
+    color: #000;
     border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    font-size: 14px;
+}
+
+table th, table td {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
     text-align: center;
 }
 
-.certificate
-{
-    margin-left: 545px;
+table th {
+    background-color: #005a8d;
+    color: white;
+    font-weight: bold;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white !important;
+    padding: 6px 10px;
+    font-size: 13px;
+    text-decoration: none;
+    border-radius: 4px;
+    display: inline-block;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.table-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    overflow-x: auto;
+    margin-left: 400px;
 }
 
 /* Footer */
-/* FOOTER */
 footer {
-    background-color: #1c2b3a;
-    color: #ffffff;
+    background-color: #142738;
     text-align: center;
-    font-weight: bold;
-    padding: 12px 0;
-    width: 100%;
+    color: white;
+    padding: 10px 0;
+    font-size: 14px;
     position: fixed;
-    left: 0;
     bottom: 0;
-    z-index: 999;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+    left: 0;
+    width: 100%;
 }
 
-footer p {
-    font-weight: bolder;
-}
-
-@media screen and (max-width: 768px)
-{
+/* Responsive */
+@media screen and (max-width: 768px) {
     .sidebar {
         position: relative;
         width: 100%;
         height: auto;
     }
 
-    .main-content {
-        margin-left: 0 !important;
-    }
-    
-    .container ul
-    {
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .container ul li
-    {
-        width: 100%;
-        text-align: center;
-    }
-
-    .container
-    {
-        width: 95%;
+    body .certificate {
+        margin-left: 0;
         padding: 20px;
     }
 
-    .user-table th, .user-table td
-    {
-        font-size: 14px;
-        padding: 12px;
+    table {
+        width: 100%;
     }
-}
 
-.sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 220px;
-    height: 100vh;
-    background-color: #0d2c43;
-    padding: 20px;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.2);
-}
-
-.sidebar h2 {
-    color: #ffffff;
-    font-size: 22px;
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.sidebar ul {
-    list-style: none;
-    padding: 0;
-}
-
-.sidebar ul li {
-    margin-bottom: 15px;
-}
-
-.sidebar ul li a {
-    text-decoration: none;
-    color: #fff;
-    font-weight: bold;
-    display: block;
-    padding: 10px 15px;
-    border-radius: 6px;
-    background-color: #005a8d;
-    transition: background-color 0.3s ease;
-}
-
-.sidebar ul li a:hover {
-    background-color: #FF9900;
-    color: #ffffff;
-}
-
-.menu-toggle {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    z-index: 999;
-    background-color: #1e3c57;
-    padding: 10px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    color: white;
-    font-size: 20px;
-    transition: background 0.3s ease;
-}
-
-.menu-toggle:hover {
-    background-color: #2a4c6e;
-}
-
-.sidebar {
-    transition: transform 0.3s ease;
-}
-
-.sidebar.hidden {
-    transform: translateX(-100%);
+    .menu-toggle {
+        left: 10px;
+        top: 10px;
+    }
 }
