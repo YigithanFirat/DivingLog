@@ -1,5 +1,4 @@
 <?php
-session_start();
 include('../config.php');
 
 $logged_in = false;
@@ -49,7 +48,7 @@ if (isset($_SESSION['tcno'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-<?php if ($logged_in): ?>
+<?php if ($logged_in && $ag): ?>
     <div class="menu-toggle" onclick="toggleSidebar()">
         <i class="fas fa-bars"></i>
     </div>
@@ -71,6 +70,7 @@ if (isset($_SESSION['tcno'])) {
                     <li><a href="admin/manage_users.php">Kullanıcıları Yönet</a></li>
                     <li><a href="admin/diving.php">Dalış Oluştur</a></li>
                     <li><a href="admin/manage_diving.php">Dalışları Yönet</a></li>
+                    <li><a href="diving_place.php">Dalış Bölgeleri</a></li>
                     <li><a href="admin/certificate.php">Sertifika Oluştur</a></li>
                     <li><a href="admin/certificate_list.php">Sertifikaları Listele</a></li>
                     <li><a href="admin/health_inspection.php">Sağlık Raporu Oluştur</a></li>
@@ -93,6 +93,8 @@ if (isset($_SESSION['tcno'])) {
             <a href="users/signup.php" class="btn">Kaydol</a>
         <?php else: ?>
             <a href="users/exit.php" class="btn">Çıkış Yap</a>
+            <a href="users/my_certificate.php?tc=<?= urlencode($_SESSION['tcno'] ?? '') ?>" class="btn">Sertifikalarım</a>
+            <a href="users/my_diving.php?tc=<?= urlencode($_SESSION['tcno'] ?? '') ?>" class="btn">Dalışlarım</a>
         <?php endif; ?>
 <?php endif; ?>
     </div>
