@@ -1,9 +1,10 @@
 <?php
-session_start();
+include('../session_guard.php');
 require_once('../../config.php');
+include('../sidebarmenu.php');
 
 // Sayfa başına gösterilecek sağlık raporu sayısı
-$perPage = 25;
+$perPage = 10;
 
 // Aktif sayfa numarası
 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int) $_GET['page'] : 1;
@@ -45,25 +46,6 @@ $result = $stmt->get_result();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="menu-toggle" onclick="toggleSidebar()">
-        <i class="fas fa-bars"></i>
-    </div>
-    <div class="sidebar">
-        <h2>Admin Panel</h2>
-        <ul>
-            <li><a href="../index.php">Ana Sayfa</a></li>
-            <li><a href="dashboard.php">Dashboard</a></li>
-            <li><a href="manage_users.php">Kullanıcıları Yönet</a></li>
-            <li><a href="diving.php">Dalış Oluştur</a></li>
-            <li><a href="manage_diving.php">Dalışları Yönet</a></li>
-            <li><a href="certificate.php">Sertifika Oluştur</a></li>
-            <li><a href="certificate_list.php">Sertifikaları Listele</a></li>
-            <li><a href="health_inspection.php">Sağlık Raporu Oluştur</a></li>
-            <li><a href="health_inspection_list.php">Sağlık Raporlarını Listele</a></li>
-            <li><a href="../users/exit.php">Çıkış Yap</a></li>
-        </ul>
-    </div>
-
     <div class="content">
         <div class="container mt-4">
             <h1 class="text-center">Sağlık Raporları Listesi</h1>
@@ -71,6 +53,9 @@ $result = $stmt->get_result();
                 <div class="all_pdf d-flex justify-content-end mb-3">
                     <a href="export_all_health_inspection_pdf.php" target="_blank" class="btn btn-dark">
                         <i class="fas fa-file-pdf"></i> Tüm Sağlık Raporlarını PDF Olarak İndir
+                    </a>
+                    <a href="health_inspection_name_search.php" class="btn">
+                        <i class="fa-solid fa-magnifying-glass"></i> Ad Soyada Göre Arama
                     </a>
                 </div>
             </div>
