@@ -1,4 +1,5 @@
 <?php
+include('../session_guard.php');
 // Output başlamadan önce hiçbir şey gönderilmediğinden emin ol
 ob_start();
 
