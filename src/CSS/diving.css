@@ -1,5 +1,4 @@
-body
-{
+body {
     font-family: 'Arial', sans-serif;
     background-color: #1e3c57;
     color: #ffffff;
@@ -11,8 +10,7 @@ body
     min-height: 100vh;
 }
 
-header
-{
+header {
     background-color: #1e3c58;
     color: white;
     width: 100%;
@@ -23,36 +21,54 @@ header
     margin-left: 10px;
 }
 
-header h1
-{
-    text-align: center;
-    justify-content: center;
+header h1 {
     margin: 0;
     font-size: 36px;
     padding: 0 10px;
+    text-align: center;
 }
 
-table input[type="number"],
-table input[type="text"],
-table select,
-table textarea
-{
+input[type="number"],
+input[type="text"],
+input[type="time"],
+select,
+textarea {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     font-size: 16px;
     background-color: #34495e;
     color: #ffffff;
     border: 1px solid #ddd;
     border-radius: 5px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     box-sizing: border-box;
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
+    transition: border-color 0.3s ease;
 }
 
-#map
-{
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="time"]:focus,
+textarea:focus,
+select:focus {
+    border-color: #00bcd4;
+    outline: none;
+}
+
+input[type="text"]:disabled {
+    background-color: #1e3c57;
+    color: #bbb;
+    cursor: not-allowed;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+#map {
     height: 400px;
     width: 100%;
     margin-top: 10px;
@@ -60,39 +76,42 @@ table textarea
     border-radius: 8px;
 }
 
-.plan-details
-{
+.plan-details {
     background-color: #2f4f66;
     padding: 30px;
-    margin: 20px 0;
+    margin: 20px 0 100px;
     border-radius: 15px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 900px;
-    margin-bottom: 100px;
 }
 
-table
-{
+table {
     width: 100%;
     margin-top: 20px;
     border-collapse: collapse;
 }
 
-table td
-{
-    padding: 12px;
+table td,
+table th {
+    padding: 12px 15px;
     text-align: left;
     font-size: 16px;
+    border-bottom: 1px solid #444;
+    vertical-align: middle;
 }
 
-/* FOOTER */
+table th {
+    background-color: #1c2b3a;
+    font-weight: 700;
+}
+
 footer {
     background-color: #1c2b3a;
     color: #ffffff;
     text-align: center;
     font-weight: bold;
-    padding: 12px 0;
+    padding: 10px 0;
     width: 100%;
     position: fixed;
     left: 0;
@@ -101,123 +120,95 @@ footer {
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
 }
 
-footer p 
-{
+footer p {
     font-weight: bolder;
     font-size: 16px;
 }
 
-header p
-{
+header p,
+p {
     font-size: 16px;
     margin-top: 10px;
-    justify-content: center;
     text-align: center;
 }
 
-p
-{
-    font-size: 16px;
-}
-
-.container
-{
+.container {
     padding: 20px;
     margin: 40px;
 }
 
-input[type="text"]:focus,
-textarea:focus,
-select:focus,
-input[type="number"]:focus
-{
-    border-color: #00bcd4;
-    outline: none;
-}
-
-input[type="text"]:disabled
-{
-    background-color: #1e3c57;
-    color: #ddd;
-    cursor: not-allowed;
-}
-
-@media(max-width: 768px)
-{
-    .plan-details
-    {
+@media (max-width: 768px) {
+    .plan-details {
         margin: 20px;
         padding: 15px;
     }
 
-    table td
-    {
+    table td,
+    table th {
         font-size: 14px;
+        padding: 10px 8px;
     }
 
-    header h1
-    {
+    header h1 {
         font-size: 28px;
     }
 }
 
-.diving_plan_create
-{
+.diving_plan_create {
     font-size: 15px;
-    font-weight: bolder;
-    padding: 12px;
+    font-weight: 700;
+    padding: 12px 20px;
     border-radius: 10px;
     background-color: #FF9900;
     color: #fafafa;
     border: 1px solid #000;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
+    display: inline-flex;
     align-items: center;
-    width: 100%;
-    max-width: 900px;
+    justify-content: center;
+    max-width: 160px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
 }
 
-table select
-{
+.diving_plan_create:hover {
+    background-color: #e68a00;
+}
+
+select {
     background-image: url('data:image/svg+xml;utf8,<svg fill="%23ffffff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
     background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 20px 20px;
+    background-position: right 12px center;
+    background-size: 18px 18px;
     padding-right: 40px;
 }
 
-.success
-{
+.success,
+.error {
+    padding: 15px 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 700;
+    max-width: 900px;
+}
+
+.success {
     background-color: #28a745;
     color: white;
-    padding: 15px;
-    border-radius: 5px;
-    margin-bottom: 20px;
-    text-align: center;
 }
 
-.error
-{
+.error {
     background-color: #dc3545;
     color: white;
-    padding: 15px;
-    border-radius: 5px;
-    margin-bottom: 20px;
-    text-align: center;
-    font-weight: bolder;
-}
-
-textarea {
-    resize: vertical;
-    min-height: 80px;
 }
 
 .saveButton {
     width: 100%;
-    padding: 12px;
+    padding: 14px 0;
     font-size: 16px;
-    font-weight: bold;
+    font-weight: 700;
     background-color: #FF9900;
     color: #fff;
     border: 1px solid #000;
@@ -225,6 +216,7 @@ textarea {
     cursor: pointer;
     box-sizing: border-box;
     transition: background-color 0.3s ease;
+    margin-bottom: 50px;
 }
 
 .saveButton:hover {
@@ -240,6 +232,7 @@ textarea {
     background-color: #0d2c43;
     padding: 20px;
     box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease;
 }
 
 .sidebar h2 {
@@ -255,13 +248,13 @@ textarea {
 }
 
 .sidebar ul li {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .sidebar ul li a {
     text-decoration: none;
     color: #fff;
-    font-weight: bold;
+    font-weight: 700;
     display: block;
     padding: 10px 15px;
     border-radius: 6px;
@@ -269,14 +262,22 @@ textarea {
     transition: background-color 0.3s ease;
 }
 
-.sidebar ul li a:hover {
+.sidebar ul li a:hover,
+.sidebar ul li a.active {
     background-color: #FF9900;
     color: #ffffff;
 }
 
-.diving-plan-container
-{
-    margin-left: 230px;
+.sidebar.hidden {
+    transform: translateX(-100%);
+}
+
+.diving-plan-container {
+    margin-left: 240px;
+    padding: 30px;
+    width: 100%;
+    max-width: 1000px;
+    box-sizing: border-box;
 }
 
 .menu-toggle {
@@ -297,10 +298,46 @@ textarea {
     background-color: #2a4c6e;
 }
 
-.sidebar {
-    transition: transform 0.3s ease;
+.search-form {
+    width: 100%;
+    max-width: 900px;
+    margin: 20px 0;
 }
 
-.sidebar.hidden {
-    transform: translateX(-100%);
+.search-wrapper,
+.search-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.search-wrapper input[type="text"],
+.search-row input[type="text"] {
+    flex: 1;
+    padding: 12px;
+    font-size: 16px;
+    background-color: #34495e;
+    color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.search-button {
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 700;
+    background-color: #FF9900;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.search-button:hover {
+    background-color: #e68a00;
+    transform: scale(1.03);
 }
