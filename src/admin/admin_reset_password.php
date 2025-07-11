@@ -1,6 +1,7 @@
 <?php
     include('../../config.php');
-    session_start();
+    include('../sidebarmenu.php');
+    include('../session_guard.php');
 
     // Kullanıcı verisini güvenli şekilde al
     if(isset($_GET['id']))
@@ -67,24 +68,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-    <div class="menu-toggle" onclick="toggleSidebar()">
-        <i class="fas fa-bars"></i>
-    </div>
-    <div class="sidebar">
-        <h2>Admin Panel</h2>
-        <ul>
-            <li><a href="../index.php">Ana Sayfa</a></li>
-            <li><a href="dashboard.php">Dashboard</a></li>
-            <li><a href="manage_users.php">Kullanıcıları Yönet</a></li>
-            <li><a href="diving.php">Dalış Oluştur</a></li>
-            <li><a href="manage_diving.php">Dalışları Yönet</a></li>
-            <li><a href="certificate.php">Sertifika Oluştur</a></li>
-            <li><a href="certificate_list.php">Sertifikaları Listele</a></li>
-            <li><a href="health_inspection.php">Sağlık Raporu Oluştur</a></li>
-            <li><a href="health_inspection_list.php">Sağlık Raporlarını Listele</a></li>
-            <li><a href="../users/exit.php">Çıkış Yap</a></li>
-        </ul>
-    </div>
     <header>
         <h1>DivingLog | Admin Şifre Sıfırlama</h1>
     </header>
