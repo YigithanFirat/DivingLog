@@ -1,8 +1,9 @@
 <?php
+include('../session_guard.php');
 include('../../config.php');
 
 // Sayfa başına gösterilecek sertifika sayısı
-$perPage = 25;
+$perPage = 10;
 
 // Aktif sayfa numarası
 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int) $_GET['page'] : 1;
@@ -47,6 +48,7 @@ $result = mysqli_query($mysqlB, $query);
                 <li><a href="manage_users.php">Kullanıcıları Yönet</a></li>
                 <li><a href="diving.php">Dalış Oluştur</a></li>
                 <li><a href="manage_diving.php">Dalışları Yönet</a></li>
+                <li><a href="diving_place.php">Dalış Bölgeleri</a></li>
                 <li><a href="certificate.php">Sertifika Oluştur</a></li>
                 <li><a href="certificate_list.php">Sertifikaları Listele</a></li>
                 <li><a href="health_inspection.php">Sağlık Raporu Oluştur</a></li>
@@ -65,6 +67,9 @@ $result = mysqli_query($mysqlB, $query);
                 <div class="all_pdf d-flex justify-content-end mb-3">
                     <a href="export_all_certificate_pdf.php" class="btn btn-dark">
                         <i class="fas fa-file-pdf"></i> Tüm Sertifikaları PDF Olarak İndir
+                    </a>
+                    <a href="certificate_name_search.php" class="btn btn-search ms-2">
+                        <i class="fa-solid fa-magnifying-glass"></i> Ad Soyada Göre Arama
                     </a>
                 </div>
 
