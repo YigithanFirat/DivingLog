@@ -1,20 +1,48 @@
 <?php
-session_start();
+include('../session_guard.php');
 include('../../config.php');
+include('../sidebarmenu.php');
 
 $success = false;
 $error = false;
+$users = [];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+// Kullanıcı arama işlemi
+if (isset($_POST['search_user'])) {
+    $search_input = trim($_POST['search_input']);
+
+    $stmt = mysqli_prepare($mysqlB, "SELECT id, ad, soyad, tcno FROM users WHERE tcno LIKE CONCAT('%', ?, '%') OR ad LIKE CONCAT('%', ?, '%') OR soyad LIKE CONCAT('%', ?, '%')");
+    mysqli_stmt_bind_param($stmt, "sss", $search_input, $search_input, $search_input);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $users = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    mysqli_stmt_close($stmt);
+}
+
+// Sağlık raporu kaydetme işlemi
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_report'])) {
     $muayene_tarihi = $_POST['muayene_tarihi'] ?? '';
     $onaylayan = trim($_POST['onaylayan'] ?? '');
-    $onaylanan = trim($_POST['onaylanan'] ?? '');
+    $user_id = $_POST['user_id'] ?? '';
     $created_at = date('Y-m-d H:i:s');
 
-    if (!empty($muayene_tarihi) && !empty($onaylayan) && !empty($onaylanan)) {
-        $stmt = mysqli_prepare($mysqlB, "INSERT INTO health_inspections (muayene_tarihi, onaylayan, onaylanan, created_at) VALUES (?, ?, ?, ?)");
-        if ($stmt) {
-            mysqli_stmt_bind_param($stmt, "ssss", $muayene_tarihi, $onaylayan, $onaylanan, $created_at);
+    if (!empty($muayene_tarihi) && !empty($onaylayan) && !empty($user_id)) {
+        // Kullanıcı bilgilerini çek (ad, soyad, tcno)
+        $query = "SELECT ad, soyad, tcno FROM users WHERE id = ?";
+        $stmt = mysqli_prepare($mysqlB, $query);
+        mysqli_stmt_bind_param($stmt, "i", $user_id);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        $user = mysqli_fetch_assoc($result);
+        mysqli_stmt_close($stmt);
+
+        if ($user) {
+            $onaylanan = $user['ad'] . ' ' . $user['soyad'];
+            $tcno = $user['tcno'];
+
+            // Sağlık raporu ekleme sorgusu
+            $stmt = mysqli_prepare($mysqlB, "INSERT INTO health_inspections (muayene_tarihi, onaylayan, onaylanan, tcno, created_at) VALUES (?, ?, ?, ?, ?)");
+            mysqli_stmt_bind_param($stmt, "sssss", $muayene_tarihi, $onaylayan, $onaylanan, $tcno, $created_at);
             $success = mysqli_stmt_execute($stmt);
             if (!$success) $error = true;
             mysqli_stmt_close($stmt);
@@ -37,48 +65,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-    <div class="menu-toggle" onclick="toggleSidebar()">
-        <i class="fas fa-bars"></i>
-    </div>
-    <div class="sidebar">
-        <h2>Admin Panel</h2>
-        <ul>
-            <li><a href="../index.php">Ana Sayfa</a></li>
-            <li><a href="dashboard.php">Dashboard</a></li>
-            <li><a href="manage_users.php">Kullanıcıları Yönet</a></li>
-            <li><a href="diving.php">Dalış Oluştur</a></li>
-            <li><a href="manage_diving.php">Dalışları Yönet</a></li>
-            <li><a href="certificate.php">Sertifika Oluştur</a></li>
-            <li><a href="certificate_list.php">Sertifikaları Listele</a></li>
-            <li><a href="health_inspection.php">Sağlık Raporu Oluştur</a></li>
-            <li><a href="health_inspection_list.php">Sağlık Raporlarını Listele</a></li>
-            <li><a href="../users/exit.php">Çıkış Yap</a></li>
-        </ul>
-    </div>
     <div class="content">
-        <h1>Sağlık Raporu Kaydı</h1>
+        <h1>Sağlık Raporu Oluştur</h1>
 
         <?php if ($success): ?>
             <p class="success">✔️ Sağlık Raporu başarıyla kaydedildi.</p>
         <?php elseif ($error): ?>
-            <p class="error">❌ Lütfen tüm alanları doğru doldurduğunuzdan emin olun.</p>
+            <p class="error">❌ Lütfen tüm alanları eksiksiz doldurduğunuzdan emin olun.</p>
         <?php endif; ?>
 
-        <form method="POST" class="form" novalidate>
-            <label for="muayene_tarihi">Muayene Tarihi:</label>
-            <input type="date" id="muayene_tarihi" name="muayene_tarihi" required>
-
-            <label for="onaylayan">Onaylayan Doktor:</label>
-            <input type="text" id="onaylayan" name="onaylayan" placeholder="Dr. Adı Soyadı" required>
-
-            <label for="onaylanan">Onaylanan Kişi:</label>
-            <input type="text" id="onaylanan" name="onaylanan" placeholder="Onaylanan Kişi Adı Soyadı" required>
-
-            <div class="btn-container">
-                <button type="submit" class="btn">Kaydet</button>
-                <a href="../index.php" class="btn">⬅️ Geri Dön</a>
-            </div>
+        <!-- Kullanıcı Arama Formu -->
+        <form method="POST" class="form" style="margin-bottom: 30px;">
+            <label for="search_input">Kullanıcı Ara (Ad, Soyad, TC):</label>
+            <input type="text" id="search_input" name="search_input" placeholder="Ad, Soyad ya da TC girin" required>
+            <button type="submit" name="search_user" class="btn">🔍 Ara</button>
         </form>
+
+        <?php if (!empty($users)): ?>
+            <form method="POST" class="form" novalidate>
+                <label for="user_id">Kullanıcı Seç:</label>
+                <select name="user_id" id="user_id" required>
+                    <?php foreach ($users as $user): ?>
+                        <option value="<?= $user['id'] ?>">
+                            <?= htmlspecialchars($user['ad']) ?> <?= htmlspecialchars($user['soyad']) ?> - <?= htmlspecialchars($user['tcno']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+
+                <label for="muayene_tarihi">Muayene Tarihi:</label>
+                <input type="date" id="muayene_tarihi" name="muayene_tarihi" required>
+
+                <label for="onaylayan">Onaylayan Doktor:</label>
+                <input type="text" id="onaylayan" name="onaylayan" placeholder="Dr. Adı Soyadı" required>
+
+                <div class="btn-container">
+                    <button type="submit" name="create_report" class="btn">Kaydet</button>
+                    <a href="../index.php" class="btn">⬅️ Geri Dön</a>
+                </div>
+            </form>
+        <?php elseif (isset($_POST['search_user'])): ?>
+            <p class="error">🔍 Eşleşen kullanıcı bulunamadı.</p>
+        <?php endif; ?>
     </div>
 
     <footer>
