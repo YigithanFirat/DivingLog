@@ -1,12 +1,13 @@
 <?php
-session_start();
+include('../session_guard.php');
 include('../../config.php');
+include('../sidebarmenu.php');
 
 function e($str) {
     return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
 }
 
-$usersPerPage = 25;
+$usersPerPage = 10;
 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int) $_GET['page'] : 1;
 if ($page < 1) $page = 1;
 
@@ -30,6 +31,7 @@ if (isset($_GET['login'])) {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -41,24 +43,6 @@ if (isset($_GET['login'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
-    <div class="menu-toggle" onclick="toggleSidebar()">
-        <i class="fas fa-bars"></i>
-    </div>
-    <div class="sidebar">
-        <h2>Admin Panel</h2>
-        <ul>
-            <li><a href="../index.php">Ana Sayfa</a></li>
-            <li><a href="dashboard.php">Dashboard</a></li>
-            <li><a href="manage_users.php">Kullanıcıları Yönet</a></li>
-            <li><a href="diving.php">Dalış Oluştur</a></li>
-            <li><a href="manage_diving.php">Dalışları Yönet</a></li>
-            <li><a href="certificate.php">Sertifika Oluştur</a></li>
-            <li><a href="certificate_list.php">Sertifikaları Listele</a></li>
-            <li><a href="health_inspection.php">Sağlık Raporu Oluştur</a></li>
-            <li><a href="health_inspection_list.php">Sağlık Raporlarını Listele</a></li>
-            <li><a href="../users/exit.php">Çıkış Yap</a></li>
-        </ul>
-    </div>
 <div class="container">
     <?php if ($loginStatus === 'success'): ?>
         <div class="success_message">İşlem başarıyla gerçekleşti.</div>
@@ -69,11 +53,24 @@ if (isset($_GET['login'])) {
     <h2>Kullanıcılar Listesi</h2>
 
     <?php if ($result && mysqli_num_rows($result) > 0): ?>
-        <div class="all_pdf">
-            <a href="export_all_users_pdf.php" class="btn">
-                <i class="fa-solid fa-file-pdf"></i>Tüm Kullanıcıları PDF Olarak İndir
+    <div class="all_pdf d-flex space-between">
+        <div class="left">
+            <a href="../users/signup.php" class="btn">
+                <i class="fa fa-user-plus"></i> Yeni Kullanıcı Ekle
+            </a>
+            <a href="search_name.php" class="btn">
+                <i class="fa-solid fa-magnifying-glass"></i> Ad Soyada Göre Arama
             </a>
         </div>
+        <div class="right">
+            <a href="export_all_users_pdf.php" class="btn">
+                <i class="fa-solid fa-file-pdf"></i> Tüm Kullanıcıları PDF Olarak İndir
+            </a>
+            <a href="search_tc.php">
+                <i class="fa-solid fa-magnifying-glass"></i> TC Numarasına Göre Arama
+            </a>
+        </div>
+    </div>
         <div class="table-responsive">
         <table>
             <thead>
