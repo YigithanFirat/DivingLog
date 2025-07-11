@@ -38,7 +38,7 @@ body {
 }
 
 .sidebar ul li {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .sidebar ul li a {
@@ -219,7 +219,7 @@ footer {
     color: #ffffff;
     text-align: center;
     font-weight: bold;
-    padding: 12px 0;
+    padding: 0px 0;
     width: 100%;
     position: fixed;
     left: 0;
@@ -287,4 +287,43 @@ footer p {
 
 .sidebar.hidden {
     transform: translateX(-100%);
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #000;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 15px;
+    border: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.btn:hover {
+    background-color: #FF9900;
+    transform: translateY(-2px);
+}
+
+/* PDF için özel koyu buton */
+.btn-dark {
+    background-color: #1e3c58;
+}
+
+.btn-dark:hover {
+    background-color: #005a8d;
+}
+
+/* Arama için açık mavi tonlu buton */
+.btn-search {
+    background-color: #0077b6;
+}
+
+.btn-search:hover {
+    background-color: #0096c7;
 }
