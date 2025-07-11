@@ -1,4 +1,5 @@
 <?php
+include('../session_guard.php');
 require_once('../../config.php');
 
 // Yalnızca POST yöntemiyle çalışmasına izin ver
