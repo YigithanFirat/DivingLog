@@ -325,7 +325,7 @@ select {
 }
 
 .search-button {
-    padding: 12px 20px;
+    padding: 12px 24px;
     font-size: 16px;
     font-weight: 700;
     background-color: #FF9900;
@@ -334,10 +334,30 @@ select {
     border-radius: 5px;
     cursor: pointer;
     white-space: nowrap;
+    height: 45px;        /* Input ile aynı yükseklik */
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .search-button:hover {
     background-color: #e68a00;
     transform: scale(1.03);
+}
+
+.search-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.search-row input[type="text"] {
+    flex: 1;             /* Genişliği input alanı kaplasın */
+    padding: 12px;
+    font-size: 16px;
+    background-color: #34495e;
+    color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    height: 45px;        /* Buton ile aynı yükseklik */
 }
