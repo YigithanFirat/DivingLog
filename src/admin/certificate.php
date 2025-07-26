@@ -80,5 +80,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['search_name'])) {
     <footer>
         <p>&copy; 2025 DivingLog Uygulaması</p>
     </footer>
+    <script src="../JS/certificate.js"></script>
 </body>
 </html>
