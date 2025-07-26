@@ -1,14 +1,36 @@
 <?php
-include('../session_guard.php');
+session_start();
 include('../../config.php');
+
+$logged_in = false;
+$isAdmin = false;
+$user = [];
+
+// Giriş yapılmışsa kullanıcı bilgilerini çek
+if (isset($_SESSION['tcno']) && !empty($_SESSION['tcno'])) {
+    $tcno = $_SESSION['tcno'];
+    $stmt = mysqli_prepare($mysqlB, "SELECT login, admin, ad FROM users WHERE tcno = ?");
+    if ($stmt) {
+        mysqli_stmt_bind_param($stmt, "s", $tcno);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        if ($result && mysqli_num_rows($result) > 0) {
+            $user = mysqli_fetch_assoc($result);
+            $logged_in = ($user['login'] == 1);
+            $isAdmin = ($user['admin'] == 1);
+        }
+        mysqli_stmt_close($stmt);
+    }
+}
 
 $success_message = '';
 $error_messages = [];
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // Form verilerini al ve işle
     $ad = trim($_POST['ad'] ?? '');
     $soyad = trim($_POST['soyad'] ?? '');
-    $tcno = trim($_POST['tcno'] ?? '');
+    $tcno_post = trim($_POST['tcno'] ?? '');
     $dogum_tarihi = trim($_POST['dogum_tarihi'] ?? '');
     $milliyet = trim($_POST['milliyet'] ?? '');
     $adres = trim($_POST['adres'] ?? '');
@@ -19,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $tekrarsifre = $_POST['tekrarsifre'] ?? '';
 
     // Validasyonlar
-    if (!preg_match('/^\d{11}$/', $tcno)) {
+    if (!preg_match('/^\d{11}$/', $tcno_post)) {
         $error_messages[] = "TC Kimlik Numarası 11 haneli olmalıdır.";
     }
     if ($sifre !== $tekrarsifre) {
@@ -35,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // TCNO tekrar kontrolü
     $tcno_check_query = mysqli_prepare($mysqlB, "SELECT id FROM users WHERE tcno = ?");
     if ($tcno_check_query) {
-        mysqli_stmt_bind_param($tcno_check_query, "s", $tcno);
+        mysqli_stmt_bind_param($tcno_check_query, "s", $tcno_post);
         mysqli_stmt_execute($tcno_check_query);
         mysqli_stmt_store_result($tcno_check_query);
 
@@ -72,13 +94,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $error_messages[] = "Fotoğraf seçilmedi ya da yükleme hatası oluştu.";
     }
 
-    // Captcha kontrolü
-    $recaptcha_secret = '6LcpwGwrAAAAAHRXcDsC1bLEbk_RBFGihKTm7NI6';
-    $recaptcha_response = $_POST['g-recaptcha-response'] ?? '';
-    $verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" . $recaptcha_secret . "&response=" . $recaptcha_response);
-    $response_data = json_decode($verify);
-    if (!$response_data->success) {
-        $error_messages[] = "Lütfen reCAPTCHA doğrulamasını geçin.";
+    // reCaptcha kontrolü (SADECE ADMIN DEĞİLSE)
+    if (!$isAdmin) {
+        $recaptcha_secret = '6LcpwGwrAAAAAHRXcDsC1bLEbk_RBFGihKTm7NI6';
+        $recaptcha_response = $_POST['g-recaptcha-response'] ?? '';
+        $verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" . $recaptcha_secret . "&response=" . $recaptcha_response);
+        $response_data = json_decode($verify);
+        if (!$response_data->success) {
+            $error_messages[] = "Lütfen reCAPTCHA doğrulamasını geçin.";
+        }
     }
 
     // Kayıt işlemi
@@ -87,7 +111,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         $stmt = mysqli_prepare($mysqlB, "INSERT INTO users (ad, soyad, tcno, dogum_tarihi, milliyet, adres, kaza_haber_kişi_ad_soyad, telefon, email, sifre, fotograf) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         if ($stmt) {
-            mysqli_stmt_bind_param($stmt, "sssssssssss", $ad, $soyad, $tcno, $dogum_tarihi, $milliyet, $adres, $kaza_haber_kişi_ad_soyad, $telefon, $email, $hashed_sifre, $foto_yolu);
+            mysqli_stmt_bind_param($stmt, "sssssssssss", $ad, $soyad, $tcno_post, $dogum_tarihi, $milliyet, $adres, $kaza_haber_kişi_ad_soyad, $telefon, $email, $hashed_sifre, $foto_yolu);
 
             if (mysqli_stmt_execute($stmt)) {
                 $success_message = "Kayıt başarılı! Giriş yapmak için <a href='login.php' class='login-link'>buraya tıklayın</a>.";
@@ -100,6 +124,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 }
+
+// Yardımcı fonksiyon büyük harf TR için
+function buyukHarfTR($metin)
+{
+    $harfler = ['i', 'ı', 'ğ', 'ü', 'ş', 'ö', 'ç'];
+    $buyukler = ['İ', 'I', 'Ğ', 'Ü', 'Ş', 'Ö', 'Ç'];
+    $metin = str_replace($harfler, $buyukler, $metin);
+    return mb_strtoupper($metin, 'UTF-8');
+}
 ?>
 
 <!DOCTYPE html>
@@ -110,74 +143,261 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <title>Kayıt Ol | DivingLog</title>
     <link rel="stylesheet" href="../CSS/signup.css" />
     <link rel="icon" href="../images/divinglog.png" />
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-    <h1>DivingLog | Kayıt Ol</h1>
-    <h2>Yeni Hesap Oluştur</h2>
+    <?php if ($logged_in && $isAdmin): ?>
+    <div class="menu-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </div>
+    <div class="sidebar">
+        <h2>Admin Panel</h2>
+        <ul>
+            <li><a href="../index.php"><i class="fas fa-home"></i> Ana Sayfa</a></li>
+            <li><a href="../admin/dashboard.php"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+            <li><a href="../admin/manage_users.php"><i class="fas fa-users"></i> Öğrencileri Listesi</a></li>
+            <li><a href="../admin/diving.php"><i class="fas fa-water"></i> Dalış Oluştur</a></li>
+            <li><a href="../admin/manage_diving.php"><i class="fas fa-database"></i> Dalışları Yönet</a></li>
+            <li><a href="../admin/diving_place.php"><i class="fas fa-map-marker-alt"></i> Dalış Bölgeleri</a></li>
+            <li><a href="../admin/certificate.php"><i class="fas fa-certificate"></i> Sertifika Oluştur</a></li>
+            <li><a href="../admin/certificate_list.php"><i class="fas fa-list"></i> Sertifikaları Listele</a></li>
+            <li><a href="../admin/health_inspection.php"><i class="fas fa-notes-medical"></i> Sağlık Raporu Oluştur</a></li>
+            <li><a href="../admin/health_inspection_list.php"><i class="fas fa-clipboard-list"></i> Sağlık Raporlarını Listele</a></li>
+            <li><a href="../users/exit.php"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</a></li>
+        </ul>
+    </div>
+    <h1 class="register">DivingLog | Kayıt Ol</h1>
+    <h2 class="newaccount">Yeni Hesap Oluştur</h2>
     <div class="content">
-        <?php if (!empty($error_messages) || $success_message): ?>
-            <div class="<?= $success_message ? 'success' : 'error' ?>">
-                <?php if ($success_message): ?>
-                    <?= $success_message ?>
-                <?php else: ?>
-                    <ul>
-                        <?php foreach ($error_messages as $msg): ?>
-                            <li><?= htmlspecialchars($msg, ENT_QUOTES, 'UTF-8') ?></li>
-                        <?php endforeach; ?>
-                    </ul>
-                <?php endif; ?>
-            </div>
-        <?php endif; ?>
 
-        <?php if (!$success_message): ?>
-        <form action="signup.php" method="POST" enctype="multipart/form-data">
-            <div class="form-row">
-                <label for="ad">Ad:</label>
-                <input type="text" id="ad" name="ad" required />
-                <label for="soyad">Soyad:</label>
-                <input type="text" id="soyad" name="soyad" required />
-            </div>
-            <div class="form-row">
-                <label for="dogum_tarihi">Doğum Tarihi:</label>
-                <input type="date" id="dogum_tarihi" name="dogum_tarihi" required />
-                <label for="milliyet">Milliyet:</label>
-                <input type="text" id="milliyet" name="milliyet" required />
-            </div>
-            <label for="tcno">TC Kimlik Numarası:</label><br />
-            <input type="text" id="tcno" name="tcno" required pattern="\d{11}" title="Lütfen 11 haneli bir TC Kimlik Numarası girin." /><br /><br />
+        <!-- Hata mesajları için div -->
+        <div id="form-errors" style="color:red; margin-bottom: 15px;">
+            <?php if (!empty($error_messages)): ?>
+                <ul>
+                    <?php foreach ($error_messages as $msg): ?>
+                        <li><?= htmlspecialchars($msg, ENT_QUOTES, 'UTF-8') ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
+        </div>
 
-            <label for="adres">Adres:</label><br />
-            <textarea id="adres" name="adres" required></textarea><br /><br />
+        <?php if ($success_message): ?>
+            <div class="success"><?= $success_message ?></div>
+        <?php else: ?>
+            <?php if (!$logged_in): ?>
+                <form class="nregister" action="signup.php" method="POST" enctype="multipart/form-data">
+                    <div class="form-row">
+                        <label for="ad">Ad:</label>
+                        <input type="text" id="ad" name="ad" required />
+                        <label for="soyad">Soyad:</label>
+                        <input type="text" id="soyad" name="soyad" required />
+                    </div>
+                    <div class="form-row">
+                        <label for="dogum_tarihi">Doğum Tarihi:</label>
+                        <input type="date" id="dogum_tarihi" name="dogum_tarihi" required />
+                        <label for="milliyet">Milliyet:</label>
+                        <input type="text" id="milliyet" name="milliyet" required />
+                    </div>
+                    <label for="tcno">TC Kimlik Numarası:</label><br />
+                    <input type="text" id="tcno" name="tcno" required pattern="\d{11}" title="Lütfen 11 haneli bir TC Kimlik Numarası girin." /><br /><br />
 
-            <label for="kaza_haber_kişi_ad_soyad">Kaza Halinde Haber Verilecek Kişi:</label>
-            <input type="text" id="kaza_haber_kişi_ad_soyad" name="kaza_haber_kişi_ad_soyad" required /><br /><br />
+                    <label for="adres">Adres:</label><br />
+                    <textarea id="adres" name="adres" required></textarea><br /><br />
 
-            <label for="telefon">Telefon Numarası:</label><br />
-            <input type="text" id="telefon" name="telefon" required pattern="^\+?\d{10,15}$" title="Telefon numarasını +90xxxxxxxxxx formatında girin" /><br /><br />
+                    <label for="kaza_haber_kişi_ad_soyad">Kaza Halinde Haber Verilecek Kişi:</label>
+                    <input type="text" id="kaza_haber_kişi_ad_soyad" name="kaza_haber_kişi_ad_soyad" required /><br /><br />
 
-            <label for="fotograf">Fotoğraf Yükle:</label><br />
-            <input type="file" id="fotograf" name="fotograf" accept="image/*" required /><br /><br />
+                    <label for="telefon">Telefon Numarası:</label><br />
+                    <input type="text" id="telefon" name="telefon" required pattern="^\+?\d{10,15}$" title="Telefon numarasını +90xxxxxxxxxx formatında girin" /><br /><br />
 
-            <label for="email">E-posta:</label><br />
-            <input type="email" id="email" name="email" required /><br /><br />
+                    <label for="fotograf">Fotoğraf Yükle:</label><br />
+                    <input type="file" id="fotograf" name="fotograf" accept="image/*" required /><br /><br />
 
-            <label for="sifre">Şifre:</label><br />
-            <input type="password" id="sifre" name="sifre" required /><br /><br />
+                    <label for="email">E-posta:</label><br />
+                    <input type="email" id="email" name="email" required /><br /><br />
 
-            <label for="tekrarsifre">Şifre Onayla:</label><br />
-            <input type="password" id="tekrarsifre" name="tekrarsifre" required /><br /><br /> 
+                    <label for="sifre">Şifre:</label><br />
+                    <input type="password" id="sifre" name="sifre" required /><br /><br />
 
-            <div class="g-recaptcha" data-sitekey="6LcpwGwrAAAAAA2kUVfXGEpbnE0WmdFXu0DDdfF7"></div><br /><br /> 
+                    <label for="tekrarsifre">Şifre Onayla:</label><br />
+                    <input type="password" id="tekrarsifre" name="tekrarsifre" required /><br /><br />
 
-            <button type="submit" class="btn">Kayıt Ol</button>
-        </form>
+                    <?php if (!$isAdmin): ?>
+                        <div class="g-recaptcha" data-sitekey="6LcpwGwrAAAAAA2kUVfXGEpbnE0WmdFXu0DDdfF7"></div><br /><br />
+                    <?php endif; ?>
+
+                    <button type="submit" class="btn">Kayıt Ol</button>
+                </form>
+            <?php else: ?>
+                <form class="aregister" action="signup.php" method="POST" enctype="multipart/form-data">
+                    <div class="form-row">
+                        <label for="ad">Ad:</label>
+                        <input type="text" id="ad" name="ad" required />
+                        <label for="soyad">Soyad:</label>
+                        <input type="text" id="soyad" name="soyad" required />
+                    </div>
+                    <div class="form-row">
+                        <label for="dogum_tarihi">Doğum Tarihi:</label>
+                        <input type="date" id="dogum_tarihi" name="dogum_tarihi" required />
+                        <label for="milliyet">Milliyet:</label>
+                        <input type="text" id="milliyet" name="milliyet" required />
+                    </div>
+                    <label for="tcno">TC Kimlik Numarası:</label><br />
+                    <input type="text" id="tcno" name="tcno" required pattern="\d{11}" title="Lütfen 11 haneli bir TC Kimlik Numarası girin." /><br /><br />
+
+                    <label for="adres">Adres:</label><br />
+                    <textarea id="adres" name="adres" required></textarea><br /><br />
+
+                    <label for="kaza_haber_kişi_ad_soyad">Kaza Halinde Haber Verilecek Kişi:</label>
+                    <input type="text" id="kaza_haber_kişi_ad_soyad" name="kaza_haber_kişi_ad_soyad" required /><br /><br />
+
+                    <label for="telefon">Telefon Numarası:</label><br />
+                    <input type="text" id="telefon" name="telefon" required pattern="^\+?\d{10,15}$" title="Telefon numarasını +90xxxxxxxxxx formatında girin" /><br /><br />
+
+                    <label for="fotograf">Fotoğraf Yükle:</label><br />
+                    <input type="file" id="fotograf" name="fotograf" accept="image/*" required /><br /><br />
+
+                    <label for="email">E-posta:</label><br />
+                    <input type="email" id="email" name="email" required /><br /><br />
+
+                    <label for="sifre">Şifre:</label><br />
+                    <input type="password" id="sifre" name="sifre" required /><br /><br />
+
+                    <label for="tekrarsifre">Şifre Onayla:</label><br />
+                    <input type="password" id="tekrarsifre" name="tekrarsifre" required /><br /><br />
+
+                    <?php if (!$isAdmin): ?>
+                        <div class="g-recaptcha" data-sitekey="6LcpwGwrAAAAAA2kUVfXGEpbnE0WmdFXu0DDdfF7"></div><br /><br />
+                    <?php endif; ?>
+
+                    <button type="submit" class="btn">Kayıt Ol</button>
+                </form>
+            <?php endif; ?>
         <?php endif; ?>
     </div>
 
     <footer>
         <p>&copy; 2025 DivingLog Uygulaması</p>
     </footer>
+
     <script src="../JS/signup.js"></script>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <?php else: ?>
+    <h1 class="register centered-header">DivingLog | Kayıt Ol</h1>
+    <h2 class="newaccount centered-header">Yeni Hesap Oluştur</h2>
+    <div class="content1">
+
+        <!-- Hata mesajları için div -->
+        <div id="form-errors" style="color:red; margin-bottom: 15px;">
+            <?php if (!empty($error_messages)): ?>
+                <ul>
+                    <?php foreach ($error_messages as $msg): ?>
+                        <li><?= htmlspecialchars($msg, ENT_QUOTES, 'UTF-8') ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
+        </div>
+
+        <?php if ($success_message): ?>
+            <div class="success"><?= $success_message ?></div>
+        <?php else: ?>
+            <?php if (!$logged_in): ?>
+                <form class="elseregister" action="signup.php" method="POST" enctype="multipart/form-data">
+                    <div class="form-row">
+                        <label for="ad">Ad:</label>
+                        <input type="text" id="ad" name="ad" required />
+                        <label for="soyad">Soyad:</label>
+                        <input type="text" id="soyad" name="soyad" required />
+                    </div>
+                    <div class="form-row">
+                        <label for="dogum_tarihi">Doğum Tarihi:</label>
+                        <input type="date" id="dogum_tarihi" name="dogum_tarihi" required />
+                        <label for="milliyet">Milliyet:</label>
+                        <input type="text" id="milliyet" name="milliyet" required />
+                    </div>
+                    <label for="tcno">TC Kimlik Numarası:</label><br />
+                    <input type="text" id="tcno" name="tcno" required pattern="\d{11}" title="Lütfen 11 haneli bir TC Kimlik Numarası girin." /><br /><br />
+
+                    <label for="adres">Adres:</label><br />
+                    <textarea id="adres" name="adres" required></textarea><br /><br />
+
+                    <label for="kaza_haber_kişi_ad_soyad">Kaza Halinde Haber Verilecek Kişi:</label>
+                    <input type="text" id="kaza_haber_kişi_ad_soyad" name="kaza_haber_kişi_ad_soyad" required /><br /><br />
+
+                    <label for="telefon">Telefon Numarası:</label><br />
+                    <input type="text" id="telefon" name="telefon" required pattern="^\+?\d{10,15}$" title="Telefon numarasını +90xxxxxxxxxx formatında girin" /><br /><br />
+
+                    <label for="fotograf">Fotoğraf Yükle:</label><br />
+                    <input type="file" id="fotograf" name="fotograf" accept="image/*" required /><br /><br />
+
+                    <label for="email">E-posta:</label><br />
+                    <input type="email" id="email" name="email" required /><br /><br />
+
+                    <label for="sifre">Şifre:</label><br />
+                    <input type="password" id="sifre" name="sifre" required /><br /><br />
+
+                    <label for="tekrarsifre">Şifre Onayla:</label><br />
+                    <input type="password" id="tekrarsifre" name="tekrarsifre" required /><br /><br />
+
+                    <?php if (!$isAdmin): ?>
+                        <div class="g-recaptcha" data-sitekey="6LcpwGwrAAAAAA2kUVfXGEpbnE0WmdFXu0DDdfF7"></div><br /><br />
+                    <?php endif; ?>
+
+                    <button type="submit" class="btn">Kayıt Ol</button>
+                </form>
+            <?php else: ?>
+                <form class="elseregister" action="signup.php" method="POST" enctype="multipart/form-data">
+                    <div class="form-row">
+                        <label for="ad">Ad:</label>
+                        <input type="text" id="ad" name="ad" required />
+                        <label for="soyad">Soyad:</label>
+                        <input type="text" id="soyad" name="soyad" required />
+                    </div>
+                    <div class="form-row">
+                        <label for="dogum_tarihi">Doğum Tarihi:</label>
+                        <input type="date" id="dogum_tarihi" name="dogum_tarihi" required />
+                        <label for="milliyet">Milliyet:</label>
+                        <input type="text" id="milliyet" name="milliyet" required />
+                    </div>
+                    <label for="tcno">TC Kimlik Numarası:</label><br />
+                    <input type="text" id="tcno" name="tcno" required pattern="\d{11}" title="Lütfen 11 haneli bir TC Kimlik Numarası girin." /><br /><br />
+
+                    <label for="adres">Adres:</label><br />
+                    <textarea id="adres" name="adres" required></textarea><br /><br />
+
+                    <label for="kaza_haber_kişi_ad_soyad">Kaza Halinde Haber Verilecek Kişi:</label>
+                    <input type="text" id="kaza_haber_kişi_ad_soyad" name="kaza_haber_kişi_ad_soyad" required /><br /><br />
+
+                    <label for="telefon">Telefon Numarası:</label><br />
+                    <input type="text" id="telefon" name="telefon" required pattern="^\+?\d{10,15}$" title="Telefon numarasını +90xxxxxxxxxx formatında girin" /><br /><br />
+
+                    <label for="fotograf">Fotoğraf Yükle:</label><br />
+                    <input type="file" id="fotograf" name="fotograf" accept="image/*" required /><br /><br />
+
+                    <label for="email">E-posta:</label><br />
+                    <input type="email" id="email" name="email" required /><br /><br />
+
+                    <label for="sifre">Şifre:</label><br />
+                    <input type="password" id="sifre" name="sifre" required /><br /><br />
+
+                    <label for="tekrarsifre">Şifre Onayla:</label><br />
+                    <input type="password" id="tekrarsifre" name="tekrarsifre" required /><br /><br />
+
+                    <?php if (!$isAdmin): ?>
+                        <div class="g-recaptcha" data-sitekey="6LcpwGwrAAAAAA2kUVfXGEpbnE0WmdFXu0DDdfF7"></div><br /><br />
+                    <?php endif; ?>
+
+                    <button type="submit" class="btn">Kayıt Ol</button>
+                </form>
+            <?php endif; ?>
+        <?php endif; ?>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 DivingLog Uygulaması</p>
+    </footer>
+
+    <script src="../JS/signup.js"></script>
+    <?php endif; ?>
 </body>
 </html>
