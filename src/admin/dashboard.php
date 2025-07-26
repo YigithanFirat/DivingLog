@@ -56,7 +56,7 @@ $stmt_total_health_inspection->close();
                     <div class="total-user-count">
                         <div class="count-text">
                             <p class="count"><?php echo htmlspecialchars($total_users); ?></p>
-                            <p class="label">Toplam Kullanıcı Sayısı</p>
+                            <p class="label">Toplam Öğrenci Sayısı</p>
                         </div>
                         <div class="icon">
                             <i class="fa-solid fa-users"></i>
