@@ -60,14 +60,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DivingLog | Kullanıcı Düzenle</title>
+    <title>DivingLog | Öğrenci Düzenle</title>
     <link rel="stylesheet" href="../CSS/edit_user.css">
     <link rel="web icon" href="../images/divinglog.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
     <header>
-        <h1>DivingLog | Kullanıcı Düzenle</h1>
+        <h1>DivingLog | Öğrenci Düzenle</h1>
     </header>
     <div class="container">
         <?php if (isset($success_message)): ?>
@@ -76,7 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php if (isset($error_message)): ?>
             <div class="error"><?php echo $error_message; ?></div>
         <?php endif; ?>
-        <h2>Kullanıcı Bilgilerini Düzenle</h2>
+        <h2>Öğrenci Bilgilerini Düzenle</h2>
         <form action="edit_user.php?id=<?php echo $user_id; ?>" method="POST">
             <label for="name">Ad:</label>
             <input type="text" id="name" name="ad" value="<?php echo $user['ad']; ?>" required>
