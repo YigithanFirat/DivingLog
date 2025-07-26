@@ -77,8 +77,9 @@ html, body {
 
 /* Tablo stilleri */
 .table-responsive {
-    overflow-x: unset; /* Scroll iptal */
+    overflow-x: unset;
     max-width: 100%;
+    margin-bottom: 100px; /* Footer'dan yukarıda kalacak şekilde boşluk */
 }
 
 table {
@@ -218,7 +219,6 @@ footer {
     color: #ffffff;
     text-align: center;
     font-weight: bold;
-    padding: 12px 0;
     width: 100%;
     position: fixed;
     left: 0;
@@ -331,4 +331,77 @@ footer p
 
 .sidebar.hidden {
     transform: translateX(-100%);
+}
+
+.total-diving-count {
+    position: relative;
+    background-color: #5762FF; /* Daha koyu sarı kutu */
+    width: 250px;
+    height: 160px;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease;
+    border: 3px solid #000;
+}
+
+.total-minutes-count {
+    position: relative;
+    background-color: #33CC33; /* Daha koyu sarı kutu */
+    width: 250px;
+    height: 160px;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease;
+    border: 3px solid #000;
+}
+
+.total-diving-count:hover, .total-minutes-count:hover
+{
+    transform: translateY(-5px);
+}
+
+.total-diving-count .count-text, .total-minutes-count .count-text
+{
+    z-index: 2;
+}
+
+.total-diving-count .count, .total-minutes-count .count
+{
+    font-size: 32px;
+    font-weight: bold;
+    margin: 0;
+    color: #000000;
+}
+
+.total-diving-count .label, .total-minutes-count .label
+{
+    font-size: 16px;
+    margin-top: 10px;
+    color: #000000;
+}
+
+.total-diving-count .icon, .total-minutes-count .icon
+{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 50px;
+    color: rgb(255, 255, 255, 0.5);
+}
+
+.diving-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+    padding-top: 20px; /* PDF butonları hizası için */
+    margin-bottom: 20px;
 }
