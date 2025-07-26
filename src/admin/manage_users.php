@@ -37,7 +37,7 @@ if (isset($_GET['login'])) {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>DivingLog | Kullanıcıları Yönet</title>
+    <title>DivingLog | Öğrencileri Yönet</title>
     <link rel="stylesheet" href="../CSS/manage_users.css" />
     <link rel="icon" href="../images/divinglog.png" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -56,7 +56,7 @@ if (isset($_GET['login'])) {
     <div class="all_pdf d-flex space-between">
         <div class="left">
             <a href="../users/signup.php" class="btn">
-                <i class="fa fa-user-plus"></i> Yeni Kullanıcı Ekle
+                <i class="fa fa-user-plus"></i> Yeni Öğrenci Ekle
             </a>
             <a href="search_name.php" class="btn">
                 <i class="fa-solid fa-magnifying-glass"></i> Ad Soyada Göre Arama
