@@ -118,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_plan'])) {
     <?php if ($success_message): ?><div class="success"><?= $success_message ?></div><?php endif; ?>
 
     <form method="POST" class="search-form">
-        <label>Kullanıcı Ara (Ad Soyad):</label>
+        <label>Öğrencileri Ara (Ad Soyad):</label>
         <div class="search-row">
             <input type="text" name="search_name" placeholder="İsim Soyisim" value="<?= htmlspecialchars($search_name) ?>" required>
             <button class="search-button" type="submit" name="search_user">Ara</button>
@@ -147,27 +147,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_plan'])) {
         <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
         <input type="hidden" name="tcno" value="<?= $selected_user['tcno'] ?>">
         <table>
-            <tr><td>Ad Soyad:</td><td><input type="text" name="ad_soyad" value="<?= htmlspecialchars($selected_user['ad_soyad']) ?>" readonly></td></tr>
-            <tr><td>Dalış Mevki:</td><td>
+            <tr><td>* Ad Soyad:</td><td><input type="text" name="ad_soyad" value="<?= htmlspecialchars($selected_user['ad_soyad']) ?>" readonly></td></tr>
+            <tr><td>* Dalış Mevki:</td><td>
                 <input type="text" id="diving_location" name="diving_location" placeholder="Körfez veya bölge adı" style="width: 100%; margin-bottom: 8px;" autocomplete="off" required>
                 <div id="map" style="width: 100%; height: 300px; border-radius: 8px; border: 1px solid #ccc;"></div>
             </td></tr>
-            <tr><td>Dalış Başlangıç:</td><td><input type="time" name="start_time" required></td></tr>
-            <tr><td>Dalış Bitiş:</td><td><input type="time" name="end_time" required></td></tr>
-            <tr><td>Dip Süresi:</td><td><input type="text" name="bottom_time" placeholder="dk" required></td></tr>
-            <tr><td>Ortalama Derinlik:</td><td><input type="text" name="avg_depth" required></td></tr>
-            <tr><td>Maksimum Derinlik:</td><td><input type="text" name="max_depth" required></td></tr>
-            <tr><td>Sıcaklık:</td><td><input type="text" name="temperature" placeholder="°C" required></td></tr>
+            <tr><td>Dalış Başlangıç:</td><td><input type="time" name="start_time"></td></tr>
+            <tr><td>Dalış Bitiş:</td><td><input type="time" name="end_time"></td></tr>
+            <tr><td>Dip Süresi:</td><td><input type="text" name="bottom_time" placeholder="dk"></td></tr>
+            <tr><td>Ortalama Derinlik:</td><td><input type="text" name="avg_depth"></td></tr>
+            <tr><td>* Maksimum Derinlik:</td><td><input type="text" name="max_depth" required></td></tr>
+            <tr><td>Sıcaklık:</td><td><input type="text" name="temperature" placeholder="°C"></td></tr>
             <tr><td>Derinlik (Feet):</td><td><input type="text" name="depth_feet"></td></tr>
-            <tr><td>Derinlik (Metre):</td><td><input type="text" name="depth_meter" required></td></tr>
-            <tr><td>Süre (dk):</td><td><input type="text" name="minutes" required></td></tr>
-            <tr><td>Dalış Ortamı:</td><td><select name="water_type" required><option value="">Seçiniz</option><?php foreach ($water_type_options as $opt) echo "<option value='$opt'>$opt</option>"; ?></select></td></tr>
-            <tr><td>Gaz:</td><td><select name="respiration" required><option value="">Seçiniz</option><?php foreach ($gas_options as $opt) echo "<option value='$opt'>$opt</option>"; ?></select></td></tr>
-            <tr><td>Elbise:</td><td><select name="clothing" required><option value="">Seçiniz</option><?php foreach ($clothing_options as $opt) echo "<option value='$opt'>$opt</option>"; ?></select></td></tr>
+            <tr><td>* Derinlik (Metre):</td><td><input type="text" name="depth_meter" required></td></tr>
+            <tr><td>* Toplam Dalış Süresi (dk):</td><td><input type="text" name="minutes" required></td></tr>
+            <tr><td>* Dalış Ortamı:</td><td><select name="water_type" required><option value="">Seçiniz</option><?php foreach ($water_type_options as $opt) echo "<option value='$opt'>$opt</option>"; ?></select></td></tr>
+            <tr><td>* Gaz:</td><td><select name="respiration" required><option value="">Seçiniz</option><?php foreach ($gas_options as $opt) echo "<option value='$opt'>$opt</option>"; ?></select></td></tr>
+            <tr><td>* Elbise:</td><td><select name="clothing" required><option value="">Seçiniz</option><?php foreach ($clothing_options as $opt) echo "<option value='$opt'>$opt</option>"; ?></select></td></tr>
             <tr><td>Amacı:</td><td><input type="text" name="diving_purpose"></td></tr>
-            <tr><td>Aletler:</td><td><input type="text" name="tools"></td></tr>
-            <tr><td>Takım:</td><td><select name="tools_devices" required><option value="">Seçiniz</option><?php foreach ($equipment_options as $opt) echo "<option value='$opt'>$opt</option>"; ?></select></td></tr>
-            <tr><td>Gözetmen:</td><td><input type="text" name="supervisor"></td></tr>
+            <tr><td>* Kullanılan Aletler:</td><td><input type="text" name="tools"></td></tr>
+            <tr><td>* Takım:</td><td><select name="tools_devices" required><option value="">Seçiniz</option><?php foreach ($equipment_options as $opt) echo "<option value='$opt'>$opt</option>"; ?></select></td></tr>
+            <tr><td>* Dalış Amiri:</td><td><input type="text" name="supervisor" required></td></tr>
         </table>
         <button class="saveButton" type="submit" name="submit_plan">Kaydet</button>
     </form>
